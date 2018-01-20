@@ -1,0 +1,21 @@
+\section{Introduction}
+Neural Network (\NN) is good.
+
+But \NN is not perfect, large amount of labeled data, purely data-driven method makes it hard to tune.
+
+On the other hand, we have accumulated siginificant amount of knowledge on our interested task, which provide a valuable source to improve our model.
+
+Specifically, Regular Expressions (\RE) is the most commonly used human-generated pattern in real word. For example, industrial often write some high-precision \RE patterns to handle a fraction of cases, and leave the rest for data-driven models. Or use \RE patterns to route the input cases to different domain-specific models. However, high-precision patterns often requires heavy annotation and extensive experiment. It will be good if we can make use of both high-precision and low-precision patterns, and possibly generate better data-driven models.
+
+In this paper, we investigate the Natural Language Understanding (\NLU) problem in dialogue system. We choose this task because it contains two subtasks: intent detection and slot filling, which corresponds to the two of the most important tasks in Natualy Language Processing (\NLP): sentence classification, sequence labeling. Another reason that we choose this task is that this is one of the most valuable \NLP task in industry, where \RE patterns are heavily used.
+
+We explore 3 different methods of combining \RE and \NN: use \RE to modify (1) \NN input, (2) behavior of \NN module, and (3) \NN output. We find that modifying \NN input works best for slot filling but fails in intent detection, modifying the behavior of \NN module works best for intent detection but not for slot filling, and modifying \NN output generally works for both tasks, but not yield best performance. And it works best on few-shot learning settings, and also makes improvements when using the full dataset.
+
+Our contributions are: 
+
+(1) We systematically explore 3 aspects of combining \RE and \NN in two typical \NLP tasks.
+
+(2) The extensive experiment shows that our method significantly improves the model performance in few-shot learning settings, and also makes improvements when using the full dataset.
+
+(3) By investigating the performance of different kinds of \RE patterns, we provide some useful insights on how to generate useful \RE patterns.
+
