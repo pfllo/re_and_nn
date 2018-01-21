@@ -1,21 +1,88 @@
 \section{Approach}
-\subsection{Modify Input}
+\subsection{Base Models}
+Following \cite{liu2016attention}, which achieves state-of-art results in the famous ATIS \NLU dataset \cite{hemphill1990atis}, we also use Bi-directional LSTM (Bi-LSTM) as our base \NN model. The experiments show that our base model achieves comparitive results to \cite{liu2016attention}.
 \paragraph{Intent Detection}
-TBD
+As for the intent detection task, similar to \cite{liu2016attention}, we also add a self attention layer to the output of Bi-LSTM. Sepcifically, given the output of the Bi-LSTM $[\textbf{h}_1, ..., \textbf{h}_n]$, where $n$ is the sentence lenght, we first compute the attention for each word:
+\begin{equation}
+\alpha_i=\frac{exp(\textbf{cWh}_i)}{\sum_{i}{exp(\textbf{cWh}_i)}}
+\end{equation}
+where $\textbf{c}$ is a randomly initialized context vector, and $\textbf{W}$ is a weight matrix. The final sentence embedding is abtained by: 
+\begin{equation}
+\textbf{s} = \sum_{i}{\alpha_i\textbf{h}_i}
+\end{equation}
+and the sentence embedding is then fed to a softmax classifier for intent prediction.
 
 \paragraph{Slot Filling}
-TBD
+The model for the slot filling task is more straightforward. Given the output of the Bi-LSTM $[\textbf{h}_1, ..., \textbf{h}_n]$, the tag prediction of the word $i$ is generated directly by a softmax classifier which takes $\textbf{h}_i$ as input.
+
+
+\subsection{Modify Input}
+Similar to the stacking technique \cite{wolpert1992stacked}, the most straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as the input of \NN models.
+\paragraph{Intent Detection}
+The output of \RE patterns for intent detection is usually some tags for the entire sentence, which may or may not be the intent labels that we are trying to model. And these tags may possibly conflict with each other due to the imperfection of our patterns. 
+For example, given the sentence \emph{list the delta airlines flights from boston to philadelphia} may match a pattern \textsl{/list( the)? \_\_AIRLINE/} that output label \emph{airline}, and may match a pattern \textsl{/list( \_\_WORD)\{0,3\}? flights?/} that output label \emph{flight} as well. Here \emph{\_\_WORD} matches a single word, which can be written as \textsl{/\textbackslash w+/}.
+
+Many paper has proved that, embed the discrete feature is an effective method to combine features in \NN \cite{zeng2014relation, guo2017deepfm}. Since there may exist several labels for each sentence, we will average the label embeddings to form an aggregated embedding as input. 
+Then, there are two ways to add sentence level features: (1) append the label embedding to every input word embedding, (2) append the label embedding to the input of the softmax classifier. In our pilot experiments, we find that since the label embedding appear so many times, it will dominate the input to \NN, which makes the \NN heavily relies on \RE patterns and therefore lead to bag generalization ability. Consequently, we will adopt the second method.
+
+\todo{describe how to handle unrecalled sentences in exp settings.}
+
+\paragraph{Slot Filling}
+Since the output of slot filling \RE patterns will output word-level tags, we can simply embed the output tags and append it to input word embeddings. Further, since our target output is subject to the BIO annotation paradigm, we further extend the output tag to BIO format. For example, the phrase \emph{new york} in Table \ref{atis_sample} will be tagged as \emph{B-city I-city} if we use a simple word list pattern \textsl{/(\_\_CITY)/}.
 
 \subsection{Modify NN Module}
+Apart from the \RE output, since the regular expression models the pattern itself, it can also help us guide some specific modules in \NN. 
 \paragraph{Intent Detection}
-TBD
+The attention module is a natural fit to receive the guidance from \RE patterns. For example, the pattern \textsl{/\textasciicircum flights? from/} that lead to label \emph{flight} means that, we should attend to the first two words of the input sentence, i.e., flights from, to output the intent \emph{flight}. Since the \NN model relies on distributed representation, it can further generalize the pattern so that phrases with similar meaning can also match the pattern.
+
+While the above method works in practice, we can still do better. First, every intent has different text patterns. Therefore, similar to \cite{lin2016neural}, we can let each intent use diffenrent attention, and use that attention to generate the score for that intent. Specifically, the probability $p_i$ that the input sentence belongs to intent $i$ is computed by:
+\begin{equation}
+\alpha_{ij}=\frac{exp(\textbf{c}_i\textbf{W}_a\textbf{h}_j)}{\sum_{j}{exp(\textbf{c}_i\textbf{W}_a\textbf{h}_j)}}, 
+\textbf{s}_i = \sum_{j}{\alpha_{ij}\textbf{h}_j}
+\label{label_att_eq}
+\end{equation}
+\begin{equation}
+logit_i=\textbf{w}_i\textbf{s}_i + b_i, p_i = \frac{logit_i}{\sum_{i}{logit_i}}
+\label{label_prob_eq}
+\end{equation}
+where $\textbf{c}_i$, $\textbf{s}_i$, $\textbf{w}_i$, $logit_i$, $b_i$ are the context vector, setentence embedding, weight vector, logit, and bias for intent $i$ respectively, $\textbf{h}_j$ is the Bi-LSTM output for word $j$, $\textbf{W}_a$ is a weight matrix.
+
+Second, apart from indicating a sentence belongs to intent $i$ (\emph{positive patterns}), an \RE pattern can also indicate a sentence should not be labeled as intent $i$ (\emph{negative patterns}). Therefore, to make use negative patterns, we use another set of context vectors to compute a new set of logits for each intent using Equation \ref{label_att_eq} and \ref{label_prob_eq}. By denoting the logits computed by positive patterns as $logit_{pi}$, and the ones computed by negative patterns by as $logit_{ni}$, the final logit for intent $i$ is then: 
+\begin{equation}
+logit_i = logit_{pi} - logit_{ni}
+\end{equation}
+
+To apply guidance from \RE patterns, we simply add an attention loss to the final loss:
+\begin{equation}
+att\_loss = \sum_{i}{m_i\sum_{j}{t_{ij}log(\alpha_{ij})}}
+\label{att_loss}
+\end{equation}
+where $t_{ij} = 1/k_{i}$ if there exist a matched pattern that lead to intent $i$ that use word $j$ as clue word, and $k_i$ is the number of matched clue words for intent $i$. Otherwise, $t_{ij} = 0$. $m_i$ is an mask indicator that equals 1 only when intent $i$ has matched \RE pattern. We use Equation \ref{att_loss} to compute both positive attention loss $att\_loss_p$ and negative attention loss $att\_loss_n$, and the final loss is:
+\begin{equation}
+loss = clf\_loss + \beta_p att\_loss_p + \beta_n att\_loss_n
+\end{equation} 
+where $clf\_loss$ is ordinary classification loss, $\beta_p$ and $\beta_n$ are weights for positive and negative attention loss.
+
+One interesting point that need to worth mentioning is that, while with some noise, one positive pattern for intent $i$ can often be negative patterns for other intents. For example, the pattern \textsl{/\textasciicircum flights? from/} that indicates the \emph{flight} intent also indicates that this sentence should not be labeled as intents like \emph{meal}, \emph{quantity}, \emph{airline}, and etc.
+Therefore, we simply use the positive pattern for intent $i$ as the negative pattern for other intents in our experiments.
 
 \paragraph{Slot Filling}
-TBD
+While we can apply the same positive attention and negative attention method as we do in intent classification, we face a efficiency problem in slot filling. Since we need to assign a tag for each word, f we still compute a set of positive attention and a set of negative attention for each tag, we will have to compute $2\times L \times n$ attention values, where $L$ is the number of tags and $n$ is the length of the input sentence. Considering the BIO tagging format further doubles the number of tags, this will result much more computation and will need more memory to store the intemediate results since we need to do backpropagation. 
+
+Therefore, we use the simplified version of positive and negative attention. Specifically, all the tags share the same set of positive and negative attention, and therefore result in one sentence embedding $\textbf{s}_{pi}$ generated from positive attention, and another embedding $\textbf{s}_{ni}$ generated from negative attention for word $i$. The final prediction $textbf{p}_i$ for word $i$ is then:
+\begin{equation}
+\textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) - (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n)) 
+\end{equation} 
+where $\textbf{W}_{p|n}$ and $\textbf{b}_{p|n}$ are weight matrices and bias vecotrs for positive and negative attention respectively. Here we add the Bi-LSTM output $\textbf{h}_i$ because the word $i$ itself plays an important part in recognizing its label.
 
 \subsection{Modify Output}
-\paragraph{Intent Detection}
-TBD
+The final type of combination is to use \RE patterns to modify the output of \NN. \cite{hu2016harnessing} pioneered to explore to apply posterior first order logic constraints to alter the \NN output, and let the \NN to mimic the modification rules. However, different from their work, we focus more on signals that indicate existance of a specific label rather than the constraints that should not be violated. Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
-\paragraph{Slot Filling}
-TBD
+Our method for modifying output is the same for intent detection and slot filling.
+First, to modify the output directly, the output of the \RE pattern need to be changed. Specifically, we need to assign some target labels to output tag of the \RE pattern. This is not difficult because the \RE tags are almost always somewhat related to final target label, otherwise \RE tags may not provide useful information for the prediction. For example, in slot filling, a simple word list pattern \textsl{/(\_\_CITY)/} can lead to three target labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
+
+Then, the final logits for label $i$ is computed as: 
+\begin{equation}
+logit_i = logit'_i + w_i z_i
+\end{equation}
+where $logit'_i$ is the logit computed by ordinary \NN, $z_i$ is the 0-1 indicator of whether a matched pattern leads to label $i$, $w_i$ is a trainable weight indicating the overall confidence for patterns that lead to label $i$. Here we do not assign a trainable weight for each pattern because there may lack enough data to train a good weight, especially when label $i$ only has limited training instances, which is the scenario that \RE patterns helps most. Further, we can also easily incorporate human assigned pattern weights, by simply multiply it to $w_i$.

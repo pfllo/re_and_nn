@@ -1,2 +1,203 @@
-\section{Experimental Results \label{sec:evaluation}}
-TBD
+\section{Experimental Results}
+\label{sec:experiments}
+\subsection{Full Dataset}
+
+\paragraph{Intent Detection}
+
+\begin{table}
+\setlength{\tabcolsep}{0.23em}
+\centering
+\small{
+\begin{tabular}{|c|c|c|}
+
+\hline
+  & Macro-P/R/F1 & Accuracy  \\
+\hline
+raw & 89.55 / 95.66 / 92.50 & 98.77  \\
+\hline
+raw+feat & TBA &TBA  \\
+\hline
+raw+logit & TBA & TBA  \\
+\hline
+two & 90.83 / 96.61 / 93.64 & 98.88 \\
+\hline
+two+posi & 89.68 / 96.61 / 93.02 & 98.88 \\
+\hline
+two+neg & 91.35 / 96.63 / 93.92 & \textbf{98.99} \\
+\hline
+two+both & \textbf{95.78} / \textbf{96.63} / \textbf{96.20} & \textbf{98.99} \\
+\hline
+\hline
+RE & 84.37 / 60.27 / 70.31 & 68.98 \\
+\hline
+mem & 94.71 / 94.41 / 94.56 & 98.54 \\
+\hline
+joint & - & 98.43 \\
+\hline 
+
+\end{tabular}
+}
+\caption{Intent Detection Result on Full Dataset}
+\label{tab_intent_full}
+\end{table}
+
+See Tabel \ref{tab_intent_full}.
+Our model achieves comparitive results to state-of-art (\texttt{joint}). Attention guidance helps. Large memory (\texttt{mem}) helps in macro stats, but slightly reduces overall accuracy.
+
+
+\paragraph{Slot Filling}
+\begin{table}
+\setlength{\tabcolsep}{0.23em}
+\centering
+\small{
+\begin{tabular}{|c|c|c|}
+
+\hline
+  & Macro-P/R/F1 & Micro-P/R/F1  \\
+\hline
+raw &  84.67 / 85.35 / 85.01            & 95.04 / 95.91 / 95.47  \\
+\hline
+raw+feat & \textbf{87.8} / \textbf{86.1} / \textbf{86.94} & 95.03 / 95.8 / 95.42  \\
+\hline
+raw+logit & 87.43 / 85.98 / 86.7        & 95.27 / 95.84 / 95.55  \\
+\hline
+two & 83.96 / 84.94 / 84.45             & 94.65 / 95.45 / 95.05 \\
+\hline
+two+posi & 86.51 / 84.26 / 85.37        & 94.61 / 95.34 / 95.34  \\
+\hline
+two+posi+logit & 82.75 / 84.14 / 83.44  & 95.07 / 95.84 / 95.45 \\
+\hline
+two+posi+feat & 85.32 / 85.74 / 85.53   & \textbf{95.58} / \textbf{96.19} / \textbf{95.89} \\
+\hline
+\hline
+RE & 52.56 / 35.44 / 42.33 & 82.37 / 62.07 / 70.79 \\
+\hline
+mem & TBA & TBA \\
+\hline
+joint & - & - / - / \textbf{95.98} \\
+\hline 
+
+\end{tabular}
+}
+\caption{Intent Detection Result on Full Dataset}
+\label{tab_slot_full}
+\end{table}
+
+See Table \ref{tab_slot_full}.
+\texttt{+neg} does not work, so it is omitted.
+\texttt{+logit} words. \texttt{+feat} works better, combining \texttt{+posi} and \texttt{+logit} and \texttt{+feat} improves micro stats, but descreases macro stats.
+
+
+
+\subsection{Few-Shot Learning}
+\paragraph{Intent Detection}
+
+\begin{table*}
+\setlength{\tabcolsep}{0.23em}
+\centering
+\small{
+\begin{tabular}{|c|c|c|c|c|c|c|}
+
+\hline
+  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+ \hline
+  & Macro-P/R/F1 & Accuracy & Macro-P/R/F1 & Accuracy  & Macro-P/R/F1 & Accuracy   \\
+\hline
+raw & 37.36 / 57.44 / 45.28 & 60.02 & 50.84 / 75.07 / 60.62 & 64.61 & 56.01 / 73.58 / 63.60 & 80.52  \\
+\hline
+raw+feat & 44.25 / 55.92 / 49.40 & 63.72 & 57.90 / 72.39 / 64.34 & 73.46 & 57.09 / 75.89 / 65.16 & 83.20   \\
+\hline
+raw+logit & 38.29 / 59.15 / 46.49 & 56.44 & 55.39 / 74.41 / 63.51 & 77.83 & 62.67 / 77.31 / 69.22 & \textbf{89.25} \\
+\hline
+two & 33.65 / 50.67 / 40.44 & 57.22 & 51.83 / 73.29 / 60.72 & 75.14 & 57.09 / 69.98 / 62.88 & 83.65  \\
+\hline
+two+posi & 43.87 / 60.61 / 50.90 & 74.47 & 59.15 / 81.90 / 68.69 & 84.66 & 63.08 / 85.02 / 72.43 & 85.78  \\
+\hline
+two+neg & 41.92 / 58.99 / 49.01 & 68.31 & 56.29 / 75.98 / 64.67 & 79.17 & 63.65 / 83.73 / 72.32 & 86.34   \\
+\hline
+two+both & \textbf{47.89 / 64.22 / 54.86} & \textbf{75.36} & \textbf{61.80 / 84.06 / 71.23} & \textbf{85.44} & \textbf{68.02 / 85.03 / 75.58} & 88.80   \\
+\hline
+
+\end{tabular}
+}
+\caption{Intent Detection Result on Few-Shot Data}
+\label{tab_intent_few}
+\end{table*}
+See Table \ref{tab_intent_few}
+
+
+\paragraph{Slot Filling}
+
+\begin{table*}
+\setlength{\tabcolsep}{0.23em}
+\centering
+\small{
+\begin{tabular}{|c|c|c|c|c|c|c|}
+
+\hline
+  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+ \hline
+  & Macro-P/R/F1 & Micro-P/R/F1 & Macro-P/R/F1 & Micro-P/R/F1  & Macro-P/R/F1 & Micro-P/R/F1   \\
+\hline
+raw & 59.83/61.76/60.78 & 84.04/83.77/83.91 & 73.1/75.51/74.28  & 90.08/90.3/90.19 & 80.04/81.1/80.57 & 92.87/93.3/93.08 \\
+\hline
+raw+feat & \textbf{67.66/66.04/66.84} & \textbf{90.24/87.72/88.96} & 80.75/78.61/79.67 & \textbf{94.6/92.7/93.64} & 83.56/82.92/83.24 & 94.81/94.74/94.78 \\
+\hline
+raw+logit & 63.9/63.47/63.68 & 86.93/85.43/86.18 & 76.02/76.23/76.12 & 91.82/91.46/91.64  & 83.3/84.11/83.71 & 94.14/94.71/94.43 \\
+\hline
+two & 57.48/61.45/59.4 & 82.91/83.67/83.29 & 72.5/73.95/73.22 & 90.32/89.84/90.08 & 77.98/81.25/79.58 & 92.44/92.7/92.57 \\
+\hline
+two+posi & 58.08/61.66/59.81 & 81.26/80.74/81.0 & 73.38/73.87/73.62 & 89.88/88.68/89.28 & 77.91/80.01/78.94 & 92.12/92.31/92.21 \\
+\hline
+two+posi+feat & 66.51/65.65/66.08 & 88.42/86.74/87.57 & \textbf{80.89/81.89/81.39} & 93.48/92.52/93.0 & 84.41/83.8/84.11 & 95.02/94.81/94.92\\
+\hline
+mem & 59.75/60.44/60.09 & 83.41/83.17/83.29 & 77.52/78.15/77.83  & 90.49/90.65/90.57 & 82.94/83.02/82.98 & 93.29/93.69/93.49 \\
+\hline
+mem+feat & 65.4/64.76/65.08 & 89.07/87.09/88.07 & 80.47/80.81/80.64 & 94.26/92.7/93.47 & \textbf{86.24/84.67/85.45} & \textbf{95.44/95.34/95.39} \\
+\hline
+
+\end{tabular}
+}
+\caption{Intent Detection Result on Few-Shot Data}
+\label{tab_slot_few}
+\end{table*}
+See Table \ref{tab_slot_few}
+
+
+\subsection{Compare with Memory Network}
+
+\begin{table*}
+\setlength{\tabcolsep}{0.23em}
+\centering
+\small{
+\begin{tabular}{|c|c|c|c|c|c|c|}
+
+\hline
+  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+ \hline
+  & Macro-P/R/F1 & Accuracy & Macro-P/R/F1 & Accuracy  & Macro-P/R/F1 & Accuracy   \\
+\hline
+raw & 68.18/61.61/64.73 & 91.71 & 78.63/78.48/78.55 & 96.53 & 80.22/83.96/82.05 & 97.20 \\
+\hline
+two & 67.96/63.38/65.59 & 91.04 & 77.64/78.20/77.92 & 95.52 & 79.57/82.50/81.01 & 96.86 \\
+\hline
+two+both & 67.68/\textbf{65.59/66.62} & 92.05 & \textbf{84.54}/86.99/85.75 & 96.98 & \textbf{87.78}/88.16/\textbf{87.97} & \textbf{97.76} \\
+\hline
+mem & 65.77/61.77/63.70 & 91.71 & 79.43/85.09/82.16 & 96.75 & 82.10/87.45/84.69 & 97.42 \\
+\hline
+mem+posi & \textbf{70.96}/62.63/66.54 & \textbf{92.16} & 84.26/\textbf{87.88/86.03} & \textbf{97.09} & 83.59/\textbf{90.03}/86.69 & 97.65 \\
+\hline
+
+\end{tabular}
+}
+\caption{Intent Detection Result on Few-Shot Data with the Top 3 Intents Having 300 Sentences.}
+\label{tab_intent_few_fill}
+\end{table*}
+See Table \ref{tab_intent_few_fill}, the top 3 labels have 300 sentences.
+
+
+
+
+
+
+
