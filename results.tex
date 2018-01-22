@@ -1,5 +1,7 @@
 \section{Experimental Results}
 \label{sec:experiments}
+
+\todo{discuss few-shot learning first, then mem-net, then full dataset}
 \subsection{Full Dataset}
 
 \paragraph{Intent Detection}
@@ -15,7 +17,7 @@
 \hline
 raw & 89.55 / 95.66 / 92.50 & 98.77  \\
 \hline
-raw+feat & TBA &TBA  \\
+raw+feat & 94.52 / 81.22 / 87.36 & 95.97  \\
 \hline
 raw+logit & TBA & TBA  \\
 \hline
@@ -79,7 +81,7 @@ joint & - & - / - / \textbf{95.98} \\
 
 \end{tabular}
 }
-\caption{Intent Detection Result on Full Dataset}
+\caption{Slot Filling Result on Full Dataset}
 \label{tab_slot_full}
 \end{table}
 
@@ -107,7 +109,7 @@ raw & 37.36 / 57.44 / 45.28 & 60.02 & 50.84 / 75.07 / 60.62 & 64.61 & 56.01 / 73
 \hline
 raw+feat & 44.25 / 55.92 / 49.40 & 63.72 & 57.90 / 72.39 / 64.34 & 73.46 & 57.09 / 75.89 / 65.16 & 83.20   \\
 \hline
-raw+logit & 38.29 / 59.15 / 46.49 & 56.44 & 55.39 / 74.41 / 63.51 & 77.83 & 62.67 / 77.31 / 69.22 & \textbf{89.25} \\
+raw+logit & 38.11 / 58.06 / 46.01 & 58.68 & 55.39 / 74.41 / 63.51 & 77.83 & 62.67 / 77.31 / 69.22 & \textbf{89.25} \\
 \hline
 two & 33.65 / 50.67 / 40.44 & 57.22 & 51.83 / 73.29 / 60.72 & 75.14 & 57.09 / 69.98 / 62.88 & 83.65  \\
 \hline
@@ -151,14 +153,13 @@ two+posi & 58.08/61.66/59.81 & 81.26/80.74/81.0 & 73.38/73.87/73.62 & 89.88/88.6
 \hline
 two+posi+feat & 66.51/65.65/66.08 & 88.42/86.74/87.57 & \textbf{80.89/81.89/81.39} & 93.48/92.52/93.0 & 84.41/83.8/84.11 & 95.02/94.81/94.92\\
 \hline
-mem & 59.75/60.44/60.09 & 83.41/83.17/83.29 & 77.52/78.15/77.83  & 90.49/90.65/90.57 & 82.94/83.02/82.98 & 93.29/93.69/93.49 \\
+mem & 61.85/60.67/61.25 & 83.4/83.49/83.45 & 77.52/78.15/77.83  & 90.49/90.65/90.57 & 82.94/83.02/82.98 & 93.29/93.69/93.49 \\
 \hline
 mem+feat & 65.4/64.76/65.08 & 89.07/87.09/88.07 & 80.47/80.81/80.64 & 94.26/92.7/93.47 & \textbf{86.24/84.67/85.45} & \textbf{95.44/95.34/95.39} \\
 \hline
-
 \end{tabular}
 }
-\caption{Intent Detection Result on Few-Shot Data}
+\caption{Slot Filling Result on Few-Shot Data}
 \label{tab_slot_few}
 \end{table*}
 See Table \ref{tab_slot_few}
@@ -196,6 +197,15 @@ mem+posi & \textbf{70.96}/62.63/66.54 & \textbf{92.16} & 84.26/\textbf{87.88/86.
 See Table \ref{tab_intent_few_fill}, the top 3 labels have 300 sentences.
 
 
+\subsection{Complexity of the Pattern}
+There are two aspects of the pattern tha causes complexity. First, the pattern complexity increases with the number of groups in the \RE. This kind of complexity will lead to better precision and lower coverage. Second, the pattern complexity also increases with the number of \emph{or}s (the symbol |) in a group. This kind of complexity, however, results in higher coverage but lower precision. 
+
+A group can be considered as a phrase set that expresses the same meaning, which is more easy to obtain than annotation more groups.
+
+We simplify all the patterns with 
+
+% Not used intents: atis_airline, atis_meal, atis_aircraft, atis_restriction, atis_quantity, atis_abbreviation
+17 patterns each
 
 
 
