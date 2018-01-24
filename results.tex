@@ -148,7 +148,7 @@ raw & 89.55 / 95.66 / 92.50 & 98.77  \\
 \hline
 raw+feat & 94.52 / 81.22 / 87.36 & 95.97  \\
 \hline
-raw+logit & TBA & TBA  \\
+raw+logit & 89.50 / 95.66 / 92.48 & 98.77  \\
 \hline
 two & 90.83 / 96.61 / 93.64 & 98.88 \\
 \hline
@@ -161,7 +161,9 @@ two+both & \textbf{95.78} / \textbf{96.63} / \textbf{96.20} & \textbf{98.99} \\
 \hline
 RE & 84.37 / 60.27 / 70.31 & 68.98 \\
 \hline
-mem & 94.71 / 94.41 / 94.56 & 98.54 \\
+mem & 92.31 / 94.56 / 93.42 & 98.77 \\
+\hline
+mem+posi & 91.08 / 97.88 / 94.36 & 98.99 \\
 \hline
 joint & - & 98.43 \\
 \hline 
@@ -201,7 +203,9 @@ two+posi+feat & 85.32 / 85.74 / 85.53   & \textbf{95.58} / \textbf{96.19} / \tex
 \hline
 RE & 52.56 / 35.44 / 42.33 & 82.37 / 62.07 / 70.79 \\
 \hline
-mem & TBA & TBA \\
+mem & 86.21 / 85.23 / 85.72 & 94.93 / 95.8 / 95.37 \\
+\hline
+mem+feat & 88.21 / 87.43 / 87.82 & 95.62 / 96.19 / 95.9 \\
 \hline
 joint & - & - / - / \textbf{95.98} \\
 \hline 
@@ -230,13 +234,15 @@ Specifically, for intent detection, we simplify all the patterns with more than 
 \begin{tabular}{|c|c|c|}
 
 \hline
-  & Macro-P/R/F1 & Accuracy  \\
+  & Macro-F1 & Accuracy  \\
 \hline
-raw+feat & TBA & TBA  \\
+raw & 63.60 & 80.52 \\
 \hline
-raw+logit & TBA & TBA  \\
+raw+feat & 65.16 $\rightarrow$ TBA & 83.20 $\rightarrow$ TBA \\
 \hline
-two+both & TBA & TBA \\
+raw+logit & 69.22 $\rightarrow$ 65.09 & 89.25 $\rightarrow$ 83.09  \\
+\hline
+two+both & 75.58 $\rightarrow$ 74.51 & 88.80 $\rightarrow$ 87.46 \\
 \hline 
 \end{tabular}
 }
