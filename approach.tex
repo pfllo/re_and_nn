@@ -71,7 +71,9 @@ While we can apply the same positive attention and negative attention method as 
 
 Therefore, we use the simplified version of positive and negative attention. Specifically, all the tags share the same set of positive and negative attention, and therefore result in one sentence embedding $\textbf{s}_{pi}$ generated from positive attention, and another embedding $\textbf{s}_{ni}$ generated from negative attention for word $i$. The final prediction $textbf{p}_i$ for word $i$ is then:
 \begin{equation}
-\textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) - (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n)) 
+\begin{split}
+\textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) \\- (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n))
+\end{split} 
 \end{equation} 
 where $\textbf{W}_{p|n}$ and $\textbf{b}_{p|n}$ are weight matrices and bias vecotrs for positive and negative attention respectively. Here we add the Bi-LSTM output $\textbf{h}_i$ because the word $i$ itself plays an important part in recognizing its label.
 
