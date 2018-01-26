@@ -7,15 +7,17 @@ However, the data-driven nature of \NN makes it heavily rely on large amount of 
 
 On the other hand, instead of encoding knowledge into massive labeled data, human tend to express their knowledge in a more compact way, i.e., the rules. The rules accumulated by domain experts makes it an excellent source to compensate the shortage of labeled data.
 
-In practice, regular expressions (\RE) is one of the most commonly used human-generated rules in real word. 
+In practice, regular expressions (\RE) is one of the most commonly used human-generated rules in real world. 
 For example, when building a dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can help recognize the sentence in Table \ref{atis_sample} to expressing \emph{flights} intent, which indicates that the user is looking for flight information.
 In industry, people often write some high-precision \RE patterns to handle a fraction of cases, and leave the rest for data-driven models. And \RE can also be the dominent method in few-shot learning scenarios, where the training data is limited.
 
-However, the value \RE patterns should not be limited to only handle specific cases in a high-confident way. The knowledge encoded in the pattern can also been used to help data-driven models like \NN. Furthermore, this is also a perfect scenario where the easy-to-produce low-precision patterns can work, since \NN is known to be good at tolerenting noises \cite{srivastava2014dropout, xie2016disturblabel}.
+However, the value of \RE patterns should not be limited to only handle specific cases in a high-confident way. The knowledge encoded in the pattern can also been used to help data-driven models like \NN. 
+This is also a perfect scenario where the easy-to-produce low-precision patterns can work, since \NN is known to be good at tolerenting noises \cite{srivastava2014dropout, xie2016disturblabel}.
+On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
 
 Specifically, there are 3 different ways of fusing \RE with \NN. First, we can use the output of \RE as features to \NN. This shares similar spirit with the stacking technic \cite{wolpert1992stacked} and has also been used by \cite{wangcombining17} to incorporate knowledge base rules into short text classification. Second, since the \RE patterns highlights important phrases for a specific tag, we can use \RE to help guide the attention module in \NN. Third, we can also combine the output of \RE and \NN in a learnable way, so that the final output contains the information from 2 aspects. \cite{hu2016deep} also explored to use rules to modify the \NN output in a posterior regularization manner, but they are more focused on constraints that should not be broke rather than the positive signals produced by \RE.
 
-In this paper, we investigate the Natural Language Understanding (\NLU) problem in dialogue system to explore methods for fusing \RE and \NN. We choose this task because it contains intent detection and slot filling as two subtasks, which corresponds to two of the most important tasks in Natualy Language Processing (\NLP): sentence classification, sequence labeling. 
+In this paper, we investigate the Natural Language Understanding (\NLU) scenario in dialogue system to explore methods for fusing \RE and \NN. We choose this task because it contains intent detection and slot filling as two subtasks, which corresponds to two of the most important tasks in Natualy Language Processing (\NLP): sentence classification, sequence labeling. 
 Furthermore, in industry, this is also a task where \RE patterns are heavily used.
 We explore the few-shot learning setting where the data is limited as well as the setting using the full dataset, to see how \RE helps when we have different amount of data. To guide \RE annotation, we also conduct quantitive analysis on the impact of \RE complexity to the performance \NN. 
 

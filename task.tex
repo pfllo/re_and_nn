@@ -31,6 +31,7 @@ For example, Table \ref{atis_sample} shows a sample sentence in the ATIS dataset
 
 
 \subsection{Regular Expression Patterns}
+\label{re_desc}
 Regular expression patterns are commonly used in naturaly language related tasks. As for intent detection, an \RE typically models a text pattern and output a related tag for the sentence when the pattern mathes. For example, a pattern 
 \texttt{/\textasciicircum flights?\:from/} can match the sentence in Table \ref{atis_sample}, and then output that the sentence is of intent \emph{flight}. 
 
@@ -39,5 +40,9 @@ Similarly, as for slot filling, given the group functionality of \RE, we can ass
 
 While the outputs are the intent or slot themselves in the examples here, the \RE output can also be a tag related to, but not the same as, the label that we want to predict (see Section \ref{fusion_with_input} and \ref{fusion_with_output}).
 
-When writing \RE patterns, since complicated \texttt{RE}s often requires more efforts to generate, the complexity of the pattern is usually an important trade-off that we need to make. Generally, 2 aspects of an \RE matters the most. First, the pattern complexity increases with the number of groups in the \RE. This kind of complexity will lead to better precision and lower coverage. Second, the pattern complexity also increases with the number of \emph{or}s (the symbol $|$) in a group. Here a group can be considered as a phrase set that expresses the same meaning. Therefore, unless adding ambiguous phrases to the group, this kind of complexity usually results in higher coverage and slightly lower precision. \red{due to limited space, examples for \RE complexity is omitted}  
+When writing \RE patterns, since complicated \texttt{RE}s often requires more efforts to generate, the complexity of the pattern is usually an important trade-off that we need to make. Generally, 2 aspects of an \RE matters the most. First, the pattern complexity increases with the number of groups in the \RE. This kind of complexity will lead to better precision and lower coverage. Second, the pattern complexity also increases with the number of \emph{or}s (the symbol $|$) in a group. Here a group can be considered as a phrase set that expresses the same meaning. Therefore, unless adding ambiguous phrases to the group, this kind of complexity usually results in higher coverage and slightly lower precision. \orange{LUO: due to limited space, examples for \RE complexity is omitted}  
+
+We let the output tag of \RE can differ from the label that we try to predict because this change can sometimes make it easier to write an \RE. For example, we need \texttt{/from\:(\_\_CITY)/} to identify \emph{fromloc.city}, but only \texttt{/(\_\_CITY)/} to identify \emph{city}. In this paper, the output of intent patterns is the same as the intent label, and the output of slot patterns used by the method in Section \ref{interact_with_module} is the same as the slot label. However, the slot \RE tag for methods in Section \ref{fusion_with_input} and \ref{fusion_with_output} is the entity part of the slot label (e.g., \emph{city} in \emph{fromloc.city}). \todo{make the reason for using different slot \RE patterns more clear}
+
+
 

@@ -63,7 +63,7 @@ Our two-side attention ourperforms the pure \RE output (see the \RE row in Table
 \hline
 raw & 59.83/61.76/60.78 & 84.04/83.77/83.91 & 73.1/75.51/74.28  & 90.08/90.3/90.19 & 80.04/81.1/80.57 & 92.87/93.3/93.08 \\
 \hline
-raw+feat & \textbf{67.66/66.04/66.84} & \textbf{90.24/87.72/88.96} & 80.75/78.61/79.67 & \textbf{94.6/92.7/93.64} & 83.56/82.92/83.24 & 94.81/94.74/94.78 \\
+raw+feat & \textbf{67.66/66.04/66.84} & \textbf{90.24/87.72/88.96} & 80.75/78.61/79.67 & \textbf{94.6/92.7/93.64} & 85.02/85.07/85.04 & 94.82/94.89/94.85 \\
 \hline
 raw+logit & 63.9/63.47/63.68 & 86.93/85.43/86.18 & 76.02/76.23/76.12 & 91.82/91.46/91.64  & 83.3/84.11/83.71 & 94.14/94.71/94.43 \\
 \hline
@@ -221,8 +221,6 @@ See Table \ref{tab_slot_full}. The base model achieves comparative results to st
 
 
 \subsection{Complexity of the Pattern}
-There are two aspects of the pattern that causes complexity. First, the pattern complexity increases with the number of groups in the \RE. This kind of complexity will lead to better precision and lower coverage. Second, the pattern complexity also increases with the number of \emph{or}s (the symbol |) in a group. Here a group can be considered as a phrase set that expresses the same meaning. Therefore, unless adding ambiguous phrases to the group, this kind of complexity, generally results in higher coverage and slightly lower precision. 
-
 Since, enriching a group is usually easier than designing the structure of the pattern (arranging the groups), we choose to modify the number of groups in a pattern to see the relationship between pattern complexity and performance.
 
 Specifically, for intent detection, we simplify all the patterns with more than 2 meaningful groups (except for groups that match all the words), so that they will only have 2 meaningful groups. In total, 17 patterns are simplfied. The results are shown in Table \ref{simple_intent}
@@ -238,7 +236,7 @@ Specifically, for intent detection, we simplify all the patterns with more than 
 \hline
 raw & 63.60 & 80.52 \\
 \hline
-raw+feat & 65.16 $\rightarrow$ TBA & 83.20 $\rightarrow$ TBA \\
+raw+feat & 65.16 $\rightarrow$ 66.51 & 83.20 $\rightarrow$ 80.40 \\
 \hline
 raw+logit & 69.22 $\rightarrow$ 65.09 & 89.25 $\rightarrow$ 83.09  \\
 \hline
@@ -262,9 +260,11 @@ As for slot filling, since the number of patterns with more than 2 meaningful gr
 \hline
   & Macro-P/R/F1 & Micro-P/R/F1  \\
 \hline
-raw+feat & TBA & TBA  \\
+raw & 80.57 & 93.08 \\
 \hline
-raw+logit & TBA & TBA  \\
+raw+feat & 84.95 $\rightarrow$ 83.88 & 95.00 $\rightarrow$ 94.71 \\
+\hline
+raw+logit & 83.71 $\rightarrow$ 83.22 & 94.43 $\rightarrow$ 93.94  \\
 \hline 
 \end{tabular}
 }
