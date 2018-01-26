@@ -16,7 +16,8 @@ and the sentence embedding is then fed to a softmax classifier for intent predic
 The model for the slot filling task is more straightforward. Given the output of the Bi-LSTM $[\textbf{h}_1, ..., \textbf{h}_n]$, the tag prediction of the word $i$ is generated directly by a softmax classifier which takes $\textbf{h}_i$ as input.
 
 
-\subsection{Modify Input}
+\subsection{Fusion with Iutput}
+\label{fusion_with_input}
 Similar to the stacking technique \cite{wolpert1992stacked}, the most straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as the input of \NN models.
 \paragraph{Intent Detection}
 The output of \RE patterns for intent detection is usually some tags for the entire sentence, which may or may not be the intent labels that we are trying to model. And these tags may possibly conflict with each other due to the imperfection of our patterns. 
@@ -30,7 +31,7 @@ Then, there are two ways to add sentence level features: (1) append the label em
 \paragraph{Slot Filling}
 Since the output of slot filling \RE patterns will output word-level tags, we can simply embed the output tags and append it to input word embeddings. Further, since our target output is subject to the BIO annotation paradigm, we further extend the output tag to BIO format. For example, the phrase \emph{new york} in Table \ref{atis_sample} will be tagged as \emph{B-city I-city} if we use a simple word list pattern \textsl{/(\_\_CITY)/}.
 
-\subsection{Modify NN Module}
+\subsection{Interact with NN Module}
 Apart from the \RE output, since the regular expression models the pattern itself, it can also help us guide some specific modules in \NN. 
 \paragraph{Intent Detection}
 The attention module is a natural fit to receive the guidance from \RE patterns. For example, the pattern \textsl{/\textasciicircum flights? from/} that lead to label \emph{flight} means that, we should attend to the first two words of the input sentence, i.e., flights from, to output the intent \emph{flight}. Since the \NN model relies on distributed representation, it can further generalize the pattern so that phrases with similar meaning can also match the pattern.
@@ -77,7 +78,8 @@ Therefore, we use the simplified version of positive and negative attention. Spe
 \end{equation} 
 where $\textbf{W}_{p|n}$ and $\textbf{b}_{p|n}$ are weight matrices and bias vecotrs for positive and negative attention respectively. Here we add the Bi-LSTM output $\textbf{h}_i$ because the word $i$ itself plays an important part in recognizing its label.
 
-\subsection{Modify Output}
+\subsection{Fusion with Output}
+\label{fusion_with_output}
 The final type of combination is to use \RE patterns to modify the output of \NN. \cite{hu2016harnessing} pioneered to explore to apply posterior first order logic constraints to alter the \NN output, and let the \NN to mimic the modification rules. However, different from their work, we focus more on signals that indicate existance of a specific label rather than the constraints that should not be violated. Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
 Our method for modifying output is the same for intent detection and slot filling.
