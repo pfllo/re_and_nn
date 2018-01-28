@@ -2,127 +2,134 @@
 \label{sec:experiments}
 
 \subsection{Few-Shot Learning}
-\RE patterns are often used for domains with limited trainging data in industry. Therefore, we first explore whether combining \RE patterns improves \NN models, and how does it compare to pure \RE patterns.
+\RE patterns are often used for domains with limited training data in industry. Therefore, to answer question (1), we first explore the few-shot learning scenario.
 
 \paragraph{Intent Detection}
 
-\begin{table*}
+\begin{table}
 \setlength{\tabcolsep}{0.23em}
 \centering
 \small{
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 
 \hline
-  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
  \hline
-  & Macro-P/R/F1 & Accuracy & Macro-P/R/F1 & Accuracy  & Macro-P/R/F1 & Accuracy   \\
+  & \multicolumn{3}{|c|}{Macro-F1 / Accuracy} \\
 \hline
-raw & 37.36 / 57.44 / 45.28 & 60.02 & 50.84 / 75.07 / 60.62 & 64.61 & 56.01 / 73.58 / 63.60 & 80.52  \\
+BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52  \\
 \hline
-raw+feat & 44.25 / 55.92 / 49.40 & 63.72 & 57.90 / 72.39 / 64.34 & 73.46 & 57.09 / 75.89 / 65.16 & 83.20   \\
+BLSTM+feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20   \\
 \hline
-raw+logit & 38.11 / 58.06 / 46.01 & 58.68 & 55.39 / 74.41 / 63.51 & 77.83 & 62.67 / 77.31 / 69.22 & \textbf{89.25} \\
+BLSTM+logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} \\
 \hline
-two & 33.65 / 50.67 / 40.44 & 57.22 & 51.83 / 73.29 / 60.72 & 75.14 & 57.09 / 69.98 / 62.88 & 83.65  \\
+two & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65  \\
 \hline
-two+posi & 43.87 / 60.61 / 50.90 & 74.47 & 59.15 / 81.90 / 68.69 & 84.66 & 63.08 / 85.02 / 72.43 & 85.78  \\
+two+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78  \\
 \hline
-two+neg & 41.92 / 58.99 / 49.01 & 68.31 & 56.29 / 75.98 / 64.67 & 79.17 & 63.65 / 83.73 / 72.32 & 86.34   \\
+two+neg & 49.01 / 68.31 & 64.67 / 79.17 & 72.32 / 86.34   \\
 \hline
-two+both & \textbf{47.89 / 64.22 / 54.86} & \textbf{75.36} & \textbf{61.80 / 84.06 / 71.23} & \textbf{85.44} & \textbf{68.02 / 85.03 / 75.58} & 88.80   \\
+two+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80   \\
 \hline
 
 \end{tabular}
 }
 \caption{Intent Detection Result on Few-Shot Data}
 \label{tab_intent_few}
-\end{table*}
-See Table \ref{tab_intent_few}. 
+\end{table}
 
-All the methods works, attention perfoms best, both positive and negative works, and it perfoms best when they are combined together.
+As shown in Table \ref{tab_intent_few}, all the methods makes improvements to the baseline \texttt{BLSTM}, and using \RE to guide the attention module works best. Specifically, \texttt{posi} performs better than \texttt{neg} when the data is limited, which is because that the negative patterns are derived from the positive ones with some noise. However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones, and this also indicates the noise tolerence ability of \NN. Further, not surprisingly, we get the best results when positive and negative patterns are combined.
 
-\texttt{logit} is better than \texttt{feature}, probably because the information from \texttt{logit} is more clear (one logit value per intent), and \texttt{feature} is the mix of prediction of various patterns (average of matched intent vector). They does not perform well when training data is limited (5-shot), because of extra learnable parameters.
+Further, we can also see that \texttt{logit} works generally better than \texttt{+feature}, except for the 5-shot case. This is probably because that adding a value directly to the logit of each intent is more clear and straightforward than using the average of embeddings of the intent predicted by \RE as feature. And the straightforwardness of \texttt{logit} also makes the final prediction more sensitive to the noise of \RE, which lead to worse results in the 5-shot setting.
 
-The improvement from \RE decreases as the size of training data increases.
+Another pattern that we can recognize from Table \ref{tab_intent_few} is that, the improvement from \RE decreases as the size of training data increases, which is reasonable since there is more overlap between the information contained by the data and those contained by \RE as we have more data. Besides, \texttt{two} ourperforms the pure \BLSTM from the 10-shot setting even without guidance from \RE, showing the effectiveness the two-side attention architecture.
 
-Our two-side attention ourperforms the pure \RE output (see the \RE row in Table \ref{tab_intent_full}) in 10-shot setting. 
+Besides, \texttt{two+both} significantly outperforms the results produced by our \RE (see the \RE row in Table \ref{tab_intent_full}) since the 10-shot setting, indicating that our method do help generalization the \RE patterns by fusing them with \NN. 
 
 
 \paragraph{Slot Filling}
 
-\begin{table*}
+\begin{table}
 \setlength{\tabcolsep}{0.23em}
 \centering
 \small{
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 
 \hline
-  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
  \hline
-  & Macro-P/R/F1 & Micro-P/R/F1 & Macro-P/R/F1 & Micro-P/R/F1  & Macro-P/R/F1 & Micro-P/R/F1   \\
+  &  \multicolumn{3}{|c|}{Macro-F1 / Micro-F1}   \\
 \hline
-raw & 59.83/61.76/60.78 & 84.04/83.77/83.91 & 73.1/75.51/74.28  & 90.08/90.3/90.19 & 80.04/81.1/80.57 & 92.87/93.3/93.08 \\
+BLSTM & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08 \\
 \hline
-raw+feat & \textbf{67.66/66.04/66.84} & \textbf{90.24/87.72/88.96} & 80.75/78.61/79.67 & \textbf{94.6/92.7/93.64} & 85.02/85.07/85.04 & 94.82/94.89/94.85 \\
+BLSTM+feat & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.0 \\
 \hline
-raw+logit & 63.9/63.47/63.68 & 86.93/85.43/86.18 & 76.02/76.23/76.12 & 91.82/91.46/91.64  & 83.3/84.11/83.71 & 94.14/94.71/94.43 \\
+BLSTM+logit & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
 \hline
-two & 57.48/61.45/59.4 & 82.91/83.67/83.29 & 72.5/73.95/73.22 & 90.32/89.84/90.08 & 77.98/81.25/79.58 & 92.44/92.7/92.57 \\
+two & 59.4 / 83.29 & 73.22 / 90.08 & 79.58 / 92.57 \\
 \hline
-two+posi & 58.08/61.66/59.81 & 81.26/80.74/81.0 & 73.38/73.87/73.62 & 89.88/88.68/89.28 & 77.91/80.01/78.94 & 92.12/92.31/92.21 \\
+two+posi & 59.81 / 81.0 & 73.62 / 89.28 & 78.94 / 92.21 \\
+% \hline
+% two+posi+feat & 66.08 / 87.57 & \textbf{81.39} / 93.0 & 84.11 / 94.92\\
 \hline
-two+posi+feat & 66.51/65.65/66.08 & 88.42/86.74/87.57 & \textbf{80.89/81.89/81.39} & 93.48/92.52/93.0 & 84.41/83.8/84.11 & 95.02/94.81/94.92\\
+mem & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
 \hline
-mem & 61.85/60.67/61.25 & 83.4/83.49/83.45 & 77.52/78.15/77.83  & 90.49/90.65/90.57 & 82.94/83.02/82.98 & 93.29/93.69/93.49 \\
-\hline
-mem+feat & 65.4/64.76/65.08 & 89.07/87.09/88.07 & 80.47/80.81/80.64 & 94.26/92.7/93.47 & \textbf{86.24/84.67/85.45} & \textbf{95.44/95.34/95.39} \\
+mem+feat & 65.08 / 88.07 & 80.64 / 93.47 & \textbf{85.45} / \textbf{95.39} \\
 \hline
 \end{tabular}
 }
 \caption{Slot Filling Result on Few-Shot Data}
 \label{tab_slot_few}
-\end{table*}
-See Table \ref{tab_slot_few}.
+\end{table}
 
-Attention does not work, because the major signal that decides the tag of a word is the word itself, together with 0-3 words in the context. However, attention does not contribute to better self-awareness, and LSTM already has the ability to model context word, the additional attention loss is more of a burden than benifit. Negative attention performs worse, so we only include the results for positive attention in Table \ref{tab_slot_few}.
+Different from intent detection, as shown in Table \ref{tab_slot_few}, the attention loss does not work for slot filling.
+% \footnote{Negative pattern works even worse, we therefore only show the results of positive pattern here}. 
+The reason is that, the major signal that decides the tag of a word is the word itself, together with 0-3 words in the context.
+However, attention does not contribute to better self-awareness. 
+Therefore, since \BLSTM already has the ability to model the context words, the additional attention loss is more of a burden than benifit.
+In our further experiment where we add the attention module to \BLSTM but without attention loss to train on the full dataset. 
+We find that instead of marking informative context words, the attention tend to concentrate on the word that is to be predicted itself, which confirms our hypothesis about why attention loss does not work. 
+Note that, since negative attention performs even worse, we only show positive attention results here.
 
-Contrary to intent detection, although \texttt{logit} and \texttt{feat} both works, \texttt{feat} performs better this time. The reason is \texttt{feat} introduces more information about the target word itself, which makes LSTM make better understanding of the sentence.
+Another difference is that, although both \texttt{logit} and \texttt{feat} work, \texttt{feat} performs better this time. The reason is probably that, rather than simply adding a value to the logit of each label, \texttt{feat} introduces more information about the target word itself, which helps LSTM make better understanding of the sentence.
 
-It is interesting that positive attention and \texttt{feat} is complementary to each other (but the combination does not work for intent detection). \texttt{posi+feat} performs better than pure \texttt{feat} itselft when we have enough data (see 10-shot and 20-shot). This is probably because the extra light-weight NER from \texttt{feat} significantly reduces the need for self-awareness of the target word, which leaves possibility to better model the context (using attention).
+% It is also interesting that, \texttt{posi} and \texttt{feat} is complementary to each other. \texttt{posi+feat} performs better than pure \texttt{feat} itselft when we have enough data. This is probably because the extra light-weight NER from \texttt{feat} significantly reduces the need for self-awareness of the target word, which leaves possibility to better model the context (using attention).
 
-Even our vanila Bi-LSTM model out performs the pure \RE output (see the \RE row in Table \ref{tab_slot_full}) in 5-shot. It is not surprising because this is not true 5-shot setting, extra data still exists for frequent patterns since one sentence may contain multiple slots.
+Besides, we can see that even our vanila Bi-LSTM model outperforms the pure \RE output (see the \RE row in Table \ref{tab_slot_full}) in 5-shot, showing that it is hard to write high-performance \RE patterns, but using \RE to boost \NN models is feasible. 
+% It is not surprising because this is not true 5-shot setting, extra data still exists for frequent patterns since one sentence may contain multiple slots.
 
 
 \subsection{Compare with Memory Network}
 To better understand the relationship between our method and the existing few-shot learning methods, we also implement the memory network model \cite{kaiser2017learning}, which achieves good results in various datasets. Since it proposes a memory module that is plugable to various model, we use the memory module from their released code and adpat it to our intent detection and slot filling base models.
 
-\begin{table*}
+\begin{table}
 \setlength{\tabcolsep}{0.23em}
 \centering
 \small{
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 
 \hline
-  & \multicolumn{2}{|c|}{5-shot} & \multicolumn{2}{|c|}{10-shot} & \multicolumn{2}{|c|}{20-shot}  \\
+  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
  \hline
-  & Macro-P/R/F1 & Accuracy & Macro-P/R/F1 & Accuracy  & Macro-P/R/F1 & Accuracy   \\
+  & \multicolumn{3}{|c|}{Macro-F1 / Accuracy}   \\
 \hline
-raw & 68.18/61.61/64.73 & 91.71 & 78.63/78.48/78.55 & 96.53 & 80.22/83.96/82.05 & 97.20 \\
+raw & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
 \hline
-two & 67.96/63.38/65.59 & 91.04 & 77.64/78.20/77.92 & 95.52 & 79.57/82.50/81.01 & 96.86 \\
+two & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
 \hline
-two+both & 67.68/65.59/66.62 & 92.05 & \textbf{84.54}/86.99/85.75 & 96.98 & \textbf{87.78}/88.16/\textbf{87.97} & \textbf{97.76} \\
+two+both & 66.62 / 92.05 & 85.75 / 96.98 & \textbf{87.97} / \textbf{97.76} \\
 \hline
-mem & 71.38/64.09/67.54 & 91.83 & 79.43/85.09/82.16 & 96.75 & 82.10/87.45/84.69 & 97.42 \\
+mem & 67.54 / 91.83 & 82.16 / 96.75 & 84.69 / 97.42 \\
 \hline
-mem+posi & \textbf{75.08/66.37/70.46} & \textbf{93.06} & 84.26/\textbf{87.88/86.03} & \textbf{97.09} & 83.59/\textbf{90.03}/86.69 & 97.65 \\
+mem+posi & \textbf{70.46} / \textbf{93.06} & \textbf{86.03} / \textbf{97.09} & 86.69 / 97.65 \\
 \hline
 
 \end{tabular}
 }
 \caption{Intent Detection Result on Few-Shot Data with the Top 3 Intents Having 300 Sentences.}
 \label{tab_intent_few_fill}
-\end{table*}
+\end{table}
+
 See Table \ref{tab_intent_few_fill}, the top 3 labels have 300 sentences. Since we already have extra data for frequent tags in few-shot slot filling setting, we use them to run memory network directly. Further, since the memory module require the input datum to have only one embedding, we therefore simplify our multi-attention model for intent detection, and only use one set of attention to generate only one sentence embedding. Consequently, we only use positive attention in this setting.
 
 The memory module generally improves the base model, and it is also compatible to our proposed method, which receives significant improvement when combined with \RE patterns.

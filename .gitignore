@@ -10,3 +10,4 @@ acl2018.pdf
 *.synctex(busy)
 *.DS_Store
 other
+*_backup.tex
