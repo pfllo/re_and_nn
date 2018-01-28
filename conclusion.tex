@@ -1,3 +1,2 @@
 \section{Conclusions}
-\todo{unify the notation of tag and label}
-TBD
+In this paper, we systematically investigate the methods of combining \NN and \RE in three different aspects under the \NLU scenario. The experiments with different numbers of training data show that combining \NN and \RE significantly improves the performance on few-shot learning settings, and there still remains clear improvements when using the full dataset. While most methods work, the best-performant method for intent detection (sentence classification) is using \RE to guide the attention module, and using the \RE output as feature is best for slot filling (sequence labeling). Besides, we also discuss where the complexity of the \RE comes from, and find that accurate \RE patterns do give better results, but the patterns with lower precision can help \NN models as well.
