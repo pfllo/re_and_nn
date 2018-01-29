@@ -1,5 +1,6 @@
 \section{Evaluation Methodology}
 Our experiments aim to answer three main questions: (1) Does \RE patterns help when training data is limited? (2) Does \RE patterns help when using the full training data? (3) When do the three combination methods work, and which works best in each scenario?
+\todo{how to refer to question (3) in exp?}
 
 \subsection{Datasets}
 ATIS (Airline Travel Information Systems) dataset \cite{hemphill1990atis} is a widely used benchmark in \NLU research. It involves queries about flights, meal, abbreviations and etc. We follow the setup used by \cite{liu2016attention}, with 4978 queries for training and 893 for test. There are 127 slot labels and 18 intents. Numbers are replaced with special tokens like \emph{DIGIT*m}, where \emph{m} is the number of digits in the original string. Different from previous work, we also separate words like \emph{Miami\'s} into \emph{Miami \'s} to reduce the number of unseen words, which is important to few-shot leanring.

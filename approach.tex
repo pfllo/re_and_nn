@@ -1,9 +1,19 @@
 \section{Approach}
+
+\begin{figure*}[t!]
+\begin{center}
+\includegraphics[width=0.85\textwidth]{figure/re_nn_overview.png}    
+\caption{Overview of our methods. The left side shows the methods for intent detection, and the right side shows an example for predicting the slot lable for the third word. \circled{1}, \circled{2}, \circled{3} refers to the methods in Section \ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_output} respectively, and the \RE that applies to the input sentence is shown in the bottom.}
+\label{fig_overview}
+\end{center}
+\vspace{-1em}
+\end{figure*}
+
 \subsection{Base Models}
 We use Bi-directional LSTM (\BLSTM) as our base \NN model for both intent classification and slot filling, since it proves to perform well in both of these two tasks \cite{liu2016attention}. 
 % Further, to obtain sentence embedding for intent detection, we use a self-attention layer upon the \BLSTM output.
 \paragraph{Intent Detection}
-As for the intent detection task, to obtain sentence embedding for further classification, we also add a self attention layer upon the output of \BLSTM. Sepcifically, given the \BLSTM output $[\textbf{h}_1, ..., \textbf{h}_n]$, where $n$ is the sentence length, we first compute the attention $\alpha_i$ for each word $i$:
+As shown in Fig. \ref{fig_overview}, given the word embeddings $[\textbf{x}_1, ..., \textbf{x}_n]$ as input, \BLSTM outputs $[\textbf{h}_1, ..., \textbf{h}_n]$ for each word, where $n$ is the sentence length. To obtain sentence embedding for further intent prediction, we also add a self attention layer upon the \BLSTM output, and the attention $\alpha_i$ for each word $i$ is:
 \begin{equation}
 \alpha_i=\frac{exp(\textbf{h}_i\textbf{Wc})}{\sum_{i}{exp(\textbf{h}_i\textbf{Wc})}}
 \end{equation}
@@ -14,10 +24,10 @@ where $\textbf{c}$ is a randomly initialized context vector used to select impor
 and $\textbf{s}$ is fed to a softmax classifier for classfication.
 
 \paragraph{Slot Filling}
-The model for the slot filling task is more straightforward. Given the output of the Bi-LSTM $[\textbf{h}_1, ..., \textbf{h}_n]$, the tag prediction of the word $i$ is generated directly by a softmax classifier which takes $\textbf{h}_i$ as input.
+The model for the slot filling task is more straightforward. Given the output of the Bi-LSTM $[\textbf{h}_1, ..., \textbf{h}_n]$, the tag prediction of the word $i$ is generated directly by a softmax classifier which takes $\textbf{h}_i$ as input.\footnote{The attention aggregation in Fig. \ref{fig_overview} is only used for the mothod in Section \ref{interact_with_module}.}
 
 
-\subsection{Fusion with Iutput}
+\subsection{Fusion with Input}
 \label{fusion_with_input}
 Similar to the stacking technique \cite{wolpert1992stacked}, a straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as the input of \NN models.
 \paragraph{Intent Detection}
@@ -29,16 +39,18 @@ and match a pattern \texttt{/list(\;\textbackslash w+)\{0,3\}?\;flights?/} that 
 
 % Many paper has proved that, embed the discrete feature is an effective method to combine features in \NN \cite{zeng2014relation, guo2017deepfm}. 
 Since there may exist several tags for each sentence, we will average the tag embeddings to form an aggregated embedding as input. 
-Then, there are two ways to add this embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier. Note that, in the first method, the tag embedding is actually copied $n$ times, where $n$ is the sentence length. In our pilot experiments, we find that the copied tag embedding tend to dominate the input, which makes \NN heavily relies on \RE output, and therefore makes the overall performance similar to the performance of \RE alone. Consequently, we will adopt the second method in this paper.
+Then, there are two ways to add this embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier (see \circled{1} in the left part of Fig. \ref{fig_overview}). Note that, in the first method, the tag embedding is actually copied $n$ times, where $n$ is the sentence length. In our pilot experiments, we find that the copied tag embedding tend to dominate the input, which makes \NN heavily relies on \RE output, and therefore makes the overall performance similar to the performance of \RE alone. Consequently, we will adopt the second method in this paper.
 
 \paragraph{Slot Filling}
-Since the output of slot filling \RE patterns will output word-level tags, we can simply embed the output tags and append it to input word embeddings. Further, since our slot label is subject to the BIO annotation paradigm, we further extend the output tag of \RE to BIO format. For example, the final \RE tag of phrase \emph{new york} is \emph{B-city I-city} if its original tag is \emph{city}.
+Since the output of slot filling \RE patterns will output word-level tags, as shown in \circled{1} in the right part of Fig. \ref{fig_overview}, we can simply embed the output tags and append it to input word embeddings. 
+Further, since our slot label is subject to the BIO annotation paradigm, we further extend the output tag of \RE to BIO format. For example, the final \RE tag of phrase \emph{new york} is \emph{B-city I-city} if its original tag is \emph{city}.
 
 \subsection{Interact with NN Module}
 \label{interact_with_module}
 Since the \RE pattern itself has already highlighted informative words for the output tag, it can also help us guide the attention module in \NN.
+As shown in \circled{2} in Fig. \ref{fig_overview}, the bold blue arrows and words indicates the informative words marked by \RE for this prediction.
 \paragraph{Intent Detection}
-Taking the sentence in Table \ref{atis_sample} again for example, the pattern \texttt{/\textasciicircum flights?\:from/} that leads to tag \emph{flight} means that, we should attend to \emph{flights from} in the input sentence to output the intent \emph{flight}. 
+Taking the sentence in Table \ref{atis_sample} again for example, the pattern \texttt{/\textasciicircum flights?\:from/} that leads to tag \emph{flight} means that, we should attend to \emph{flights from} in the input sentence to output the intent \emph{flight}.
 
 Different from the base intent model, we make two changes to better incorporate guidance from \RE.
 First, since different intent has their specific informative words, using a single sentence embedding, which is produced by only one set of attention, would make the attention less focused. 
@@ -89,7 +101,8 @@ where $\textbf{W}_{p}$, $\textbf{W}_{n}$, $\textbf{b}_{p}$, $\textbf{b}_{n}$ are
 
 \subsection{Fusion with Output}
 \label{fusion_with_output}
-The final type of combination is to use \RE patterns to modify the output of \NN, and the method is the same for both intent detection and slot filling. 
+The final type of combination is to use \RE to modify the output of \NN, and the method is the same for the two tasks (see \circled{3} in Fig. \ref{fig_overview}). 
+
 % Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
 As mentioned in Section \ref{re_desc}, the intent \RE patterns output the intent label directly, while the slot \RE patterns used by this fusion method only output the entity part of the slot label. To make connections between the \RE tag and the slot label, we further annotate all the slot labels that the output tag may lead to. For example, patterns that output tag \emph{city} will lead to three slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
