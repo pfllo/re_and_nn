@@ -35,7 +35,12 @@ Macro-precision/recall are calculated by averaging precision/recall of each labe
 While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
 
 \paragraph{Naming Conventions}
-\texttt{BLSTM} refers to attentional \BLSTM for intent detection and vanila \BLSTM for slot filling, \texttt{two} refers to \texttt{BLSTM} with two-side attention without attention loss, \texttt{+feat} means using \RE output as feature, \texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to use both attention losses, \texttt{RE} refers to using \RE output as prediction directly\footnote{for slot filling, patterns for attention guidance are used}, \texttt{+hu16} means the method of \cite{liu2016attention}, \texttt{mem} means combining \texttt{BLSTM} and the memory module that performs well on few-shot learning \cite{kaiser2017learning}, \LL means the joint model \cite{liu2016attention} which achives state-of-art results in ATIS. 
+\texttt{BLSTM} refers to attentional \BLSTM for intent detection and vanila \BLSTM for slot filling, \texttt{two} refers to \texttt{BLSTM} with two-side attention without attention loss, \texttt{+feat} means using \RE output as feature, \texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to use both attention losses, \texttt{RE} refers to using \RE output as prediction directly\footnote{
+For slot filling, patterns for attention guidance are used.}, 
+\texttt{+hu16} means the method of \cite{liu2016attention}, \texttt{mem} means combining \texttt{BLSTM} and the memory module that performs well on few-shot learning \cite{kaiser2017learning}\footnote{
+We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
+}, 
+\LL means the joint model \cite{liu2016attention} which achives state-of-art results in ATIS. 
 
 
 

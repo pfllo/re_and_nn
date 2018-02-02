@@ -2,7 +2,9 @@
 \label{sec:experiments}
 
 \subsection{Few-Shot Learning}
-\RE patterns are often used for domains with limited training data in industry. Therefore, to answer question (1), we first explore the few-shot learning scenario.
+\RE patterns are often used for classes with limited data in industry. Therefore, to answer question (1), we first explore the few-shot learning scenario.
+
+\todo{should I metion \texttt{two}?}
 
 \paragraph{Intent Detection}
 
@@ -40,9 +42,12 @@ two+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \
 \label{tab_intent_few}
 \end{table}
 
-As shown in Table \ref{tab_intent_few}, all the methods makes improvements to the baseline \texttt{BLSTM}, and using \RE to guide the attention module works best. Specifically, \texttt{posi} performs better than \texttt{neg} when the data is limited, which is because that the negative patterns are derived from the positive ones with some noise. However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones, and this also indicates the noise tolerence ability of \NN. Further, not surprisingly, we get the best results when positive and negative patterns are combined.
+As shown in Table \ref{tab_intent_few}, except for 5-shot, all the methods makes improvements to the baseline \texttt{BLSTM}, and using \RE to guide the attention module works best. Specifically, \texttt{posi} performs better than \texttt{neg} when the data is limited, which is because that the negative patterns are derived from the positive ones with some noise. However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones, and this also indicates the noise tolerence ability of \NN. Further, not surprisingly, we get the best results when positive and negative patterns are combined.
 
 Further, we can also see that \texttt{logit} works generally better than \texttt{+feature}, except for the 5-shot case. This is probably because that adding a value directly to the logit of each intent is more clear and straightforward than using the average of embeddings of the intent predicted by \RE as feature. And the straightforwardness of \texttt{logit} also makes the final prediction more sensitive to the noise of \RE, which lead to worse results in the 5-shot setting.
+
+To compare with existing methods of combining \NN and rules, we also implement the teacher-student network method of \cite{liu2016attention}, which is a powerful method to combine first-order-logic constraints into \NN, and proves to perform well on various dataset when data is sufficient. Their method requires a student network to learn from the label distribution produced by rules, which requires enough data to learn from. Therefore, although \texttt{hu16} and \texttt{logit} both belongs to \emph{fusion with output}, \texttt{hu16} performs consistently worse than \texttt{logit} in this few-shot learning setting, since the \texttt{RE}-related parameters are limited in \texttt{logit}.
+% \todo{try to acknowledge that \texttt{hu16} belongs to \emph{fusion in output}}
 
 Another pattern that we can recognize from Table \ref{tab_intent_few} is that, the improvement from \RE decreases as the size of training data increases, which is reasonable since there is more overlap between the information contained by the data and those contained by \RE as we have more data. Besides, \texttt{two} ourperforms the pure \BLSTM from the 10-shot setting even without guidance from \RE, showing the effectiveness the two-side attention architecture.
 
@@ -95,7 +100,7 @@ In our further experiment where we add the attention module to \BLSTM but withou
 We find that instead of marking informative context words, the attention tend to concentrate on the word that is to be predicted itself, which confirms our hypothesis about why attention loss does not work. 
 Note that, since negative attention performs even worse, we only show positive attention results here.
 
-Another difference is that, although both \texttt{logit} and \texttt{feat} work, \texttt{feat} performs better this time. The reason is probably that, rather than simply adding a value to the logit of each label, \texttt{feat} introduces more information about the target word itself, which helps LSTM make better understanding of the sentence.
+Another difference is that, although both \texttt{logit} and \texttt{feat} work, \texttt{feat} performs better this time. The reason is probably that, rather than simply adding a value to the logit of each label, \texttt{feat} introduces more information about the target word itself, which helps LSTM make better understanding of the sentence. Further, with the same reason mentioned in the intent part, \texttt{logit} still performs consistently worse than \texttt{hu16}.
 
 % It is also interesting that, \texttt{posi} and \texttt{feat} is complementary to each other. \texttt{posi+feat} performs better than pure \texttt{feat} itselft when we have enough data. This is probably because the extra light-weight NER from \texttt{feat} significantly reduces the need for self-awareness of the target word, which leaves possibility to better model the context (using attention).
 
@@ -105,6 +110,7 @@ Besides, we can see that even our vanila Bi-LSTM model outperforms the pure \RE 
 
 \subsection{Compare with Memory Network}
 To better understand the relationship between our method and other existing few-shot learning methods, we also implement the memory network method \cite{kaiser2017learning}, which achieves good results in various few-shot settings. Specifically, by adapting their open-source code, we add their proposed memory module to our \BLSTM model.
+\todo{change title, should I mention \texttt{hu16} here?}
 
 \begin{table}
 \setlength{\tabcolsep}{0.23em}
@@ -194,6 +200,10 @@ L\&L16 & - / 98.43 & - / 95.98\\
 Table \ref{tab_full} shows the results for intent detection and slot filling on the full dataset. We can see that, for slot filling, the attention loss still works, \texttt{logit} achieves similar results to \texttt{BLSTM}, but \texttt{feat} performs significantly worse than the baseline. This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While the \NN can learn to assign low weights for the \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and theirfore leading to bad results of \texttt{feat}.
 
 As for slot filling, while the attention loss still does not work, \texttt{feat} and \texttt{logit} both works as in the few-shot setting. The reason is probably that the output of the \RE used for \texttt{feat} and \texttt{logit} is only the entity part of the slot label, which is only indirectly connected to the prediction target. The noise contained in the indirectness makes the \NN relies less on the \RE output, and therefore is less sensitive to the wrong predictions made by \RE as they do in the intent detection scenario.
+
+With enough data, we can see that \texttt{hu16} performs better than \texttt{logit} in intent detection. 
+However, since \texttt{hu16} is a general framework to combine first-order-logic rules, it is more indirect in transfering information from rules to \NN compared to our methods. Therefore, its performance is still clearly inferior to attention loss in intent detection and \texttt{feat} in slot filling, which are designed specifically for \RE rules.
+% The reason that it still performs worse than attention loss intent detection and in slot filling, is 
 
 Further, we can see that \texttt{mem} still generally works, and we can also make improvements by combining our fusion methods. Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model\footnote{Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest}), making our results still comparatable to \LL.}.
 
