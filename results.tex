@@ -23,6 +23,8 @@ BLSTM+feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20   \\
 \hline
 BLSTM+logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} \\
 \hline
+BLSTM+hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10  \\
+\hline
 two & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65  \\
 \hline
 two+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78  \\
@@ -65,6 +67,8 @@ BLSTM & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08 \\
 BLSTM+feat & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.0 \\
 \hline
 BLSTM+logit & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
+\hline
+BLSTM+hu16 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47 \\
 \hline
 two & 59.4 / 83.29 & 73.22 / 90.08 & 79.58 / 92.57 \\
 \hline
@@ -113,7 +117,9 @@ To better understand the relationship between our method and other existing few-
  \hline
   & \multicolumn{3}{|c|}{Macro-F1 / Accuracy}   \\
 \hline
-raw & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
+BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
+\hline
+BLSTM+hu16 & 65.22 / 91.94 & 84.49 / 96.75 & 84.80 / 97.42 \\
 \hline
 two & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
 \hline
@@ -159,6 +165,8 @@ BLSTM+feat & 87.36 / 95.97 & 86.7 / 95.55\\
 \hline
 BLSTM+logit & 92.48 / 98.77 & 86.94 / 95.42  \\
 \hline
+BLSTM+hu16 & 93.09 / 98.77 & 85.74 / 95.33  \\
+\hline
 two & 93.64 / 98.88  & 84.45 / 95.05\\
 % \hline
 % two+posi & 93.02 & 98.88 \\
@@ -187,7 +195,7 @@ Table \ref{tab_full} shows the results for intent detection and slot filling on 
 
 As for slot filling, while the attention loss still does not work, \texttt{feat} and \texttt{logit} both works as in the few-shot setting. The reason is probably that the output of the \RE used for \texttt{feat} and \texttt{logit} is only the entity part of the slot label, which is only indirectly connected to the prediction target. The noise contained in the indirectness makes the \NN relies less on the \RE output, and therefore is less sensitive to the wrong predictions made by \RE as they do in the intent detection scenario.
 
-Further, we can see that \texttt{mem} still generally works, and we can also make improvements by combining our fusion methods. Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model.
+Further, we can see that \texttt{mem} still generally works, and we can also make improvements by combining our fusion methods. Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model\footnote{Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest}), making our results still comparatable to \LL.}.
 
 \subsection{Complexity of the Pattern}
 
