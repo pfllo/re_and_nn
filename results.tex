@@ -54,7 +54,7 @@ since the \texttt{RE}-related parameters are limited in \texttt{logit},
 We can also see that, the improvements from \RE decreases as the size of training data increases, 
 which is reasonable since as we have more data, the information contained in the data will have more overlap with the information in \RE. 
 
-Besides, starting from 10-shot, \texttt{two+both} significantly outperforms pure \RE (see the \RE row in Table \ref{tab_full}), showing that our method do help generalization the \RE patterns by fusing them with \NN. 
+Besides, starting from 10-shot, \texttt{two+both} significantly outperforms pure \RE (see the \RE row in Table \ref{tab_full}), showing that our method do help generalizing the \RE patterns by fusing them with \NN. 
 
 
 \paragraph{Slot Filling}
@@ -247,12 +247,16 @@ base & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}
 \label{tab_simple}
 \end{table}
 
-Since enriching the number of phrases in a group with $|$ is usually easier than designing the structure of the pattern (i.e., arranging the groups), we choose to modify the number of groups in a pattern to see the relationship between pattern complexity and fusion performance.
+Since enriching the number of phrases in a group with $|$ is usually easier adding new groups, we choose to modify the number of groups in a pattern to see the relationship between pattern complexity and fusion performance.
 
-Specifically, for intent detection, we simplify all the patterns with more than 2 meaningful groups (except for groups that match a sequence of any words), so that only 2 meaningful groups are kept. In total, 17 patterns are simplfied. 
-As for slot filling, since the number of patterns with more than 2 meaningful groups is limited (only 7 patterns), we choose a more aggresive strategy that all the patterns are reduced to word list pattern, except for patterns whose main group matches a number or a common word, which is not distinguishable at all on its own. Further, all the remaining patterns are ensured to have at most 2 meaningful groups. In total, 21 patterns are affected.
+Specifically, for intent detection, we simplify all the patterns with more than 2 groups (groups matching a sequence of any words are excluded), so that only 2 groups are kept, which influences 17 patterns. 
+As for slot filling, since the number of patterns with more than 2 groups is limited (only 7 patterns), we choose a more aggresive strategy that all the patterns are reduced to word list pattern, except for those trying to tag a a group that matches a number or a common word, which is not distinguishable at all on its own. 
+All the remaining patterns are ensured to have at most 2 groups, and 21 patterns are affected in total.
 
-As shown in Table \ref{tab_simple}, simplifying the \RE generally results in worse performance, but the results are still better than the base \BLSTM. This shows that, while the quality of the \RE matters when fusing with \NN, we can still get useful information from low-quality patterns. Further, we can see that the attention loss is much less sensitive to the simplification than other methods. The reason probably lies in that, although simplified, the core informative words still remains in the pattern, and is therefore still helpful for the attention module.\footnote{We do not include the simplification results for attention loss since the \RE used for it is different from the other two methods, and we already know it does not work for slot filling} 
+As shown in Table \ref{tab_simple}, simplifying the \RE generally results in worse performance, but the results are still better than the base \BLSTM. 
+This shows that, while the quality of the \RE matters when fused with \NN, we can still get useful information from low-quality patterns. Further, we can see that attention loss is less sensitive to the simplification than other methods. 
+The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module\footnote{
+We do not include simplification results of attention loss for slot filling because its \texttt{RE}s are different from the other two methods, and we already know it does not work for slot filling}.
 
 
 
