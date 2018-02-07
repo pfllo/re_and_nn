@@ -11,7 +11,7 @@ As a technique based on human-generated rules, it is explainable, tunable, and d
 
 On the other hand, since all the synonyms and variations need to be explicitly specified, the generalization ability of \RE is rather poor, which leads to low coverage of the patterns. Therefore, in practice, \RE is often combined with other data-driven methods like neural network (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision. 
 
-However, the value of \RE is more than that. When writing an \texttt{RE}, people actually encode their knowledge about the problem in the pattern, which can be used to improve our data-driven models like \NN. For example, the words in \RE actually indicate the informative words (\emph{clue words}) for this prediction, and an \RE containing only a word list can help us get better understanding of the type of matched phrase.
+However, the value of \RE is more than that. When writing an \texttt{RE}, people actually encode their knowledge about the problem in the pattern, which can be used to improve our data-driven models like \NN. For example, the words in \RE actually indicate the informative words (\textbf{\emph{clue words}}) for this prediction, and an \RE containing only a word list can help us get better understanding of the type of matched phrase.
 
 Since \NN proves to perform generally well than other data-driven methods~\cite{kim2014convolutional, bahdanau2014neural, yih2015semantic}, in this paper, we investigate specifically the methods of using \RE to improve \NN. 
 By doing this, we can further make use of low-precision \texttt{RE}s, since \NN is known to be good at tolerenting noises~\cite{srivastava2014dropout, xie2016disturblabel}. 
