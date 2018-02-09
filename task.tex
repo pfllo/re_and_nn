@@ -18,15 +18,15 @@ For example, Table \ref{atis_sample} shows a sample sentence in the ATIS dataset
 \begin{tabular}{|c|l|}
 
 \hline
-\textbf{Sentence} &flights \;\;\; from \;\;\;\;\; boston \;\;\;\;\;\;\; to \;\;\;\; miami  \\
+\textbf{Sentence} &flights \;\;\;\;\;\;\;\; from \;\;\;\; boston \;\;\;\;\; to \;\;\; miami  \\
 \hline
-\textbf{Slot Label} &\;\;\; O \;\;\;\;\;\;\;\; O \;\; B-fromloc.city \, O \; B-toloc.city \\
+\textbf{Slot Label} &\;\;\; \emph{O} \;\;\;\;\;\;\;\;\;\;\; \emph{O} \; \emph{B-fromloc.city} \, \emph{O} \, \emph{B-toloc.city} \\
 \hline
-\textbf{Slot RE} & \multicolumn{1}{|l|}{\quad\quad\quad\;\;/from \quad (\_\_CITY) \;\;\;\;\,\, to \quad (\_\_CITY)/} \\
+\textbf{Slot RE} & \multicolumn{1}{|l|}{\quad\quad\quad\;\;\;\;\;\;/\texttt{from} \; \texttt{(\_\_CITY)} \, \texttt{to}  \texttt{(\_\_CITY)}/} \\
 \hline
-\textbf{Intent} &\multicolumn{1}{|c|}{flight} \\
+\textbf{Intent} &\multicolumn{1}{|c|}{\emph{flight}} \\
 \hline
-\textbf{Intent RE} & \multicolumn{1}{|l|}{/\textasciicircum flights? from/} \\
+\textbf{Intent RE} & \multicolumn{1}{|l|}{/\textasciicircum \texttt{flights?} \texttt{from}/} \\
 \hline
 \end{tabular}
 }
@@ -37,7 +37,8 @@ For example, Table \ref{atis_sample} shows a sample sentence in the ATIS dataset
 
 \subsection{Regular Expression Patterns}
 \label{re_desc}
-We denote the output of \RE as \textbf{\emph{\RE tag}}, and the label that we are trying to predict as \textbf{\emph{intent label}} and \textbf{\emph{slot label}} for intent detection and slot filling respectively, which are generally referred to as \textbf{\emph{target label}}. Note that, while not necessarily the same as the target label, \RE tag is usually related to one or more target labels. For example, the \RE tag \emph{city} is related to both \emph{fromloc.city} and \emph{toloc.city}.
+We denote the output of \RE as \textbf{\emph{\RE tag}}, and the label that we want to predict as \textbf{\emph{intent label}} and \textbf{\emph{slot label}} for intent detection and slot filling respectively, which are generally referred to as \textbf{\emph{target label}}. 
+Note that, while not necessarily the same as the target label, \RE tag is usually related to one or more target labels. For example, the \RE tag \emph{city} is related to: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
 
 Specifically, in this paper, our \RE tag for intent detection is the same as the intent label. For example, a pattern 
 \texttt{/\textasciicircum flights?\:from/} can match the sentence in Table~\ref{atis_sample}, and output intent \emph{flight}. 
