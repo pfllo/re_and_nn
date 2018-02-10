@@ -6,21 +6,25 @@ Our experiments aim to answer three main questions: (1) Does \RE patterns help w
 \label{sec_datasest}
 ATIS (Airline Travel Information Systems) dataset \cite{hemphill1990atis} is widely used in \NLU research. It involves queries about flights, meal and etc. We follow the setup of \cite{liu2016attention}, with 4978 queries for training and 893 for test. There are 18 intents and 127 slot labels. Numbers are replaced with special tokens like \textsl{\underline{DIGIT*m}}, where \emph{m} is the number of digits in the original string. Different from previous work, we also split words like \textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} to reduce the number of unseen words, which eases few-shot leanring and reduces the complexity of \RE.
 
-To answer question (1), we also explore the few-shot learning scenario. Specifically, for intent detection, we randomly select 5, 10, 20 training instances for each intent to form the few-shot training set. As for slot filling, we first sort the slot labels by frequence, and randomly select sentences for the least-frequent slot label first, then the more frequent labels afterwards one by one. Although we also explore 5, 10, 20 shots settings, since one sentence typically involves multiple slots, the number of frequent slot labels may inevitably exceed the target number of shots.
-To make the \texttt{RE}s reusable across different settings, $k_1$-shot dataset is contained by $k_2$-shot dataset if $k_1 < k_2$. 
+To answer question (1), we also explore the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we randomly select 5, 10, 20 training instances for each intent to form the few-shot training set. 
+As for slot filling, we also explore 5, 10, 20 shots settings. However, since one sentence typically involves multiple slots, the number of frequent slot labels may inevitably exceed the target number of shots. To better approximate the target shot, we select sentences for each slot label sequentially, in the ascending order of the label frequency.
+% As for slot filling, we first sort the slot labels by frequence, and randomly select sentences for the least-frequent slot label first, then the more frequent labels afterwards one by one. Although we also explore 5, 10, 20 shots settings, since one sentence typically involves multiple slots, the number of frequent slot labels may inevitably exceed the target number of shots.
+$k_1$-shot dataset is contained by $k_2$-shot dataset if $k_1 < k_2$. 
 The original test set are used for all settings.
 % After that, we move to the adjacent label which is slightly more frequent, and make sure the number of training instances meet the threshold.
 
-Since most few-shot learning methods require either extra classes or classes with enough data for training, we also explore a new setting for intent detection to make fair comparison with existing few-shot learning methods. Specifically, we let the 3 most frequent intents have 300 training instances, and the rest of the few-shot dataset remains untouched.
+Since most few-shot learning methods require either extra classes or classes with enough data for training, we also explore the \textbf{\emph{partial few-shot learning setting}} for intent detection to make fair comparison with existing few-shot learning methods. Specifically, we let the 3 most frequent intents have 300 training instances, and the rest of the few-shot dataset remains untouched.
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{RE Patterns}
 \label{re_in_exp}
-We only use the 20-shot data to write \RE patterns, but word lists like city list are collected using the full training set. 
+\RE patterns are written by a person who is familiar with the dataset.
+We only use the 20-shot data to write \RE patterns, but word lists like city list are collected from the full training set. 
 While word lists can be generated automatically, the major complexity of writing an \RE comes from the number of groups.
-Typically, writing intent patterns is simple, which takes about 1-2 minutes to yield one pattern, and 54 patterns are collected in total, with averagely 2.2 groups for each \RE (the group matching a sequence of any words is not included). 
-Similarly, writing slot patterns to provide feature or modify output is also easy since we only annotate the entity part of the slot label. It also takes about 1-2 minutes to write one, and 60 patterns are finnally produced, with averagely 1.7 groups.
-However, writing slot patterns to guide attention is difficult, since we need to carefully select informative words and target to the full slot label as well. Typically, writing one pattern requires 2-5 minutes, and 115 patterns with averagely 3.3 groups are produced.
+Typically, writing intent patterns is simple, which takes about 1-2 minutes to yield one pattern, and 54 patterns are collected in total, with averagely 2.2 (from 1 to 4) groups for each \RE (the group matching a sequence of any words is not included). 
+Similarly, writing slot patterns for methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} is also easy since we only annotate a simplified version of the slot label. It takes 1-2 minutes to write an \RE, and 60 patterns are produced, with averagely 1.7 (from 1 to 3) groups.
+However, writing slot patterns to guide attention is more difficult, since we need to carefully select informative words and target to the full slot label as well. Typically, writing one pattern requires 2-5 minutes, and 115 patterns with averagely 3.3 (from 2 to 8) groups are produced.
+The performance of the \texttt{RE}s can be seen in \todo{fill this}
 % These patterns a generated in a single run, and not modified during experiments.
 
 
@@ -35,9 +39,15 @@ Macro-precision/recall are calculated by averaging precision/recall of each labe
 While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
 
 \paragraph{Naming Conventions}
-\texttt{BLSTM} refers to attentional \BLSTM for intent detection and vanila \BLSTM for slot filling, \texttt{two} refers to \texttt{BLSTM} with two-side attention without attention loss, \texttt{+feat} means using \RE output as feature, \texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to use both attention losses, \texttt{RE} refers to using \RE output as prediction directly\footnote{
+\texttt{BLSTM} refers to our base model,
+\ptatt refers to the two-side attention method without attention loss,
+\texttt{+feat} means using \RE tag as feature (fusion with input in Sec.~\ref{fusion_with_input}),
+\texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (interact with \NN module in Sec.~\ref{interact_with_module}),
+\texttt{+logit} means using \RE tag to modify \NN output (fusion with output in Sec.~\ref{fusion_with_output}),
+\texttt{RE} refers to using \RE output as prediction directly\footnote{
 For slot filling, patterns for attention guidance are used.}, 
-\texttt{+hu16} means the method of \cite{liu2016attention}, \texttt{mem} means combining \texttt{BLSTM} and the memory module that performs well on few-shot learning \cite{kaiser2017learning}\footnote{
+\texttt{+hu16} means the method of Hu et al.~\shortcite{hu2016harnessing},
+\texttt{+mem} means adding the memory module that performs well on few-shot learning \cite{kaiser2017learning}\footnote{
 We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
 }, 
 \LL means the joint model \cite{liu2016attention} which achives state-of-art results in ATIS. 

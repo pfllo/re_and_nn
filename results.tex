@@ -1,7 +1,7 @@
 \section{Experimental Results}
 \label{sec:experiments}
 
-\subsection{Few-Shot Learning}
+\subsection{Full Few-Shot Learning}
 \RE patterns are often used for classes with limited data in industry. Therefore, to answer question (1), we first explore the few-shot learning scenario.
 
 \paragraph{Intent Detection}
@@ -19,19 +19,19 @@
 \hline
 BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52  \\
 \hline
-BLSTM+feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20   \\
++feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20   \\
 \hline
-BLSTM+logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} \\
++logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} \\
 \hline
-BLSTM+hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10  \\
++hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10  \\
 \hline
-two & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65  \\
++t\_att & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65  \\
 \hline
-two+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78  \\
++t\_att+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78  \\
 \hline
-two+neg & 49.01 / 68.31 & 64.67 / 79.17 & 72.32 / 86.34   \\
++t\_att+neg & 49.01 / 68.31 & 64.67 / 79.17 & 72.32 / 86.34   \\
 \hline
-two+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80   \\
++t\_att+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80   \\
 \hline
 
 \end{tabular}
@@ -72,21 +72,21 @@ Besides, starting from 10-shot, \texttt{two+both} significantly outperforms pure
 \hline
 BLSTM & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08 \\
 \hline
-BLSTM+feat & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.0 \\
++feat & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.0 \\
 \hline
-BLSTM+logit & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
++logit & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
 \hline
-BLSTM+hu16 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47 \\
++hu16 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47 \\
 \hline
-two & 59.4 / 83.29 & 73.22 / 90.08 & 79.58 / 92.57 \\
++t\_att & 59.4 / 83.29 & 73.22 / 90.08 & 79.58 / 92.57 \\
 \hline
-two+posi & 59.81 / 81.0 & 73.62 / 89.28 & 78.94 / 92.21 \\
++t\_att+posi & 59.81 / 81.0 & 73.62 / 89.28 & 78.94 / 92.21 \\
 % \hline
 % two+posi+feat & 66.08 / 87.57 & \textbf{81.39} / 93.0 & 84.11 / 94.92\\
 \hline
-mem & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
++mem & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
 \hline
-mem+feat & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
++mem+feat & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
 \hline
 \end{tabular}
 }
@@ -112,7 +112,7 @@ Besides, we can see that even \texttt{BLSTM} outperforms \RE (see the \RE row in
 % It is not surprising because this is not true 5-shot setting, extra data still exists for frequent patterns since one sentence may contain multiple slots.
 
 
-\subsection{Compare with Memory Network}
+\subsection{Partial Few-Shot Learning}
 To better understand the relationship between our method and existing few-shot learning methods, we also implement the memory network method \cite{kaiser2017learning}, which achieves good results in various few-shot settings. Specifically, by adapting their open-source code, we add their memory module to our \BLSTM model.
 \todo{change title, do I need to mention \texttt{hu16} here?}
 
@@ -129,15 +129,15 @@ To better understand the relationship between our method and existing few-shot l
 \hline
 BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
 \hline
-BLSTM+hu16 & 65.22 / 91.94 & 84.49 / 96.75 & 84.80 / 97.42 \\
++hu16 & 65.22 / 91.94 & 84.49 / 96.75 & 84.80 / 97.42 \\
 \hline
-two & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
++t\_att & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
 \hline
-two+both & 66.62 / 92.05 & 85.75 / 96.98 & \textbf{87.97} / \textbf{97.76} \\
++t\_att+both & 66.62 / 92.05 & 85.75 / 96.98 & \textbf{87.97} / \textbf{97.76} \\
 \hline
-mem & 67.54 / 91.83 & 82.16 / 96.75 & 84.69 / 97.42 \\
++mem & 67.54 / 91.83 & 82.16 / 96.75 & 84.69 / 97.42 \\
 \hline
-mem+posi & \textbf{70.46} / \textbf{93.06} & \textbf{86.03} / \textbf{97.09} & 86.69 / 97.65 \\
++mem+posi & \textbf{70.46} / \textbf{93.06} & \textbf{86.03} / \textbf{97.09} & 86.69 / 97.65 \\
 \hline
 
 \end{tabular}
@@ -174,23 +174,23 @@ Note that, for the compactness of the paper, we only combine the best-performing
 \hline
 BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
 \hline
-BLSTM+feat & 87.36 / 95.97 & 86.7 / 95.55\\
++feat & 87.36 / 95.97 & 86.7 / 95.55\\
 \hline
-BLSTM+logit & 92.48 / 98.77 & 86.94 / 95.42  \\
++logit & 92.48 / 98.77 & 86.94 / 95.42  \\
 \hline
-BLSTM+hu16 & 93.09 / 98.77 & 85.74 / 95.33  \\
++hu16 & 93.09 / 98.77 & 85.74 / 95.33  \\
 \hline
-two & 93.64 / 98.88  & 84.45 / 95.05\\
++t\_att & 93.64 / 98.88  & 84.45 / 95.05\\
 % \hline
 % two+posi & 93.02 & 98.88 \\
 % \hline
 % two+neg & 93.92 & \textbf{98.99} \\
 \hline
-two+both/posi & \textbf{96.20} / \textbf{98.99} & 85.37 / 95.34 \\
++t\_att+both/posi & \textbf{96.20} / \textbf{98.99} & 85.37 / 95.34 \\
 \hline
-mem & 93.42 / 98.77 & 85.72 / 95.37\\
++mem & 93.42 / 98.77 & 85.72 / 95.37\\
 \hline
-mem+posi/feat & 94.36 / \textbf{98.99} & \textbf{87.82} / \textbf{95.90} \\
++mem+posi/feat & 94.36 / \textbf{98.99} & \textbf{87.82} / \textbf{95.90} \\
 \hline
 \hline
 RE & 70.31 / 68.98 & 42.33 / 70.79\\
@@ -233,7 +233,7 @@ Further, \texttt{mem} still generally works, and we can also make improvements b
 \hline
   & Before & After & Before & After \\
 \hline
-base & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
+BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
 \hline
 +feat & 65.16/\textbf{83.20} & \textbf{66.51}/80.40 & \textbf{84.95/95.00} & 83.88/94.71 \\
 \hline
@@ -243,7 +243,7 @@ base & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}
 \hline 
 \end{tabular}
 }
-\caption{Results on 20-Shot Data with Simple Patterns. \texttt{base} is \texttt{BLSTM}, the base model for \texttt{+feat} and \texttt{+logit}. \texttt{+both} refers to \texttt{two+both}.}
+\caption{Results on 20-Shot Data with Simple Patterns. \texttt{+both} refers to \ptatt\texttt{+both} for short.}
 \label{tab_simple}
 \end{table}
 
