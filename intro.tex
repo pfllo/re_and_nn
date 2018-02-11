@@ -6,15 +6,15 @@
 % For example, when developing a dialogue system for a new domain where there is no relevant data, we can only come up with several queries based on our experience before we have user logs, which is not enough for \NN to work well.
 
 Regular expression (\RE) is a commonly used technique to deal with natural language processing (\NLP) problems, including sentence classification, sequence labeling, and etc.
-For example, in dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can help recognizing the sentence in Table~\ref{atis_sample} as expressing \emph{flights} intent, which indicates that the user is looking for flight information.
+For example, in dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can help recognizing the sentence in Table~\ref{atis_sample} as expressing intent \emph{flights}, which indicates that the user is looking for flight-related information.
 As a technique based on human-generated rules, it is explainable, tunable, and does not rely on training data, making it widely used in industry and especially in few-shot learning scenarios where the training data is limited.
 
-On the other hand, since all the synonyms and variations need to be explicitly specified, the generalization ability of \RE is rather poor, which leads to low coverage of the patterns. Therefore, in practice, \RE is often combined with other data-driven methods like neural network (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision. 
+On the other hand, since all the synonyms and variations need to be explicitly specified, the generalization ability of \RE is rather poor, which leads to low coverage of the patterns. Therefore, in practice, \RE is often combined with data-driven methods like neural network (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision. 
 
-However, the value of \RE is more than that. When writing an \texttt{RE}, people actually encode their knowledge about the problem in the pattern, which can be used to improve our data-driven models like \NN. For example, the words in \RE actually indicate the informative words (\textbf{\emph{clue words}}) for this prediction, and an \RE containing only a word list can help us get better understanding of the type of matched phrase.
+However, the value of \RE is more than that. When writing an \texttt{RE}, people actually encode their knowledge about the problem in the pattern, which can be used to improve our data-driven models like \NN. For example, an \RE actually indicates the informative words (\textbf{\emph{clue words}}) for its prediction.
 
-Since \NN proves to perform generally well than other data-driven methods~\cite{kim2014convolutional, bahdanau2014neural, yih2015semantic}, in this paper, we investigate specifically the methods of using \RE to improve \NN. 
-By doing this, we can further make use of low-precision \texttt{RE}s, since \NN is known to be good at tolerenting noises~\cite{srivastava2014dropout, xie2016disturblabel}. 
+Since \NN proves to perform generally well than other data-driven methods~\cite{kim2014convolutional, bahdanau2014neural}, in this paper, we investigate the methods of using \RE to improve \NN. 
+By doing this, different from the scenario where we only use high-precision \texttt{RE}s to handle a fraction of cases, we can further make use of low-precision \texttt{RE}s, since \NN is known to be good at tolerenting noises~\cite{xie2016disturblabel}. 
 This also reduces the difficulty of writing \texttt{RE}s, since high-precision \texttt{RE}s are hard to generate, and are usually more complex than low-precision ones.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
@@ -25,7 +25,7 @@ This also reduces the difficulty of writing \texttt{RE}s, since high-precision \
 Specifically, we explore fusing \RE with \NN in three different aspects:
 (1) On the \NN input side, we can use the \RE output as features to \NN. 
 This shares similar spirit with the stacking technic~\cite{wolpert1992stacked} and has also been used by~\cite{wangcombining17} to incorporate knowledge base rules in short text classification. 
-(2) As for internal modules of \NN, since \texttt{RE}s highlight clue words for a specific tag, we can use \RE to guide the attention module in \NN.
+(2) On the \NN module side, since \texttt{RE}s highlight clue words for a specific tag, we can use \RE to guide the attention module in \NN.
 (3) On the \NN output side, we can combine the output of \RE and \NN in a learnable way, so that the final output contains information from both \NN and \RE. 
 Hu et al.~\shortcite{hu2016harnessing} also explored this aspect by using first-order-logic (\FOL) constraints to affect the \NN output in a teacher-student network manner.
 Different from their general framework, since \RE output is usually related to the label that we are trying to predict, we use a more direct way for combination. 
@@ -35,8 +35,8 @@ Different from their general framework, since \RE output is usually related to t
 We experiment our methods in the natural language understanding (\NLU) scenario.
 We choose this task because it contains intent detection and slot filling as two subtasks, which correspond to two of the most important tasks in \NLP: sentence classification, sequence labeling. Further, this is also a task where \texttt{RE}s are heavily used in industry.
 
-We explore both the few-shot learning setting where the data is limited and the setting using the full dataset, to see how \RE helps when we have different amount of data. 
+We explore both the few-shot learning setting where the data is limited and the setting with the full dataset, to see how \RE helps when we have different amounts of data. 
 To guide \RE annotation, we also conduct analysis on the impact of \RE complexity to the performance \NN. 
 
-Our contributions are: (1) To our knowledge, we are the first to systematically investigate methods for combining \RE and \NN. (2) The extensive experiment shows that our methods clearly improves the \NN performance in both few-shot learning settings, and the settings with full dataset. (3) Our analysis provides meaningful guidance to fusing method selection, and \RE annotation as well.
+Our contributions are: (1) To our knowledge, we are the first to systematically investigate methods for combining \RE and \NN. (2) The extensive experiments show that our methods clearly improve the \NN performance in both few-shot learning settings, and the settings with full dataset. (3) Our analysis provides meaningful guidance to fusing method selection, and \RE annotation as well.
 
