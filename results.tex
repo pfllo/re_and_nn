@@ -2,119 +2,113 @@
 \label{sec:experiments}
 
 \subsection{Full Few-Shot Learning}
-\RE patterns are often used for classes with limited data in industry. Therefore, to answer question (1), we first explore the few-shot learning scenario.
+To answer question (1), we first explore the few-shot learning scenario.
 
 \paragraph{Intent Detection}
 
-\begin{table}
+\begin{table*}
 \setlength{\tabcolsep}{0.23em}
 \centering
 \small{
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
 
 \hline
-  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
- \hline
-  & \multicolumn{3}{|c|}{Macro-F1 / Accuracy} \\
+\multirow{3}{*}{\textbf{Model Type}} & \multirow{3}{*}{\textbf{Model Name}}  & \multicolumn{3}{|c|}{\textbf{Intent}} & \multicolumn{3}{|c|}{\textbf{Slot}} \\
+\cline{3-8}
+&  & \multicolumn{1}{|c|}{\textbf{5-shot}} & \multicolumn{1}{|c|}{\textbf{10-shot}} & \multicolumn{1}{|c|}{\textbf{20-shot}} 
+& \multicolumn{1}{|c|}{\textbf{5-shot}} & \multicolumn{1}{|c|}{\textbf{10-shot}} & \multicolumn{1}{|c|}{\textbf{20-shot}}  \\
+\cline{3-8}
+&  & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}} & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}} \\
 \hline
-BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52  \\
+Base Model & BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52 
+& 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08  \\
 \hline
-+feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20   \\
+Input Side & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20 
+& \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.00  \\
 \hline
-+logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} \\
+\multirow{2}{*}{Output Side} & +logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25} 
+& 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
+\cline{2-8}
+& +hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10 
+& 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47  \\
 \hline
-+hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10  \\
+\multirow{2}{*}{\vspace{-2.2em}NN Module Side} & +t\_att & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65
+& 60.38 / 83.63 & 73.22 / 90.08 & 79.58 / 92.57  \\
+\cline{2-8}
+& +t\_att+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78 
+& 59.59 / 83.47 & 73.62 / 89.28 & 78.94 / 92.21 \\
+\cline{2-8}
+& +t\_att+neg & 49.01 / 68.31 & 64.67 / 79.17 & 72.32 / 86.34 
+& 59.51 / 83.23 & 72.92 / 89.11 & 78.83 / 92.07 \\
+\cline{2-8}
+& +t\_att+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80 
+& 59.47 / 83.35 & 73.55 / 89.54 & 79.02 / 92.22 \\
 \hline
-+t\_att & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65  \\
+\multirow{2}{*}{Few-Shot Model} & +mem & - & - & - & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
+\cline{2-8}
+& +mem+feat & - & - & - & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
 \hline
-+t\_att+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78  \\
 \hline
-+t\_att+neg & 49.01 / 68.31 & 64.67 / 79.17 & 72.32 / 86.34   \\
+RE Output & RE & \multicolumn{3}{|c|}{70.31 / 68.98} & \multicolumn{3}{|c|}{42.33 / 70.79} \\
 \hline
-+t\_att+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80   \\
-\hline
-
 \end{tabular}
 }
-\caption{Intent Detection Result on Few-Shot Data}
-\label{tab_intent_few}
-\end{table}
+\caption{Results on Full Few-Shot Learning Setting}
+\label{tab_full_few}
+\end{table*}
 
-As shown in Table \ref{tab_intent_few}, except for 5-shot, all the methods makes improvements to the baseline \texttt{BLSTM}, and using \RE to guide the attention module works best. Specifically, \texttt{posi} performs better than \texttt{neg} when the data is limited, which is because that the negative patterns are derived from the positive ones with some noise. However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones. Not surprisingly, we get the best results when positive and negative patterns are combined. Further, we can also see that \texttt{two} works better than \texttt{BLSTM} when we have enough data, indicating again the effectiveness of our two-side attention method.
+As shown in Table \ref{tab_full_few}, except for 5-shot, all the methods makes improvements to the baseline \texttt{BLSTM}. 
+Among these methods, our \NN module side methods (attention-loss-based methods) works best.
+The reason is that the attention module receives the clue words of this prediction directly, which contain more information than the \RE tag.
+We can also see that, since negative patterns are derived from the positive ones with some noise, \texttt{posi} performs better than \texttt{neg} when the data is limited.
+However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones. 
+% Not surprisingly, we get the best results when positive and negative patterns are combined. 
+Besides, \tatt alone works better than \texttt{BLSTM} when we have enough data, indicating again the effectiveness of our two-side attention method.
 
-Further, we can also see that \texttt{logit} works generally better than \texttt{feat}, except for the 5-shot case. This is probably because that adding a value directly to the logit of each intent is more clear and straightforward than using the average embedding of the intents predicted by \RE as feature. And the straightforwardness of \texttt{logit} also makes the prediction more sensitive to the noise of \RE, which leads to worse results in the 5-shot setting.
+Further, we can also see that the output side method (\texttt{logit}) works generally better than input side method (\texttt{feat}), except for the 5-shot case.
+The reason is probably that, modifying output is more straightforward than adding features. The shorter distance from the modification to the final output makes the combination parameters easier to learn.  
+And since \texttt{logit} is more straightforward, its prediction is more sensitive to the noise of \RE, which leads to worse results in the 5-shot setting.
 
-To compare with existing methods of combining \NN and rules, we also implement the teacher-student network \cite{liu2016attention}, which is a powerful method to combine first-order-logic (\FOL) constraints with \NN, and proves to perform well on various datasets. 
-They first use \FOL rules to rectify the label distribution produced by \NN, and then let the \NN to learn from the rectified distribution, which a certain amount of enough data to support this process. 
-Therefore, although \texttt{hu16} and \texttt{logit} both belongs to \emph{fusion with output},
-since the \texttt{RE}-related parameters are limited in \texttt{logit},
+To compare with existing methods of combining \NN and rules, we also implement the teacher-student network \cite{liu2016attention}, which proves to perform well on various datasets. 
+They first use \FOL rules to rectify the label distribution produced by \NN, and then let the \NN to learn from the rectified distribution, which requires a certain amount of data to support this process.
+Therefore, although \texttt{hu16} and \texttt{logit} are both output side methods, since \texttt{logit} is easier to learn,
 \texttt{hu16} performs consistently worse than \texttt{logit} in this few-shot learning setting.
 % \todo{try to acknowledge that \texttt{hu16} belongs to \emph{fusion in output}}
 
 We can also see that, the improvements from \RE decreases as the size of training data increases, 
 which is reasonable since as we have more data, the information contained in the data will have more overlap with the information in \RE. 
 
-Besides, starting from 10-shot, \texttt{two+both} significantly outperforms pure \RE (see the \RE row in Table \ref{tab_full}), showing that our method do help generalizing the \RE patterns by fusing them with \NN. 
+Besides, starting from 10-shot, \texttt{t\_att+both} significantly outperforms pure \RE.
+This shows that, by using our attention loss to bridge the distrional representation of \NN and the clue words of \RE, we can generalize \RE patterns by using only a small amount of data.
 
 
 \paragraph{Slot Filling}
 
-\begin{table}
-\setlength{\tabcolsep}{0.23em}
-\centering
-\small{
-\begin{tabular}{|c|c|c|c|}
-
-\hline
-  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
- \hline
-  &  \multicolumn{3}{|c|}{Macro-F1 / Micro-F1}   \\
-\hline
-BLSTM & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08 \\
-\hline
-+feat & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.0 \\
-\hline
-+logit & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
-\hline
-+hu16 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47 \\
-\hline
-+t\_att & 59.4 / 83.29 & 73.22 / 90.08 & 79.58 / 92.57 \\
-\hline
-+t\_att+posi & 59.81 / 81.0 & 73.62 / 89.28 & 78.94 / 92.21 \\
-% \hline
-% two+posi+feat & 66.08 / 87.57 & \textbf{81.39} / 93.0 & 84.11 / 94.92\\
-\hline
-+mem & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
-\hline
-+mem+feat & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
-\hline
-\end{tabular}
-}
-\caption{Slot Filling Result on Few-Shot Data}
-\label{tab_slot_few}
-\end{table}
-
-Different from intent detection, as shown in Table \ref{tab_slot_few}, the attention loss does not work for slot filling.
+Different from intent detection, as shown in Table \ref{tab_full_few}, the attention loss does not work for slot filling.
 % \footnote{Negative pattern works even worse, we therefore only show the results of positive pattern here}. 
-The reason is that, the tag of a word is decided mainly by the word itself, together with 0-3 words in the context to provide supplementary information.
+The reason is that, the slot label of a \textbf{\emph{target word}} (the word that we are trying to predict slot label) is decided mainly by the word itself, together with 0-3 words in the context to provide supplementary information.
+Therefore, since attenion can only help recognizing clue words in the context, which is less important than the word itself and can be captured by \BLSTM to some extent, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
 % However, attention does not contribute to better self-awareness. 
-Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
-Take the sentence in Table \ref{atis_sample} again for example, we recognize \emph{boston} as \emph{fromloc.city} because the word \emph{boston} reprensents a city, and it follows a context word \emph{from}. Since this simple context is easily captured by \BLSTM, attention does not help much in this case.
-By examing the attention values of \texttt{two} trained on full dataset,
-we find instead of marking informative context words, the attention tend to concentrate on the word that is to be predicted itself, which further confirms our hypothesis on attention loss. 
-Note that, since negative attention performs even worse, we only show positive attention results here.
+% Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
+Take the sentence in Table \ref{atis_sample} again for example, we recognize \textsl{\underline{boston}} as \emph{fromloc.city} because the word \textsl{\underline{boston}} reprensents a city, and it follows a context word \emph{from}. Since this simple context is easily captured by \BLSTM, attention does not help much in this case.
+By examing the attention values of \texttt{t\_att} trained on full dataset,
+we find instead of marking informative context words, the attention tends to concentrate on the word that is to be predicted itself, which further confirms our hypothesis on attention loss.
 
-Another difference is that, although both \texttt{logit} and \texttt{feat} work, \texttt{feat} performs better this time. The reason is probably that, rather than simply adding a value to the logit of each label, \texttt{feat} introduces more information about the target word itself, which helps \NN make better understanding of the sentence. Further, with the same reason mentioned in the intent part, \texttt{logit} still performs consistently worse than \texttt{hu16}.
+However, due to the word list groups like city list in \RE, the \RE tag can help us better understand the target word. 
+Therefore, \texttt{logit} and \texttt{feat} works better here.
+Further, different from intent detection, \texttt{feat} performs better this time.
+The reason is that, since \BLSTM need the type of the target word to better model the context, \texttt{feat} actually provides more information than \texttt{logit} here.
+Further, by converting \RE tag to slot label, \texttt{logit} introduces extra noise to the model.
+Besides, with the same reason mentioned in the intent part, \texttt{logit} still performs consistently worse than \texttt{hu16}.
 
 % It is also interesting that, \texttt{posi} and \texttt{feat} is complementary to each other. \texttt{posi+feat} performs better than pure \texttt{feat} itselft when we have enough data. This is probably because the extra light-weight NER from \texttt{feat} significantly reduces the need for self-awareness of the target word, which leaves possibility to better model the context (using attention).
 
-Besides, we can see that even \texttt{BLSTM} outperforms \RE (see the \RE row in Table \ref{tab_full}) in 5-shot, showing that it is hard to write high-performance \RE patterns, but using \RE to boost \NN is feasible. 
+We can see that even \texttt{BLSTM} outperforms \RE (see the \RE row in Table \ref{tab_full}) in 5-shot, showing that it is hard to write high-performance \RE patterns, but using \RE to boost \NN is feasible. 
 % It is not surprising because this is not true 5-shot setting, extra data still exists for frequent patterns since one sentence may contain multiple slots.
 
 
 \subsection{Partial Few-Shot Learning}
-To better understand the relationship between our method and existing few-shot learning methods, we also implement the memory network method \cite{kaiser2017learning}, which achieves good results in various few-shot settings. Specifically, by adapting their open-source code, we add their memory module to our \BLSTM model.
-\todo{change title, do I need to mention \texttt{hu16} here?}
+To better understand the relationship between our method and existing few-shot learning methods, we also implement the memory network method \cite{kaiser2017learning}, which achieves good results in various few-shot settings. Specifically, by adapting their open-source code, we add their memory module (\texttt{mem}) to our \BLSTM model.
 
 \begin{table}
 \setlength{\tabcolsep}{0.23em}
@@ -123,9 +117,9 @@ To better understand the relationship between our method and existing few-shot l
 \begin{tabular}{|c|c|c|c|}
 
 \hline
-  & \multicolumn{1}{|c|}{5-shot} & \multicolumn{1}{|c|}{10-shot} & \multicolumn{1}{|c|}{20-shot}  \\
- \hline
-  & \multicolumn{3}{|c|}{Macro-F1 / Accuracy}   \\
+\multirow{2}{*}{\textbf{Model}}  & \multicolumn{1}{|c|}{\textbf{5-shot}} & \multicolumn{1}{|c|}{\textbf{10-shot}} & \multicolumn{1}{|c|}{\textbf{20-shot}}  \\
+\cline{2-4}
+ & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}}   \\
 \hline
 BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
 \hline
@@ -142,19 +136,22 @@ BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
 
 \end{tabular}
 }
-\caption{Intent Detection Result on Few-Shot Data with the Top 3 Intents Having 300 Sentences.}
+\caption{Intent Detection Results on Partial Few-Shot Learning Setting.}
 \label{tab_intent_few_fill}
 \end{table}
 
-To work properly, the memory module requires to be trained on either many few-shot classes or several classes with extra data.
-Therefore, we expand our few-shot dataset for intent detection, so that the top 3 intents have 300 sentences. 
-As shown in Table \ref{tab_intent_few_fill}, while the memory module works better than the base model, our attention loss also makes clear improvements in this setting. 
+Since the memory module requires to be trained on either many few-shot classes or several classes with extra data.
+Therefore, we expand our full few-shot dataset for intent detection, so that the top 3 intents have 300 sentences (partial few-shot).
+
+As shown in Table~\ref{tab_intent_few_fill}, while \texttt{mem} works better than the base model, our attention loss also makes clear improvements in this setting.
+\texttt{hu16} also works here, but is inferior to \texttt{t\_att+both}.
 Further, the attention loss can also be combined with the memory module (\texttt{mem+posi}), and achieves better results than \texttt{mem} alone. 
 Note that, since the attention module requires the input sentence to have only one embedding, we only use one set of possitive attention in this case.
 
-As for slot filling, since we already have extra data for frequent tags in the original few-shot data, we use them directly to run the memory module. As shown in Table \ref{tab_slot_few}, \texttt{mem} also improves the base model, and it is also compatible to our \texttt{feat} fusion method, which gives \texttt{mem} a further boost.
+As for slot filling, since we already have extra data for frequent tags in the original few-shot data, we use them directly to run the memory module. As shown in Table \ref{tab_full_few}, \texttt{mem} also improves the base model, and it is also compatible to our \texttt{feat} fusion method, which gives \texttt{mem} a further boost.
 
-Note that, for the compactness of the paper, we only combine the best-performing fusion method in each task with \texttt{mem}. Other methods in each task can be easily combined as well. 
+For the compactness, we only combine the best-performing fusion method in each task with \texttt{mem}. Other methods can be easily combined as well\footnote{
+\texttt{logit} may not be able to applied to methods with other output form, e.g., matching based method~\cite{koch2015siamese}.}.
 
 % NOTE: since we have more data here, the importance of attention guidance is not that crucial as in the previous more strict few-shot leanring setting. Therefore, the weight of attention loss is reduced to 1 in this setting and the following full dataset setting, 
 
@@ -168,9 +165,9 @@ Note that, for the compactness of the paper, we only combine the best-performing
 \begin{tabular}{|c|c|c|}
 
 \hline
- & Intent & Slot \\ 
-\hline
-  & Macro-F1 / Accuracy &  Macro-F1 / Micro-F1 \\
+\multirow{2}{*}{\textbf{Model}} & \textbf{Intent} & \textbf{Slot} \\ 
+\cline{2-3}
+  & \textbf{Macro-F1/Accuracy} &  \textbf{Macro-F1/Micro-F1} \\
 \hline
 BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
 \hline
@@ -186,40 +183,49 @@ BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
 % \hline
 % two+neg & 93.92 & \textbf{98.99} \\
 \hline
-+t\_att+both/posi & \textbf{96.20} / \textbf{98.99} & 85.37 / 95.34 \\
++t\_att+both & \textbf{96.20} / \textbf{98.99} & 85.44 / 95.27 \\
 \hline
 +mem & 93.42 / 98.77 & 85.72 / 95.37\\
 \hline
 +mem+posi/feat & 94.36 / \textbf{98.99} & \textbf{87.82} / \textbf{95.90} \\
 \hline
 \hline
-RE & 70.31 / 68.98 & 42.33 / 70.79\\
-\hline
 L\&L16 & - / 98.43 & - / 95.98\\
 \hline 
 
 \end{tabular}
 }
-\caption{Results on Full Dataset. The left side of \texttt{two+both/posi} and \texttt{mem+posi/feat} applies for intent, and the right side applies for slot.} 
+\caption{Results on Full Dataset. The left side of \texttt{mem+posi/feat} applies for intent, and the right side applies for slot.} 
 \label{tab_full}
 \end{table}
 
-To answer question (2), we also evaluate our methods on the full dataset. As seen in Table \ref{tab_full}, for intent detection, attention loss still works, \texttt{logit} achieves similar results to \texttt{BLSTM}, but \texttt{feat} performs significantly worse than the baseline. This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While \NN can learn to assign low weights for \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and therefore leading to bad results of \texttt{feat}.
+To answer question (2), we also evaluate our methods on the full dataset. 
+As seen in Table \ref{tab_full}, for intent detection,
+the clue words marked by \RE still provide extra information to \NN (\texttt{t\_att+both}),
+but the \RE tag is not very useful (\texttt{feat} and \texttt{logit}).
+The reason is probably that, comparated with the knowledge learned from data, the \RE tag is much more noisy. 
+Therefore, \texttt{logit} performs similarly to \texttt{BLSTM}, and \texttt{feat} performs significantly worse since it has more learnable parameters more complex architecture, which makes it more likely to overfit.
 
-As for slot filling, on the contrary, \texttt{feat} and \texttt{logit} still works as in the few-shot setting. 
-The reason is probably that, 
-the output of the \RE used for \texttt{feat} and \texttt{logit} provides extra information to help \NN better understand the target word (e.g., entity type), which is hard to inferred by \NN itself.
+% This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While \NN can learn to assign low weights for \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and therefore leading to bad results of \texttt{feat}.
+
+As for slot filling, however, \texttt{feat} and \texttt{logit} still works. 
+The reason is that, the word type information contained in the \RE tag is still hard to be learned even when we have more data. 
+% the output of the \RE used for \texttt{feat} and \texttt{logit} provides extra information to help \NN better understand the target word (e.g., entity type), which is hard to inferred by \NN itself.
 % The reason is probably that the output of the \RE used for \texttt{feat} and \texttt{logit} is only the entity part of the slot label, which is only indirectly connected to the prediction target. The noise contained in the indirectness makes \NN relies less on the \RE output, and therefore is less sensitive to the wrong predictions made by \RE as they do in intent detection.
-Also note that, different from few-shot settings, \texttt{posi} improves \texttt{two} when we have enough data, and it also has better macro-F1 than \texttt{BLSTM}, showing that better attention can provide extra information when the key information are captured. 
+Also note that, different from few-shot settings, \texttt{t\_att+both} has better macro-F1 than \texttt{BLSTM} here, showing that better attention is still useful when base model is properly trained. 
 
-With enough data, \texttt{hu16} performs better than \texttt{logit} in intent detection. 
+In intent detection, \texttt{hu16} performs better than \texttt{logit}, showing that \NN can still learn some useful information from the noisy intent \RE tags when we have enough data.
 However, since \texttt{hu16} is a general framework to combine \FOL rules, it is more indirect in transfering knowledge from rules to \NN than our methods. Therefore, its performance is still clearly inferior to attention loss in intent detection and \texttt{feat} in slot filling, which are designed specifically for \RE rules.
 % The reason that it still performs worse than attention loss intent detection and in slot filling, is 
 
-Further, \texttt{mem} still generally works, and we can also make improvements by further combining our fusion methods. Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model\footnote{Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest}), making our results still comparatable to \LL.}. And the analysis on different settings in the sections above together answer question (3).
+Further, \texttt{mem} still generally works, and we can also make improvements by further combining our fusion methods. 
+Besides, we can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data\footnote{
+Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest})}.
+% Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model), making our results still comparatable to \LL.}. 
+And the analysis on different settings in the sections above together answer question (3).
 
 \subsection{Complexity of the Pattern}
-
+\label{sec_complexity}
 \begin{table}
 \setlength{\tabcolsep}{0.23em}
 \centering
@@ -227,11 +233,11 @@ Further, \texttt{mem} still generally works, and we can also make improvements b
 \begin{tabular}{|c|c|c|c|c|}
 
 \hline
-  & \multicolumn{2}{|c|}{Intent} & \multicolumn{2}{|c|}{Slot}  \\
-\hline
-  & \multicolumn{2}{|c|}{Macro-F1 / Accuracy} & \multicolumn{2}{|c|}{Macro-F1 / Micro-F1}  \\
-\hline
-  & Before & After & Before & After \\
+\multirow{3}{*}{\textbf{Model}}  & \multicolumn{2}{|c|}{\textbf{Intent}} & \multicolumn{2}{|c|}{\textbf{Slot}}  \\
+\cline{2-5}
+  & \multicolumn{2}{|c|}{\textbf{Macro-F1 / Accuracy}} & \multicolumn{2}{|c|}{\textbf{Macro-F1 / Micro-F1}}  \\
+\cline{2-5}
+  & \textbf{Before} & \textbf{After} & \textbf{Before} & \textbf{After} \\
 \hline
 BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
 \hline
@@ -247,19 +253,28 @@ BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08
 \label{tab_simple}
 \end{table}
 
-Since enriching the number of phrases in a group with $|$ is usually easier adding new groups, we choose to modify the number of groups in a pattern to see the relationship between pattern complexity and fusion performance.
+This section tries to answer how the \RE complexity affects the fusion performance.
+Since enriching the phrases in a group with $|$ is usually easier adding new groups,
+we choose to control the \RE complexity by modifying the number of groups.
+As discussed in Sec.~\ref{re_desc}, more groups will lead to better precision but lower coverage.
 
-Specifically, for intent detection, we simplify all the patterns with more than 2 groups (groups matching a sequence of any words are excluded), so that only 2 groups are kept, which influences 17 patterns. 
-As for slot filling, since the number of patterns with more than 2 groups is limited (only 7 patterns), we choose a more aggresive strategy that all the patterns are reduced to word list pattern, except for those trying to tag a a group that matches a number or a common word, which is not distinguishable at all on its own. 
-All the remaining patterns are ensured to have at most 2 groups, and 21 patterns are affected in total.
+Specifically, we reduce the number of groups of existing \texttt{RE}s to decrease pattern complexity.
+To mimic the process of writing simple \texttt{RE}s from scratch, we try our best to keep the key groups of the \RE.
+For intent detection, all the \texttt{RE}s are reduced to at most 2 groups (groups matching a sequence of any words are excluded), and 17 \texttt{RE}s are affected. 
+As for slot filling, since the number of \texttt{RE}s with more than 2 groups is limited (only 7), we choose a more aggresive strategy that all the \texttt{RE}s are reduced to word list pattern.
+However, those trying to tag a group that matches a number or a common word can have at most 2 groups, since it is not distinguishable at all without some context.
+In total, 21 patterns are affected.
 
-As shown in Table \ref{tab_simple}, simplifying the \RE generally results in worse performance, but the results are still better than the base \BLSTM. 
-This shows that, while the quality of the \RE matters when fused with \NN, we can still get useful information from low-quality patterns. Further, we can see that attention loss is less sensitive to the simplification than other methods. 
-The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module\footnote{
+As shown in Table \ref{tab_simple}, simple \RE generally leads to worse results, which indicates that we should write complex \RE to get better performance if the cost is affordable.
+Further, the results of simplified \RE are still better than the base \BLSTM, showing that in practice, we can safely start with simple \texttt{RE}s, and increase the complexity gradually\footnote{
+% Further, we can see that attention loss is less sensitive to the simplification than other methods. 
+% The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module
 We do not include simplification results of attention loss for slot filling because its \texttt{RE}s are different from the other two methods, and we already know it does not work for slot filling}.
 
-
-
-
-
-
+\subsection{Key Conclusion}
+We summarize the key conclusions from the experiments above here: 
+(1) The amount of extra information that \NN can learn from \RE influences the fusion performance most. Therefore, attention loss methods works best for intent detection and \texttt{feat} works best for slot filling.
+(2) The improvements from \RE decreases as we have more training data.
+(3) Our fusion methods are compatible with existing few-shot learning methods like \texttt{mem}.
+(4) Better \RE tag leads to better fusion performance.
+\todo{Is this section necessary?}

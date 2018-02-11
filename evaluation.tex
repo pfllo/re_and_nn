@@ -24,7 +24,7 @@ While word lists can be generated automatically, the major complexity of writing
 Typically, writing intent patterns is simple, which takes about 1-2 minutes to yield one pattern, and 54 patterns are collected in total, with averagely 2.2 (from 1 to 4) groups for each \RE (the group matching a sequence of any words is not included). 
 Similarly, writing slot patterns for methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} is also easy since we only annotate a simplified version of the slot label. It takes 1-2 minutes to write an \RE, and 60 patterns are produced, with averagely 1.7 (from 1 to 3) groups.
 However, writing slot patterns to guide attention is more difficult, since we need to carefully select informative words and target to the full slot label as well. Typically, writing one pattern requires 2-5 minutes, and 115 patterns with averagely 3.3 (from 2 to 8) groups are produced.
-The performance of the \texttt{RE}s can be seen in \todo{fill this}
+The performance of the intent \texttt{RE}s and the slot \texttt{RE}s for the method in Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}.
 % These patterns a generated in a single run, and not modified during experiments.
 
 
@@ -41,9 +41,9 @@ While accuracy and micro statistics show performance on all the instances, macro
 \paragraph{Naming Conventions}
 \texttt{BLSTM} refers to our base model,
 \ptatt refers to the two-side attention method without attention loss,
-\texttt{+feat} means using \RE tag as feature (fusion with input in Sec.~\ref{fusion_with_input}),
-\texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (interact with \NN module in Sec.~\ref{interact_with_module}),
-\texttt{+logit} means using \RE tag to modify \NN output (fusion with output in Sec.~\ref{fusion_with_output}),
+\texttt{+feat} means using \RE tag as feature (input side method in Sec.~\ref{fusion_with_input}),
+\texttt{+posi} and \texttt{+neg} refers to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (\NN module method in Sec.~\ref{interact_with_module}),
+\texttt{+logit} means using \RE tag to modify \NN output (output side method in Sec.~\ref{fusion_with_output}),
 \texttt{RE} refers to using \RE output as prediction directly\footnote{
 For slot filling, patterns for attention guidance are used.}, 
 \texttt{+hu16} means the method of Hu et al.~\shortcite{hu2016harnessing},
