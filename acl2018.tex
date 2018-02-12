@@ -7,74 +7,19 @@
 %% Based on the style files for ACL-2014, which were, in turn,
 %% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
 %% EACL-2009, IJCNLP-2008...
-%% Based on the style files for EACL 2006 by 
+%% Based on the style files for EACL 2006 by
 %%e.agirre@ehu.es or Sergi.Balari@uab.es
 %% and that of ACL 08 by Joakim Nivre and Noah Smith
 
 \documentclass[11pt,a4paper]{article}
-\usepackage[hyperref]{acl2018}
-\usepackage{times}
-\usepackage{latexsym}
+\input{preamble}
 
-\usepackage{url}
-
-\usepackage{xcolor}
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
-\newcommand{\red}[1]{\textcolor{red}{#1}}
-\newcommand{\blue}[1]{\textcolor{blue}{#1}}
-\newcommand{\yellow}[1]{\textcolor{yellow}{#1}}
-\newcommand{\green}[1]{\textcolor{green}{#1}}
-\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
-\newcommand{\brown}[1]{\textcolor{brown}{#1}}
-\newcommand{\purple}[1]{\textcolor{purple}{#1}}
-\newcommand{\orange}[1]{\textcolor{orange}{#1}}
-
-\usepackage{xspace}
-\newcommand{\RE}{\texttt{RE}\xspace}
-\newcommand{\NN}{\texttt{NN}\xspace}
-\newcommand{\NLU}{\texttt{NLU}\xspace}
-\newcommand{\NLP}{\texttt{NLP}\xspace}
-\newcommand{\RNN}{\texttt{RNN}\xspace}
-\newcommand{\FOL}{\texttt{FOL}\xspace}
-\newcommand{\BLSTM}{\texttt{BLSTM}\xspace}
-\newcommand{\LL}{\texttt{L\&L16}\xspace}
-\newcommand{\tatt}{\texttt{t\_att}\xspace}
-\newcommand{\ptatt}{\texttt{+t\_att}\xspace}
-
-\usepackage{mathrsfs}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{multirow}
-\usepackage{makecell}
-
-\usepackage{tikz}
-\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
-            \node[shape=circle,draw,inner sep=0.1pt] (char) {#1};}}
-
-
-%\aclfinalcopy % Uncomment this line for the final submission
-%\def\aclpaperid{***} %  Enter the acl Paper ID here
-
-%\setlength\titlebox{5cm}
-% You can expand the titlebox if you need extra space
-% to show all the authors. Please do not make the titlebox
-% smaller than 5cm (the original size); we will check this
-% in the camera-ready version and ask you to change it back.
 
 \newcommand\BibTeX{B{\sc ib}\TeX}
 
 \title{Combining Regular Expression Patterns with Neural Network for Natural Language Understanding}
 
-\author{First Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\\And
-  Second Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\}
+\author{}
 
 \date{}
 
@@ -94,9 +39,7 @@
 
 \clearpage
 
-% include your own bib file like this:
-%\bibliographystyle{acl}
-%\bibliography{acl2018}
+
 \bibliography{acl2018}
 \bibliographystyle{acl_natbib}
 
