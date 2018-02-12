@@ -6,10 +6,10 @@
 % For example, when developing a dialogue system for a new domain where there is no relevant data, we can only come up with several queries based on our experience before we have user logs, which is not enough for \NN to work well.
 
 Regular expression (\RE) is a commonly used technique to deal with natural language processing (\NLP) problems, including sentence
-classification, sequence labeling, and etc. For example, in dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can
+classification, sequence labeling, and etc~\cite{chang2014tokensregex}. For example, in dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can
 help recognizing the sentence in Table~\ref{atis_sample} as expressing intent \emph{flights}, which indicates that the user is looking for
 flight-related information. As a technique based on human-generated rules, it is explainable, tunable, and does not rely on training data,
-making it widely used in industry and especially in few-shot learning scenarios where the training data is limited.
+making it widely used in industry and especially in scenarios where the training data is limited (few-shot learning)~\cite{gc2015big}.
 
 On the other hand, since all the synonyms and variations need to be explicitly specified, the generalization ability of \RE is rather poor,
 which leads to low coverage of the patterns. Therefore, in practice, \RE is often combined with data-driven methods like neural network
