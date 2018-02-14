@@ -19,6 +19,7 @@ As shown in Fig.~\ref{fig_overview}, given the word embeddings $[\textbf{x}_1, .
 Then, we use a self-attention layer to compute the sentence embedding $\textbf{s}$:
 \begin{equation}
 \textbf{s} = \sum_{i}{\alpha_i\textbf{h}_i}, \quad \alpha_i=\frac{exp(\textbf{h}_i\textbf{Wc})}{\sum_{i}{exp(\textbf{h}_i\textbf{Wc})}}
+\label{eq:simple_att}
 \end{equation}
 where  $\alpha_i$ is the attention for word $i$, $\textbf{c}$ is a randomly initialized context vector used to select informative words for classification, and $\textbf{W}$ is a weight matrix. 
 Finally, $\textbf{s}$ is fed to a softmax classifier for intent classfication.
@@ -95,7 +96,9 @@ Therefore, we use the positive pattern for intent $i$ as the negative patterns f
 While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) method as we do in intent prediction, we face an efficiency problem in slot filling. 
 Since we need to assign a label to each word, if we still compute attention for each tag, we will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of tags and $n$ is the sentence length. Considering the BIO tagging format further doubles the number of tags, this will result in a lot of computation and memory storage. 
 
-Therefore, we use the simplified version of the two-side attention. Specifically, all the tags share the same set of positive and negative attention, and therefore we have only one sentence embedding $\textbf{s}_{pi}$ generated from positive attention, and another embedding $\textbf{s}_{ni}$ from negative attention for each word $i$. The final prediction $\textbf{p}_i$ for word $i$ is then:
+Therefore, we use a simplified version of the two-side attention, where all the tags share the same set of positive and negative attention.
+Specifically, to predict the slot label of word $i$, we use Eq.~\ref{eq:simple_att} (with $\textbf{c}$ replaced with the \BLSTM output of word $i$) to generate one sentence embedding $\textbf{s}_{pi}$ from positive attention, and another sentence embedding $\textbf{s}_{ni}$ from negative attenion.
+The final prediction $\textbf{p}_i$ for word $i$ is then:
 \begin{equation}
 \begin{split}
 \textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) \\- (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n))

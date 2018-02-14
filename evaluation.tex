@@ -8,7 +8,8 @@ queries about flights, meal and etc. We follow the setup of \cite{liu2016attenti
 are 18 intents and 127 slot labels. Numbers are replaced with special tokens like \textsl{\underline{DIGIT*m}}, where \emph{m} is the
 number of digits in the original string. Different from previous work, we also split words like \textsl{\underline{Miami's}} into
 \textsl{\underline{Miami 's}} \FIXME{ZW: Why we want to put a space in betwen Miami and 's to reduce the \#unseen words?} to reduce the
-number of unseen words, which eases few-shot leanring and reduces the complexity of \RE.
+number of words \orange{that does not have pretrained word embeddings, which is important to few-shot learning}.
+\orange{LUO to ZW: Due to limited data, few-shot learning heavily relies on pretrained word embeddings to understand words. Inserting the space increases the chance that the word can be found in pretrained word embeddings, and therefore significantly improves the performance of \NN on few-shot learning. This process makes sure that our experiments operate on strong baselines, which improves the reliability of the experiments.}
 
 To answer question (1), we also explore the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we randomly
 select 5, 10, 20 training instances for each intent to form the few-shot training set. As for slot filling, we also explore 5, 10, 20 shots
@@ -24,17 +25,17 @@ Since most few-shot learning methods require either extra classes or classes wit
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{RE Patterns}
-\label{re_in_exp} Our \texttt{RE}s are written by a person who is familiar with the dataset. We only use the 20-shot data to write
+\label{re_in_exp} Our \texttt{RE}s are written \orange{in Perl syntax} by a person who is familiar with the dataset. We only use the 20-shot data to write
 \texttt{RE}s, but word lists like city list are collected from the full training set. While word lists can be generated automatically, the
 major complexity of writing an \RE comes from the number of \RE groups. Typically, writing intent patterns is simple, which takes about 1-2
-minutes to yield one pattern, and 54 patterns are collected in total, with averagely 2.2 (from 1 to 4) \RE groups for each \RE (the group
+minutes to yield one pattern, and 54 patterns are collected in total \orange{(used 1.5 hours)}, with averagely 2.2 (from 1 to 4) \RE groups for each \RE (the group
 matching a sequence of any words is not included). Similarly, writing slot patterns for methods in Sec.~\ref{fusion_with_input} and
 \ref{fusion_with_output} is also easy since we only annotate a simplified version of the slot label. It takes 1-2 minutes to write an \RE,
-and 60 patterns are produced, with averagely 1.7 (from 1 to 3) \RE groups. However, writing slot patterns to guide attention is more
+and 60 patterns are produced \orange{(used 70 minutes)}, with averagely 1.7 (from 1 to 3) \RE groups. However, writing slot patterns to guide attention is more
 difficult, since we need to carefully select informative words and target to the full slot label as well. Typically, writing one pattern
-requires 2-5 minutes, and 115 patterns with averagely 3.3 (from 2 to 8) \RE groups are produced. The performance of the intent \texttt{RE}s
+requires 2-5 minutes, and 115 patterns \orange{(used 5.5 hours)} with averagely 3.3 (from 2 to 8) \RE groups are produced. The performance of the intent \texttt{RE}s
 and the slot \texttt{RE}s for the method in Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}. \FIXME{ZW: We need to
-state in total how long did it take to derive all the REs. State which \RE convention is used. }
+state in total how long did it take to derive all the REs. State which \RE convention is used. } \orange{LUO to ZW: see the newly added orange parts}
 
 
 \subsection{Experimental Setup}
