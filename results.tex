@@ -20,16 +20,19 @@ To answer question (1), we first explore the few-shot learning scenario.
 \cline{3-8}
 &  & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}} & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}} \\
 \hline
-Base Model & BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52
+
+\rowcolor{Gray}Base Model & BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52
 & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08  \\
 \hline
 Input Side & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20
 & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.00  \\
 \hline
-\multirow{2}{*}{Output Side} & +logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25}
+
+\rowcolor{Gray}  & +logit & 46.01 / 58.68 & 63.51 / 77.83 & 69.22 / \textbf{89.25}
 & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
 \cline{2-8}
-& +hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10
+
+\rowcolor{Gray} \multirow{-2}{*}{Output Side}& +hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10
 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47  \\
 \hline
 \multirow{2}{*}{\vspace{-2.2em}NN Module Side} & +t\_att & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65
@@ -44,9 +47,9 @@ Input Side & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20
 & +t\_att+both & \textbf{54.86} / \textbf{75.36} & \textbf{71.23} / \textbf{85.44} & \textbf{75.58} / 88.80
 & 59.47 / 83.35 & 73.55 / 89.54 & 79.02 / 92.22 \\
 \hline
-\multirow{2}{*}{Few-Shot Model} & +mem & - & - & - & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
+\rowcolor{Gray} & +mem & - & - & - & 61.25 / 83.45 & 77.83 / 90.57 & 82.98 / 93.49 \\
 \cline{2-8}
-& +mem+feat & - & - & - & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
+\rowcolor{Gray} \multirow{-2}{*}{Few-Shot Model}  & +mem+feat & - & - & - & 65.08 / 88.07 & \textbf{80.64} / 93.47 & \textbf{85.45} / \textbf{95.39} \\
 \hline
 \hline
 RE Output & RE & \multicolumn{3}{|c|}{70.31 / 68.98} & \multicolumn{3}{|c|}{42.33 / 70.79} \\
@@ -91,9 +94,11 @@ Therefore, since attenion can only help recognizing clue words in the context, w
 Therefore, extra parameters introduced by attention and the attention loss are more of a burden than benifit.
 % However, attention does not contribute to better self-awareness.
 % Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
-Take the sentence in Table \ref{atis_sample} again for example, we recognize \textsl{\underline{boston}} as \emph{fromloc.city} because the word \textsl{\underline{boston}} reprensents a city, and it follows a context word \emph{from}. Since this simple context is easily captured by \BLSTM, attention does not help much in this case.
-By examing the attention values of \texttt{t\_att} trained on full dataset,
-we find instead of marking informative context words, the attention tends to concentrate on the word that is to be predicted itself, which further confirms our hypothesis on attention loss.
+Take the sentence in Table \ref{atis_sample} again for example, we recognize \textsl{\underline{boston}} as \emph{fromloc.city} because the
+word \textsl{\underline{boston}} reprensents a city, and it follows a context word \emph{from}. Since this simple context is easily
+captured by \BLSTM, attention does not help much in this case. By examine the attention values of \texttt{t\_att} trained on full dataset,
+we find instead of marking informative context words, the attention tends to concentrate on the word that is to be predicted itself, which
+further confirms our hypothesis on attention loss.
 
 However, due to the word list \RE groups like city list, the \RE tag actually provides type information of the target word.
 Therefore \texttt{logit} and \texttt{feat} works better here.
@@ -123,15 +128,15 @@ To better understand the relationship between our method and existing few-shot l
 \cline{2-4}
  & \multicolumn{3}{|c|}{\textbf{Macro-F1 / Accuracy}}   \\
 \hline
-BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
+\rowcolor{Gray} BLSTM & 64.73 / 91.71 & 78.55 / 96.53 & 82.05 / 97.20 \\
 \hline
 +hu16 & 65.22 / 91.94 & 84.49 / 96.75 & 84.80 / 97.42 \\
 \hline
-+t\_att & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
+\rowcolor{Gray} +t\_att & 65.59 / 91.04 & 77.92 / 95.52 & 81.01 / 96.86 \\
 \hline
 +t\_att+both & 66.62 / 92.05 & 85.75 / 96.98 & \textbf{87.97} / \textbf{97.76} \\
 \hline
-+mem & 67.54 / 91.83 & 82.16 / 96.75 & 84.69 / 97.42 \\
+\rowcolor{Gray} +mem & 67.54 / 91.83 & 82.16 / 96.75 & 84.69 / 97.42 \\
 \hline
 +mem+posi & \textbf{70.46} / \textbf{93.06} & \textbf{86.03} / \textbf{97.09} & 86.69 / 97.65 \\
 \hline
@@ -171,15 +176,15 @@ For compactness, we only combine the best-performing fusion method in each task 
 \cline{2-3}
   & \textbf{Macro-F1/Accuracy} &  \textbf{Macro-F1/Micro-F1} \\
 \hline
-BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
+\rowcolor{Gray} BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
 \hline
 +feat & 91.86 / 97.65 & 86.7 / 95.55\\
 \hline
-+logit & 92.48 / 98.77 & 86.94 / 95.42  \\
+\rowcolor{Gray} +logit & 92.48 / 98.77 & 86.94 / 95.42  \\
 \hline
 +hu16 & 93.09 / 98.77 & 85.74 / 95.33  \\
 \hline
-+t\_att & 93.64 / 98.88  & 84.45 / 95.05\\
+\rowcolor{Gray} +t\_att & 93.64 / 98.88  & 84.45 / 95.05\\
 % \hline
 % two+posi & 93.02 & 98.88 \\
 % \hline
@@ -187,12 +192,12 @@ BLSTM & 92.50 / 98.77  & 85.01 / 95.47\\
 \hline
 +t\_att+both & \textbf{96.20} / \textbf{98.99} & 85.44 / 95.27 \\
 \hline
-+mem & 93.42 / 98.77 & 85.72 / 95.37\\
+\rowcolor{Gray} +mem & 93.42 / 98.77 & 85.72 / 95.37\\
 \hline
 +mem+posi/feat & 94.36 / \textbf{98.99} & \textbf{87.82} / \textbf{95.90} \\
 \hline
 \hline
-L\&L16 & - / 98.43 & - / 95.98\\
+\rowcolor{Gray} L\&L16 & - / 98.43 & - / 95.98\\
 \hline
 
 \end{tabular}
@@ -240,11 +245,11 @@ And the analysis on different settings in the sections above together answer que
 \cline{2-5}
   & \textbf{Before} & \textbf{After} & \textbf{Before} & \textbf{After} \\
 \hline
-BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
+\rowcolor{Gray} BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
 \hline
 +feat & 65.16/\textbf{83.20} & \textbf{66.51}/80.40 & \textbf{84.95/95.00} & 83.88/94.71 \\
 \hline
-+logit & \textbf{69.22/89.25} & 65.09/83.09 & \textbf{83.71/94.43} & 83.22/93.94  \\
+\rowcolor{Gray} +logit & \textbf{69.22/89.25} & 65.09/83.09 & \textbf{83.71/94.43} & 83.22/93.94  \\
 \hline
 +both & \textbf{75.58/88.80} & 74.51/87.46 & - & - \\
 \hline

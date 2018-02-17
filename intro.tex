@@ -1,14 +1,8 @@
 \section{Introduction}
 
-% Neural networks (\NN) have been proven to be effective in various natural language processing (\NLP) tasks, including text classification \cite{kim2014convolutional}, question answering \cite{yih2015semantic}, machine translation \cite{bahdanau2014neural}, and etc.
 
-% However, the data-driven nature of \NN makes it heavily rely on large amount of labeled data, which is expensive and hard to produce.
-% For example, when developing a dialogue system for a new domain where there is no relevant data, we can only come up with several queries based on our experience before we have user logs, which is not enough for \NN to work well.
-
-
-One of the fundamental techniques in computer science is the regular expression (\RE), a language for specifying text search strings. This
-practical language is used in almost every programming language, word processor and text processing tool. It is used for a wide range of
-natural language processing (\NLP) tasks like pattern matching, sentence classification, sequence labeling
+One of the fundamental techniques in computer science is the regular expression (\RE), a language for specifying text search strings.  \RE
+is used for a wide range of natural language processing (\NLP) tasks like pattern matching, sentence classification, sequence labeling
 etc.~\cite{chang2014tokensregex}. For example, in dialogue system, an \RE pattern \texttt{/\textasciicircum flights? from/} can help
 recognizing the sentence in Table~\ref{atis_sample} as expressing intent \emph{flights}, which indicates that the user is looking for
 flight-related information. As a technique based on human-generated rules, it is explainable, tunable, and does not rely on training data,
@@ -45,10 +39,13 @@ combination.
 % However, since it is a general framework, it sacrifices some directness of the combination for its generality。
 % but they are more focused on constraints that should not be broke rather than the positive signals produced by \RE.
 
-We experiment our methods in the natural language understanding (\NLU) scenario.
-We choose this task because it contains intent detection and slot filling as two subtasks, which correspond to two of the most important tasks in \NLP: sentence classification, sequence labeling. Further, this is also a task where \texttt{RE}s are heavily used in industry.
+We experiment our methods in the natural language understanding (\NLU) scenario. We choose this task because it contains intent detection
+and slot filling as two subtasks, which correspond to two of the most important tasks in \NLP: sentence classification, sequence labeling.
+Further, this is also a task where \texttt{RE}s are heavily used in industry.
 
 We explore both the few-shot learning setting where the data is limited and the setting with the full dataset, to see how \RE helps when we have different amounts of data.
 To guide \RE annotation, we also conduct analysis on the impact of \RE complexity to the performance \NN.
 
-Our contributions are: (1) To our knowledge, we are the first to systematically investigate methods for combining \RE and \NN. (2) The extensive experiments show that our methods clearly improve the \NN performance in both few-shot learning settings, and the settings with full dataset. (3) Our analysis provides meaningful guidance to fusing method selection, and \RE annotation as well.
+Our contributions are as follows. (1) This is the first work to systematically investigate methods for combining \RE and \NN. (2) The
+extensive experiments show that our methods clearly improve the \NN performance in both few-shot learning settings, and the settings with
+full dataset. (3) Our analysis provides meaningful guidance to fusing method selection, and \RE annotation as well.

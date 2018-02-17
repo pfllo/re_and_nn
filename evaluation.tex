@@ -25,17 +25,30 @@ Since most few-shot learning methods require either extra classes or classes wit
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{RE Patterns}
-\label{re_in_exp} Our \texttt{RE}s are written \orange{in Perl syntax} by a person who is familiar with the dataset. We only use the 20-shot data to write
-\texttt{RE}s, but word lists like city list are collected from the full training set. While word lists can be generated automatically, the
-major complexity of writing an \RE comes from the number of \RE groups. Typically, writing intent patterns is simple, which takes about 1-2
-minutes to yield one pattern, and 54 patterns are collected in total \orange{(used 1.5 hours)}, with averagely 2.2 (from 1 to 4) \RE groups for each \RE (the group
-matching a sequence of any words is not included). Similarly, writing slot patterns for methods in Sec.~\ref{fusion_with_input} and
-\ref{fusion_with_output} is also easy since we only annotate a simplified version of the slot label. It takes 1-2 minutes to write an \RE,
-and 60 patterns are produced \orange{(used 70 minutes)}, with averagely 1.7 (from 1 to 3) \RE groups. However, writing slot patterns to guide attention is more
-difficult, since we need to carefully select informative words and target to the full slot label as well. Typically, writing one pattern
-requires 2-5 minutes, and 115 patterns \orange{(used 5.5 hours)} with averagely 3.3 (from 2 to 8) \RE groups are produced. The performance of the intent \texttt{RE}s
-and the slot \texttt{RE}s for the method in Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}. \FIXME{ZW: We need to
-state in total how long did it take to derive all the REs. State which \RE convention is used. } \orange{LUO to ZW: see the newly added orange parts}
+\label{re_in_exp} The \REs used in our experiments are written using Perl by an undergraduate who is familiar with the dataset. It took the
+student in total less than 10 hours to develop all the \REs used in the evaluation, but a domain expert can accomplish the task faster. We
+use the 20-shot data to develop the \REs, but word lists like citites are obtained from the full training set. The majority of the time
+spending on writing the \REs is proportional to  the number of \RE groups. Writing an intent patterns takes about 1-2 minutes. In this
+work, the student spent 1.5 hours to write the \REs for 54 patterns, with on average 2.2 \RE groups for each \RE. The student finds that
+writing the slot patterns for the methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} to be easy, since we only
+annotate a simplified version of the slot label. On average, it takes less than two minutes to write an \RE for a slot label. It took the
+student about an hour to write the \REs for the 60 slot patterns with on average 1.7 \RE group. In contrast to the first two aforementioned
+tasks, writing slot patterns to guide attention is more difficult. This is because we need to carefully select informative words and
+targets to the full slot label. As a result, it took between 2 to 5 minutes to write one pattern, yielding in total 5.5 hours for writing
+115 patterns with on average 3.3 \RE groups. The performance of the intent \texttt{RE}s and the slot \texttt{RE}s for the method in
+Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}. \FIXME{ZW: This paragraph needs some attention -- it mixes patterns
+and \REs, which is confusing. BTW: Are we following the standard regular expression grammars?}
+
+% 54 patterns are collected in total
+%\orange{(used 1.5 hours)}, with averagely 2.2 (from 1 to 4) \RE groups for each \RE (the group matching a sequence of any words is not
+%included). Similarly, writing slot patterns for methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} is also easy since we
+%only annotate a simplified version of the slot label. It takes 1-2 minutes to write an \RE, and 60 patterns are produced \orange{(used 70
+%minutes)}, with averagely 1.7 (from 1 to 3) \RE groups. However, writing slot patterns to guide attention is more difficult, since we need
+%to carefully select informative words and target to the full slot label as well. Typically, writing one pattern requires 2-5 minutes, and
+%115 patterns \orange{(used 5.5 hours)} with averagely 3.3 (from 2 to 8) \RE groups are produced. The performance of the intent \texttt{RE}s
+%and the slot \texttt{RE}s for the method in Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}. \FIXME{ZW: We need to
+%state in total how long did it take to derive all the REs. State which \RE convention is used. } \orange{LUO to ZW: see the newly added
+%orange parts}
 
 
 \subsection{Experimental Setup}
