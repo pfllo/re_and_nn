@@ -19,7 +19,7 @@ pattern, which can be used to improve our data-driven models like \NN. For examp
 Since \NN proves to perform generally well than other data-driven methods~\cite{kim2014convolutional, bahdanau2014neural}, in this paper,
 we investigate the methods of using \RE to improve \NN. By doing this, different from the scenario where we only use high-precision
 \texttt{RE}s to handle a fraction of cases, we can further make use of low-precision \texttt{RE}s, since \NN is known to be good at
-tolerenting noises~\cite{xie2016disturblabel}. This also reduces the difficulty of writing \texttt{RE}s, since high-precision \texttt{RE}s
+tolerating noises~\cite{xie2016disturblabel}. This also reduces the difficulty of writing \texttt{RE}s, since high-precision \texttt{RE}s
 are hard to generate, and are usually more complex than low-precision ones.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.

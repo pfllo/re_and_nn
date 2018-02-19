@@ -37,6 +37,13 @@
 \usepackage{xspace}
 \usepackage{color, colortbl}
 
+\usepackage{balance}
+\usepackage{blindtext}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{booktabs}
+
+
 
 \usepackage{tikz}
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
@@ -47,6 +54,19 @@
 \newcommand\REs{\texttt{REs}\xspace}
 
 \definecolor{Gray}{gray}{0.9}
+
+%--Comments
+\newboolean{showcomments}
+\setboolean{showcomments}{true} %false true
+\ifthenelse{\boolean{showcomments}} { \newcommand{\mynote}[3]{
+    \fbox{\bfseries\sffamily\scriptsize#1}
+    {\small$\blacktriangleright$\textsf{\emph{\color{#3}{#2}}}$\blacktriangleleft$}}}
+{ \newcommand{\mynote}[3]{}}
+\newcommand{\shrink}[1]{}
+\newcommand{\y}[1]{\mynote{YSF}{#1}{purple}}
+\newcommand{\lb}[1]{\mynote{BFL}{#1}{red}}
+\newcommand{\z}[1]{\mynote{ZW}{#1}{orange}}
+
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
