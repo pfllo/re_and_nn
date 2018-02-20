@@ -8,12 +8,12 @@
 \end{figure}
 
 \subsection{Problem Definition}
-While our approach is generally applicable, to evaluate our approach on concrete and measurable objectives, we target two areas of spoken
-language understanding: \emph{intent detection} and \emph{slot filling}. The former is a sentence classification task where we learn a
-function to map an input sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a corresponding \textbf{\emph{intent label}}, $c$. The latter is a
-sequence labeling task for which we learn a function to map an input query sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a
-corresponding labeling sequence, $\textbf{y}=[y_{1}, ..., y_{n}]$, where each element, $y_i$, is the \textbf{\emph{slot label}} of the corresponding word,
-$x_i$,  of the input query.
+While our approach is generally applicable, to have concrete and measurable objectives, we apply it to two \SLU tasks: \emph{intent
+detection} and \emph{slot filling}. The former is a sentence classification task where we learn a function to map an input sentence of $n$
+words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a corresponding \textbf{\emph{intent label}}, $c$. The latter is a sequence labeling task for
+which we learn a function to take in an input query sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to produce a corresponding
+labeling sequence, $\textbf{y}=[y_{1}, ..., y_{n}]$, where each element of the sequence, $y_i$, is the \textbf{\emph{slot label}} of the
+corresponding word, $x_i$, in the input query.
 
 
 %Intent detection is a typical sentence classification task.
