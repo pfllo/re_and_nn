@@ -9,17 +9,16 @@ flight-related information. As a technique based on human-generated rules, it is
 making it widely used in industry and especially in scenarios where the training data is limited (few-shot learning)~\cite{gc2015big}.
 
 On the other hand, since all the synonyms and variations need to be explicitly specified, the generalization ability of \RE is rather poor,
-which leads to low coverage of the patterns. Therefore, in practice, \RE is often combined with data-driven methods like neural network
+which leads to low coverage of the \REs. Therefore, in practice, \RE is often combined with data-driven methods like neural network
 (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision.
 
-However, the value of \RE is more than that. When writing an \texttt{RE}, people actually encode their knowledge about the problem in the
-pattern, which can be used to improve our data-driven models like \NN. For example, an \RE actually indicates the informative words
+However, the value of \RE is more than that. When writing an \texttt{RE}, people have actually encoded their knowledge about the problem in it, which can be used to improve data-driven models like \NN. For example, an \RE actually indicates the informative words
 (\textbf{\emph{clue words}}) for its prediction.
 
 Since \NN proves to perform generally well than other data-driven methods~\cite{kim2014convolutional, bahdanau2014neural}, in this paper,
 we investigate the methods of using \RE to improve \NN. By doing this, different from the scenario where we only use high-precision
-\texttt{RE}s to handle a fraction of cases, we can further make use of low-precision \texttt{RE}s, since \NN is known to be good at
-tolerating noises~\cite{xie2016disturblabel}. This also reduces the difficulty of writing \texttt{RE}s, since high-precision \texttt{RE}s
+\REs to handle a fraction of cases, we can further make use of low-precision \REs, since \NN is known to be good at
+tolerating noises~\cite{xie2016disturblabel}. This also reduces the difficulty of writing \REs, since high-precision \REs
 are hard to generate, and are usually more complex than low-precision ones.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
@@ -30,7 +29,7 @@ are hard to generate, and are usually more complex than low-precision ones.
 Specifically, we explore fusing \RE with \NN in three different aspects: (1) On the \NN input side, we can use the \RE output as features
 to \NN. This shares similar spirit with the stacking technique~\cite{wolpert1992stacked} and has also been used by~\cite{wang2017combining}
 to incorporate knowledge base rules in short text classification.
-(2) On the \NN module side, since \texttt{RE}s highlight clue words for a
+(2) On the \NN module side, since \REs highlight clue words for a
 specific tag, we can use \RE to guide the attention module in \NN. (3) On the \NN output side, we can combine the output of \RE and \NN in
 a learnable way, so that the final output contains information from both \NN and \RE. Hu et al.~\shortcite{hu2016harnessing} also explored
 this aspect by using first-order-logic (\FOL) constraints to affect the \NN output in a teacher-student network manner. Different from
@@ -41,7 +40,7 @@ combination.
 
 We experiment our methods in the natural language understanding (\NLU) scenario. We choose this task because it contains intent detection
 and slot filling as two subtasks, which correspond to two of the most important tasks in \NLP: sentence classification, sequence labeling.
-Further, this is also a task where \texttt{RE}s are heavily used in industry.
+Further, this is also a task where \REs are heavily used in industry.
 
 We explore both the few-shot learning setting where the data is limited and the setting with the full dataset, to see how \RE helps when we have different amounts of data.
 To guide \RE annotation, we also conduct analysis on the impact of \RE complexity to the performance \NN.

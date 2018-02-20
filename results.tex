@@ -63,8 +63,8 @@ RE Output & RE & \multicolumn{3}{|c|}{70.31 / 68.98} & \multicolumn{3}{|c|}{42.3
 As shown in Table \ref{tab_full_few}, except for 5-shot, all the methods improve the baseline \texttt{BLSTM}.
 Among these methods, our \NN module side methods (attention-loss-based methods) work best.
 The reason is that, the attention module receives the clue words of this prediction directly, which contain more information than the \RE tag used by other methods.
-We can also see that, since negative patterns are derived from the positive ones with some noise, \texttt{posi} performs better than \texttt{neg} when the data is limited.
-However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative patterns significantly outnumbers the positive ones.
+We can also see that, since negative \REs are derived from the positive ones with some noise, \texttt{posi} performs better than \texttt{neg} when the data is limited.
+However, \texttt{neg} works slightly better in the 20-shot setting, which is possibly due to that negative \REs significantly outnumbers the positive ones.
 % Not surprisingly, we get the best results when positive and negative patterns are combined.
 Besides, \tatt alone works better than \texttt{BLSTM} when we have enough data, indicating again the effectiveness of our two-side attention method.
 
@@ -230,7 +230,7 @@ Since slot filling is evaluated in phrase level, there is almost no difference i
 % Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model), making our results still comparatable to \LL.}.
 And the analysis on different settings in the sections above together answer question (3).
 
-\subsection{Complexity of the Pattern}
+\subsection{Complexity of the \RE}
 \label{sec_complexity}
 \begin{table}
 \setlength{\tabcolsep}{0.23em}
@@ -255,7 +255,7 @@ And the analysis on different settings in the sections above together answer que
 \hline
 \end{tabular}
 }
-\caption{Results on 20-Shot Data with Simple Patterns. \texttt{+both} refers to \ptatt\texttt{+both} for short.}
+\caption{Results on 20-Shot Data with Simple \REs. \texttt{+both} refers to \ptatt\texttt{+both} for short.}
 \label{tab_simple}
 \end{table}
 
@@ -264,18 +264,18 @@ Since enriching the phrases in an \RE group with $|$ is usually easier adding ne
 we choose to control the \RE complexity by modifying the number of groups.
 As discussed in Sec.~\ref{re_desc}, more \RE groups will lead to better precision but lower coverage.
 
-Specifically, we reduce the number of groups of existing \texttt{RE}s to decrease pattern complexity.
+Specifically, we reduce the number of groups of existing \texttt{RE}s to decrease \RE complexity.
 To mimic the process of writing simple \texttt{RE}s from scratch, we try our best to keep the key \RE groups.
 For intent detection, all the \texttt{RE}s are reduced to at most 2 groups (groups matching a sequence of any words are excluded), and 17 \texttt{RE}s are affected.
 As for slot filling, since the \texttt{RE}s with more than 2 groups are limited (only 7), we choose a more aggresive strategy that all the \texttt{RE}s are reduced to word list pattern.
 However, the \texttt{RE}s trying to tag an \RE group that matches a number or a common word can have at most 2 groups, since it is not distinguishable at all without some context.
-In total, 21 patterns are affected.
+In total, 21 \REs are affected.
 
 As shown in Table \ref{tab_simple}, simple \RE generally leads to worse results, which indicates that we should write complex \RE to get better performance if the cost is affordable.
-Further, the results of simplified \RE are still better than the base \BLSTM, showing that in practice, we can safely start with simple \texttt{RE}s, and increase the complexity gradually\footnote{
+Further, the results of simplified \RE are still better than the base \BLSTM, showing that in practice, we can safely start with simple \REs, and increase the complexity gradually\footnote{
 % Further, we can see that attention loss is less sensitive to the simplification than other methods.
 % The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module
-We do not include simplification results of attention loss for slot filling because its \texttt{RE}s are different from the other two methods, and we already know it does not work for slot filling}.
+We do not include simplification results of attention loss for slot filling because its \REs are different from the other two methods, and we already know it does not work for slot filling}.
 
 \subsection{Key Conclusion}
 We summarize the key conclusions from the experiments above here:

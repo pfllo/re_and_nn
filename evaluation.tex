@@ -25,19 +25,22 @@ Since most few-shot learning methods require either extra classes or classes wit
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{RE Patterns}
-\label{re_in_exp} The \REs used in our experiments are written using Perl by an undergraduate who is familiar with the dataset. It took the
+\label{re_in_exp} The \REs used in our experiments are written by an undergraduate who is familiar with the dataset \orange{following the standard \RE grammar}. It took the
 student in total less than 10 hours to develop all the \REs used in the evaluation, but a domain expert can accomplish the task faster. We
 use the 20-shot data to develop the \REs, but word lists like citites are obtained from the full training set. The majority of the time
-spending on writing the \REs is proportional to  the number of \RE groups. Writing an intent patterns takes about 1-2 minutes. In this
-work, the student spent 1.5 hours to write the \REs for 54 patterns, with on average 2.2 \RE groups for each \RE. The student finds that
-writing the slot patterns for the methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} to be easy, since we only
-annotate a simplified version of the slot label. On average, it takes less than two minutes to write an \RE for a slot label. It took the
-student about an hour to write the \REs for the 60 slot patterns with on average 1.7 \RE group. In contrast to the first two aforementioned
-tasks, writing slot patterns to guide attention is more difficult. This is because we need to carefully select informative words and
-targets to the full slot label. As a result, it took between 2 to 5 minutes to write one pattern, yielding in total 5.5 hours for writing
-115 patterns with on average 3.3 \RE groups. The performance of the intent \texttt{RE}s and the slot \texttt{RE}s for the method in
+spent on writing the \REs is proportional to the number of \RE groups. Writing an intent \RE takes about 1-2 minutes. In this
+work, the student spent 1.5 hours to write the 54 \REs, with on average 2.2 \RE groups for each \RE. The student finds that
+writing the slot \RE for the methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} to be easy, since we only
+annotate a simplified version of the slot label. On average, it takes less than two minutes to write an \RE. It took the
+student about an hour to write the 60 \REs with on average 1.7 \RE group. 
+In contrast to the first two aforementioned
+tasks, writing slot \REs to guide attention is more difficult. This is because we need to carefully select clue words and
+target to the full slot label. As a result, it took between 2 to 5 minutes to write one \RE, yielding in total 5.5 hours for writing
+115 \REs with on average 3.3 \RE groups. The performance of the intent \REs and the slot \REs for the method in
 Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}. \FIXME{ZW: This paragraph needs some attention -- it mixes patterns
 and \REs, which is confusing. BTW: Are we following the standard regular expression grammars?}
+
+\FIXME{Luo to ZW: Actually, \emph{pattern} equals to \emph{\RE} in this paper, I have unified this terminology in the paper now. We follow the standard regular expression grammars, which is Perl grammar, but the \REs are written in C++ with boost library.}
 
 % 54 patterns are collected in total
 %\orange{(used 1.5 hours)}, with averagely 2.2 (from 1 to 4) \RE groups for each \RE (the group matching a sequence of any words is not
@@ -68,7 +71,7 @@ While accuracy and micro statistics show performance on all the instances, macro
 \texttt{+posi} and \texttt{+neg} refer to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (\NN module side method in Sec.~\ref{interact_with_module}),
 \texttt{+logit} means using \RE tag to modify \NN output (output side method in Sec.~\ref{fusion_with_output}),
 \texttt{RE} refers to using \RE output as prediction directly\footnote{
-For slot filling, patterns for attention guidance are used.},
+For slot filling, \REs for attention guidance are used.},
 \texttt{+hu16} means the method of Hu et al.~\shortcite{hu2016harnessing},
 \texttt{+mem} means adding the memory module that performs well on few-shot learning \cite{kaiser2017learning}\footnote{
 We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
