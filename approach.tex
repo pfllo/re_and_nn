@@ -1,16 +1,33 @@
 \section{Approach}
 
-\begin{figure*}[t!]
-\begin{center}
-\includegraphics[width=0.85\textwidth]{figure/re_nn_overview.png}
-\caption{Overview of our methods. The left side shows the methods for intent detection, and the right side shows an example for predicting
-the slot label for word \textsl{\underline{boston}}. \circled{1}, \circled{2}, \circled{3} refers to the methods in
+% \begin{figure*}[t!]
+% \begin{center}
+% \includegraphics[width=0.85\textwidth]{figure/re_nn_overview.png}
+% \caption{Overview of our methods. The left side shows the methods for intent detection, and the right side shows an example for predicting
+% the slot label for word \textsl{\underline{boston}}. \circled{1}, \circled{2}, \circled{3} refers to the methods in
+% Sec.~\ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_output} respectively, and the \RE that applies to the input
+% sentence is shown in the bottom.}
+% \FIXME{ZW: Replace this diagram with a looseless PDF format and put (a) and (b) as the subfigures to the left and right diagrams respectively.}
+% \label{fig_overview}
+% \end{center}
+% \vspace{-1em}
+% \end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfigure[Intent Detection] {
+    \label{fig_overview_intent}
+    \includegraphics[width=0.8\columnwidth]{figure/re_nn_overview_intent.pdf}
+}
+\hspace{.5in}
+\subfigure[Slot Filling (predicting slot label for \textsl{\underline{boston}})] {
+    \label{fig_overview_slot}
+    \includegraphics[width=0.8\columnwidth]{figure/re_nn_overview_slot.pdf}
+}
+\caption{Overview of our methods. \circled{1}, \circled{2}, \circled{3} refers to the methods in
 Sec.~\ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_output} respectively, and the \RE that applies to the input
 sentence is shown in the bottom.}
-\FIXME{ZW: Replace this diagram with a looseless PDF format and put (a) and (b) as the subfigures to the left and right diagrams respectively.}
 \label{fig_overview}
-\end{center}
-\vspace{-1em}
 \end{figure*}
 
 As shown in Fig.~\ref{fig_overview}, we will discuss three kinds of methods of combining \NN and \RE for both intent detection and slot filling.
@@ -39,19 +56,19 @@ method in Section \ref{interact_with_module}.}
 Similar to the stacking technique \cite{wolpert1992stacked}, a straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as input of \NN models.
 \paragraph{Intent Detection}
 Our \RE tag for intent detection is the same as the intent label.\footnote{If no \RE matches, we will assign a special tag indicating no matches. This process is applied to all the settings.}
-Due to the imperfection of the \texttt{RE}s, one sentence may have several \RE tags that are possibly conflict with each other.
+Due to the imperfection of the \REs, one sentence may have several \RE tags that are possibly conflict with each other.
 For example, the sentence \textsl{\underline{list the delta airlines flights to miami}} may match an \RE \texttt{/list(\;the)?\;\_\_AIRLINE/} that output tag \emph{airline},
 and another \RE \texttt{/list(\;\textbackslash w+)\{0,3\}?\;flights?/} that output tag \emph{flight} as well.
 % \footnote{\texttt{\_\_WORD} matches a single word, which can be \texttt{/\textbackslash w+/}.}
 
 % Many paper has proved that, embed the discrete feature is an effective method to combine features in \NN \cite{zeng2014relation, guo2017deepfm}.
 Considering there may exist several \RE tags for each sentence, we average the tag embeddings to form an aggregated embedding as input.
-Then, there are two ways to add this embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier (see \circled{1} in the left part of Fig.~\ref{fig_overview}).
+Then, there are two ways to add this embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier (see \circled{1} in Fig.~\ref{fig_overview_intent}).
 Note that, in the first method, the tag embedding is actually copied $n$ times, where $n$ is the sentence length.
 In our pilot experiments, we find that the copied tag embeddings tend to dominate the input in few-shot settings, which makes \NN heavily relies on \RE output, and therefore makes the fusion performance similar to the performance of \RE alone. Consequently, we adopt the second method in this paper.
 
 \paragraph{Slot Filling}
-Since the output of slot \RE patterns output word-level tags, as shown in \circled{1} in the right part of Fig.~\ref{fig_overview}, we can simply embed and average the \RE tags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
+Since the output of slot \RE patterns output word-level tags, as shown in \circled{1} in Fig.~\ref{fig_overview_slot}, we can simply embed and average the \RE tags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
 Further, since our slot labels follow the BIO annotation paradigm, we also extend the slot \RE tags to the BIO format. For example, the \RE tag of phrase \textsl{\underline{new york}} is \emph{B-city I-city} if its original tag is \emph{city}.
 
 \subsection{Fusion on the NN Module Side}
@@ -128,7 +145,7 @@ Let $z_i$ be a 0-1 indicator of whether at least one \RE pattern that leads to t
 \begin{equation}
 logit_i = logit'_i + w_i z_i
 \end{equation}
-where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \texttt{RE}s that lead to label $i$.
+where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that lead to label $i$.
 Here we do not assign a trainable weight for each \RE because there is a good chance that there are only limited sentences matching a specific \RE.
 
 We modify logit instead of the final probability because logit is an unbounded real value, which matches $w_i z_i$ better than probability. Further, kagglers have also proved emperically that, ensembling with logits is often better than with the final probability (see the ensemble version of Juan et al.~\shortcite{juan2016field}), which is also the reason that we operate on logit instead of probability in Sec.~\ref{interact_with_module}.\orange{luo: This paragraph answers why we operate on logits}
