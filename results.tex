@@ -214,28 +214,31 @@ For compactness, we only combine the best-performing fusion method in each task 
 \end{table}
 
 To answer question (2), we also evaluate our methods on the full dataset.
-As seen in Table \ref{tab_full}, for intent detection,
-the clue words marked by \RE still provide useful information to \NN (\texttt{t\_att+both}),
-but the \REtag is not very useful (\texttt{feat} and \texttt{logit}).
-The reason is probably that, comparated with the knowledge learned from labeled data, the \REtag is much more noisy.
-Further, since \texttt{feat} operates on the input side, the powerful \NN makes it more likely to overfit than \texttt{logit}, and therefore performs even inferior the baseline \BLSTM.
+As seen in Table \ref{tab_full}, for intent detection, while \texttt{t\_att+both} still works, \texttt{feat} and \texttt{logit} no longer make improvements.
+% the clue words marked by \RE still provide useful information to \NN (\texttt{t\_att+both}),
+% but the \REtag is not very useful (\texttt{feat} and \texttt{logit}).
+This shows that, since both \REtag and labeled data provide intent label for the input sentence, the value of the extra noisy tag from \RE become limited as we have more labeled data.
+% comparated with the knowledge learned from labeled data, the \REtag is much more noisy.
+However, since there is no guidance on attention in the data, the clue words from \RE are still useful.
+Further, since \texttt{feat} operates on the input side, the powerful \NN makes it more likely to overfit than \texttt{logit}, and therefore performs even inferior to \BLSTM.
 % This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While \NN can learn to assign low weights for \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and therefore leading to bad results of \texttt{feat}.
 
 As for slot filling, however, \texttt{feat} and \texttt{logit} still works.
-The reason is that, the word type information contained in the \REtag is still hard to be learned even when we have more data.
+This shows that, the word type information contained in the \REtag is still hard to be learned even when we have much more data.
 % the output of the \RE used for \texttt{feat} and \texttt{logit} provides extra information to help \NN better understand the target word (e.g., entity type), which is hard to inferred by \NN itself.
 % The reason is probably that the output of the \RE used for \texttt{feat} and \texttt{logit} is only the entity part of the slot label, which is only indirectly connected to the prediction target. The noise contained in the indirectness makes \NN relies less on the \RE output, and therefore is less sensitive to the wrong predictions made by \RE as they do in intent detection.
-Also note that, different from few-shot settings, \texttt{t\_att+both} has better macro-F1 than \texttt{BLSTM} here, showing that better attention is still useful when base model is properly trained.
+Also note that, different from few-shot settings, \texttt{t\_att+both} has better macro-F1 than \texttt{BLSTM} here, showing that better attention is still useful when the base model is properly trained.
 
-In intent detection, \texttt{hu16} performs better than \texttt{logit}, showing that \NN can still learn some useful information from the noisy intent \RE tags when we have enough data.
+As for \texttt{hu16}, it still performs better than \texttt{BLSTM} in two tasks, showing that although the \REtags are noisy, the powerful \NN can still distill useful information from them.
 However, since \texttt{hu16} is a general framework to combine \FOL rules, it is more indirect in transfering knowledge from rules to \NN than our methods. Therefore, its performance is still clearly inferior to attention loss in intent detection and \texttt{feat} in slot filling, which are designed specifically for \RE rules.
 % The reason that it still performs worse than attention loss intent detection and in slot filling, is
 
 Further, \texttt{mem} still generally works, and we can also make improvements by further combining our fusion methods.
-Besides, we can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data\footnote{
-Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest})}.
+Besides, we can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data.
+% \footnote{
+% Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest})}.
 % Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model), making our results still comparatable to \LL.}.
-And the analysis on different settings in the sections above together answer question (3).
+The analysis on different settings in the sections above together answer question (3).
 
 \subsection{Complexity of the \RE}
 \label{sec_complexity}
@@ -250,7 +253,7 @@ And the analysis on different settings in the sections above together answer que
 \cline{2-5}
   & \multicolumn{2}{|c|}{\textbf{Macro-F1 / Accuracy}} & \multicolumn{2}{|c|}{\textbf{Macro-F1 / Micro-F1}}  \\
 \cline{2-5}
-  & \textbf{Before} & \textbf{After} & \textbf{Before} & \textbf{After} \\
+  & \textbf{Complex} & \textbf{Simple} & \textbf{Complex} & \textbf{Simple} \\
 \hline
 \rowcolor{Gray} BLSTM & \multicolumn{2}{|c|}{63.60 / 80.52} & \multicolumn{2}{|c|}{80.57 / 93.08}  \\
 \hline
@@ -279,10 +282,10 @@ However, the \REs trying to tag a \RE group that matches a number or a common wo
 In total, 21 \REs are affected.
 
 As shown in Table \ref{tab_simple}, simple \RE generally leads to worse results, which indicates that we should write complex \RE to get better performance if the cost is affordable.
-Further, the results of simplified \RE are still better than the base \BLSTM, showing that in practice, we can safely start with simple \REs, and increase the complexity gradually\footnote{
+Further, the results of simple \RE are still better than the base \BLSTM, showing that in practice, we can safely start with simple \REs, and increase the complexity gradually\footnote{
 % Further, we can see that attention loss is less sensitive to the simplification than other methods.
 % The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module
-We do not include simplification results of attention loss for slot filling because its \REs are different from the other two methods, and we already know it does not work for slot filling}.
+We do not include simplification results of \texttt{both} for slot filling because its \REs are different from the other two methods, and we already know it does not work for slot filling.}.
 
 % \subsection{Key Conclusion}
 % We summarize the key conclusions from the experiments above here:
