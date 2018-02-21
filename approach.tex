@@ -1,4 +1,3 @@
-\section{Our Approach}
 \begin{figure*}[!t]
 \centering
 \subfigure[Intent Detection] {
@@ -15,12 +14,13 @@ Sec.~\ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_outpu
 sentence is shown in the bottom.}
 \label{fig_overview}
 \end{figure*}
-
+\section{Our Approach}
 As depicted in Fig.~\ref{fig_overview}, we propose three methods to combine a \NN and \REs for intent detection and slot filling. We
 present each method in the following sub-sections, starting by describing the common \NN model used by all the three methods.
 
 \subsection{Base Models}
-We use Bi-directional LSTM (\BLSTM) as our base \NN model for both intent classification and slot filling, which proves to perform well in both of these two tasks \cite{liu2016attention}.
+We use the Bi-directional LSTM (\BLSTM) as our base \NN model. This network is proven to be effective in intent detection and slot
+filling~\cite{liu2016attention}.
 % Further, to obtain sentence embedding for intent detection, we use a self-attention layer upon the \BLSTM output.
 
 \cparagraph{Intent Detection}
