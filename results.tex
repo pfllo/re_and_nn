@@ -94,7 +94,7 @@ Since attenion can only help recognizing clue words in the context, which can al
 Therefore, the attention loss and the extra parameters introduced by attention are more of a burden than benifit.
 % However, attention does not contribute to better self-awareness.
 % Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
-Take the sentence in Fig.~\ref{atis_sample} for example, we recognize \textsl{\underline{boston}} as \emph{fromloc.city} because \textsl{\underline{boston}} itself reprensents a city, and it follows a context word \textsl{\underline{from}}. Since this simple context is easily
+Take the sentence in Fig.~\ref{atis_sample} for example, we recognize \textsl{\underline{Boston}} as \emph{fromloc.city} because \textsl{\underline{Boston}} itself reprensents a city, and it follows a context word \textsl{\underline{from}}. Since this simple context is easily
 captured by \BLSTM, attention does not help much in this case.
 By examining the attention of \texttt{t\_att} trained on full dataset,
 we find instead of marking informative context words, the attention tends to concentrate on the target word itself, which
