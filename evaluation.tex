@@ -1,6 +1,6 @@
 \section{Evaluation Methodology}
 Our experiments are designed to answer three questions: (1) Does the use of \REs enhance the learning quality when the number of training
-instances is small? (2) Does the use of \REs help when using the full training data? 
+instances is small? (2) Does the use of \REs help when using the full training data?
 (3) When do the three proposed methods work, and which method works best in each scenario?
 % \todo{how to refer to question (3) in exp?}
 
@@ -30,18 +30,38 @@ Specifically, we let the 3 most frequent intents have 300 training instances, an
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{Preparing REs}
-\label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by an undergraduate who is
-familiar with the dataset\footnote{Code and data are available at: [url redacted for double-blind review].}.  It took the student in total
-less than 10 hours to develop all the \REs, but a domain expert can accomplish the task faster. We use the 20-shot data to develop the
-\REs, but word lists like cities are obtained from the full training set. The majority of the time spent on writing the \REs is
-proportional to the number of \RE groups. Writing an intent \RE takes about 1-2 minutes. In this work, the student spent 1.5 hours to write
-the 54 \REs, with on average 2.2 \RE groups for each \RE. The student finds that writing the slot \RE for the methods described in
-Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} to be easy, since we only annotate a simplified version of the slot label. On
-average, it takes less than two minutes to write a \RE. It took the student about an hour to write the 60 \REs with on average 1.7 \RE
-group. In contrast to the two aforementioned tasks, writing slot \REs to guide attention requires more efforts. This is because we
-need to carefully select clue words and target for the full slot label. As a result, it took between 2 to 5 minutes to write one \RE,
-yielding in total 5.5 hours for writing 115 \REs with on average 3.3 \RE groups. The performance of the intent \REs and the slot \REs for
-the method described in Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}.
+\label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by an undergraduate who is familiar with the
+dataset\footnote{Code and data are available at: [url redacted for double-blind review].}.  It took the student in total less than 10 hours
+to develop all the \REs, but a domain expert can accomplish the task faster. We use the 20-shot data to develop the \REs, but word lists
+like cities are obtained from the full training set. The majority of the time spent on writing the \REs is proportional to the number of
+\RE groups. It took the student 1.5 hours to write the 54 intent \REs where each \RE has on average 2.2 \RE groups. It is straightforward
+to write the slot \REs for the two methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, for which it took the
+student 1 hour to write the 60 \REs with on average 1.7 group per \RE. By contrast, writing slot \REs to guide attention requires more
+efforts as the developer need to carefully select clue words and target for the full slot label. As a result, it took the student 5.5 hours
+to generate 11 \REs with on aver 3.3 \RE groups per \RE. The resulting performance for the set of \REs used for the method described in
+Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
+
+%Writing an intent \RE takes about 1-2 minutes. In this work, the student spent 1.5 hours to write the 54 \REs, with on average 2.2 \RE
+%groups for each \RE. The student finds that writing the slot \RE for the methods described in Sec.~\ref{fusion_with_input} and
+%\ref{fusion_with_output} to be easy, since we only annotate a simplified version of the slot label. On average, it takes less than two
+%minutes to write a \RE. It took the student about an hour to write the 60 \REs with on average 1.7 \RE group. In contrast to the two
+%aforementioned tasks, writing slot \REs to guide attention requires more efforts. This is because we need to carefully select clue words
+%and target for the full slot label. As a result, it took between 2 to 5 minutes to write one \RE, yielding in total 5.5 hours for writing
+%115 \REs with on average 3.3 \RE groups. The performance of the intent \REs and the slot \REs for the method described in
+%Sec.~\ref{interact_with_module} is shown in Table~\ref{tab_full_few}.
+
+%We use the standard \RE grammar in this work. Our \REs are written by an undergraduate who is familiar with the dataset\footnote{Code and
+%data are available at: [url redacted for double-blind review].}.  It took the student in total less than 10 hours to develop all the \REs,
+%but a domain expert can accomplish the task faster. We use the 20-shot data to develop the \REs, but word lists like cities are obtained
+%from the full training set. The majority of the time spent on writing the \REs is proportional to the number of \RE groups. Writing an
+%intent \RE takes about 1-2 minutes. In this work, the student spent 1.5 hours to write the 54 \REs, with on average 2.2 \RE groups for each
+%\RE. The student finds that writing the slot \RE for the methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} to
+%be easy, since we only annotate a simplified version of the slot label. On average, it takes less than two minutes to write a \RE. It took
+%the student about an hour to write the 60 \REs with on average 1.7 \RE group. In contrast to the two aforementioned tasks, writing slot
+%\REs to guide attention requires more efforts. This is because we need to carefully select clue words and target for the full slot label.
+%As a result, it took between 2 to 5 minutes to write one \RE, yielding in total 5.5 hours for writing 115 \REs with on average 3.3 \RE
+%groups. The performance of the intent \REs and the slot \REs for the method described in Sec.~\ref{interact_with_module} is shown in
+%Table~\ref{tab_full_few}.
 
 
 % 54 patterns are collected in total
