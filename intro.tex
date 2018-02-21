@@ -11,14 +11,16 @@ On the other hand, since all the synonyms and variations need to be explicitly s
 which leads to low coverage of the \REs. Therefore, in practice, \RE is often combined with data-driven methods like neural network
 (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision.
 
-However, the value of \RE is more than that. When writing a \texttt{RE}, people have encoded their knowledge about the problem in it, which can be used to improve data-driven models like \NN. For example, the \RE itself has actually indicated the informative words
+However, the value of \RE is more than that. When writing a \texttt{RE}, people have also encoded their knowledge about the problem in it, which can be used to improve data-driven models like \NN. For example, the \RE itself has actually indicated the informative words
 (\textbf{\emph{clue words}}) for its prediction.
 
-Since \NN proves to perform generally well in vairous \NLP tasks~\cite{goldberg2017neural}, in this paper,
-we investigate the methods of using \RE to improve \NN. By doing this, different from the scenario where we only use high-precision
-\REs to handle a fraction of cases, we can further make use of low-precision \REs, since \NN is known to be good at
-tolerating noises~\cite{xie2016disturblabel}. This also reduces the difficulty of writing \REs, since high-precision \REs
-are usually more complex than low-precision ones, and therefore are hard to generate.
+Since \NN is proven to work well in vairous \NLP tasks~\cite{goldberg2017neural}, in this paper,
+we investigate the methods of using \RE to improve \NN.
+Compared to tuning model architecture and hyper-parameters, this is an easier way to improve the \NN performance especially when training data is limited.
+Further, different from the scenario where we only use high-precision
+\REs to handle a fraction of cases, we can also make use of low-precision \REs, since \NN is known to be good at
+tolerating noises~\cite{xie2016disturblabel}. This actually reduces the difficulty of writing useful \REs, since high-precision \REs
+are usually more complex than low-precision ones, and are therefore hard to develop.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
 

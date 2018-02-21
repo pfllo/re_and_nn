@@ -46,9 +46,13 @@ all texts that match the pattern. The search is designed to return every match o
 a \REtag is assigned to either the entire sentence (for intent detection) or some phrases of the sentence (for slot filling).
 
 
-\cparagraph{Intent Detection} If a \REtag indicates an intent, it would be the same as an intent label. For example, applying the intent
+\cparagraph{Intent Detection} 
+% If a \REtag indicates an intent, it would be the same as an intent label.
+In this work, the \REtags for intent detection is the same as the intent labels.
+For example, applying the intent
 \RE in Fig.~\ref{atis_sample} to the sentence given in the figure results in a \REtag that is equivalent to the intent label of
 \emph{flight}.
+\lb{I think "If a \REtag indicates an intent, it would be the same as an intent label." is a little confusing, since intent equals to intent label. So I changed it to the original version.}
 
 
 % an \RE of \texttt{/\textasciicircum
@@ -56,10 +60,10 @@ a \REtag is assigned to either the entire sentence (for intent detection) or som
 % Figure~\ref{atis_sample} for intention detection, we get a \REtag of \emph{flight}.
 
 \cparagraph{Slot Filling} We use two sets of \REs for slot filling. Given the group functionality of \RE, we can assign \REtags to our
-interested \textbf{\emph{\RE groups}} (the text surrounded by brackets). (1)~For the method in Sec.~\ref{interact_with_module}, since we
+interested \textbf{\emph{\RE groups}} (the text surrounded by parentheses). (1)~For the method in Sec.~\ref{interact_with_module}, since we
 need to annotate clue words for certain slot labels, its \REtags are the same as the slot labels. For example, the slot \RE in
 Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second group. Here
-\emph{\_\_CITY} is a list of all the city names, which can be replaced with a string like \texttt{/Boston|Miami|LA/}. Note that, an
+\texttt{\_\_CITY} is a list of all the city names, which can be replaced with a string like \texttt{/Boston|Miami|LA/}. Note that, an
 ordinary word list pattern can be written as strings like \texttt{/(\_\_CITY)/} in \RE. (2)~For the methods in Sec.~\ref{fusion_with_input}
 and \ref{fusion_with_output}, the \REtag is different from the slot label. For example, the first and second \RE groups in the slot \RE of
 Fig.~\ref{atis_sample} will all be tagged as \emph{city}, which is a simplified version of the slot label, and is related to three slot
@@ -71,7 +75,7 @@ labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. The reason 
 
 \cparagraph{Generating \REs} For this work, the overhead in developing \REs mainly stemmed from two aspects. The first is the number of \RE
 groups -- the more \RE groups we have, the higher precision we are likely to obtain, but a higher number of \RE groups also requires more
-time and efforts to generate. The second is the number of expressions separated by the disjunction operator, `$|$', in a \RE. Having a
+efforts to generate. The second is the number of expressions separated by the disjunction operator, `$|$', in a \RE. Having a
 longer list of expressions can improve the coverage of the \RE, but writing the list also requires efforts. Later in this paper, we show
 that it is worth to spend modest efforts in generating \REs, and our approach can adapt to \RE sets of different qualities to effectively
 exploit the expressed knowledge.
