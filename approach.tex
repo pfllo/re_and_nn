@@ -1,18 +1,4 @@
 \section{Our Approach}
-
-% \begin{figure*}[t!]
-% \begin{center}
-% \includegraphics[width=0.85\textwidth]{figure/re_nn_overview.png}
-% \caption{Overview of our methods. The left side shows the methods for intent detection, and the right side shows an example for predicting
-% the slot label for word \textsl{\underline{boston}}. \circled{1}, \circled{2}, \circled{3} refers to the methods in
-% Sec.~\ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_output} respectively, and the \RE that applies to the input
-% sentence is shown in the bottom.}
-% \FIXME{ZW: Replace this diagram with a looseless PDF format and put (a) and (b) as the subfigures to the left and right diagrams respectively.}
-% \label{fig_overview}
-% \end{center}
-% \vspace{-1em}
-% \end{figure*}
-
 \begin{figure*}[!t]
 \centering
 \subfigure[Intent Detection] {
@@ -30,7 +16,8 @@ sentence is shown in the bottom.}
 \label{fig_overview}
 \end{figure*}
 
-As shown in Fig.~\ref{fig_overview}, we will discuss three kinds of methods of combining \NN and \RE for both intent detection and slot filling.
+As depicted in Fig.~\ref{fig_overview}, we propose three methods to combine a \NN and \REs for intent detection and slot filling. We
+present each method in the following sub-sections, starting by describing the common \NN model used by all the three methods.
 
 \subsection{Base Models}
 We use Bi-directional LSTM (\BLSTM) as our base \NN model for both intent classification and slot filling, which proves to perform well in both of these two tasks \cite{liu2016attention}.

@@ -46,33 +46,43 @@ all texts that match the pattern. The search is designed to return every match o
 a \REtag is assigned to either the entire sentence (for intent detection) or some phrases of the sentence (for slot filling).
 
 
-If a \REtag indicates an intent, it would be the same as an intent label. For example, when applying the intent \RE in
-Fig.~\ref{atis_sample} to the sentence given in the same figure, we will get a \REtag of \emph{flight} that corresponds to the intent
-label of \emph{flight}.
+\cparagraph{Intent Detection} If a \REtag indicates an intent, it would be the same as an intent label. For example, applying the intent
+\RE in Fig.~\ref{atis_sample} to the sentence given in the figure results in a \REtag that is equivalent to the intent label of
+\emph{flight}.
 
 
 % an \RE of \texttt{/\textasciicircum
 % flights?\:from/} can be associated with an intention label \emph{flight}; and when applying this \RE to the sentence given in
 % Figure~\ref{atis_sample} for intention detection, we get a \REtag of \emph{flight}.
 
-For slot filling, we use two different sets of \REs. Given the group functionality of \RE, we can assign \REtags to our interested
-\textbf{\emph{\RE groups}} (the text surrounded by brackets). (1)~For the method in Sec.~\ref{interact_with_module}, since we need to
-annotate clue words for certain slot labels, its \REtags are the same as the slot labels.
-For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second group.
-% \texttt{/(from)\:(\_\_CITY)/} will match the sentence in Figure~\ref{atis_sample}, and assign \emph{fromloc.city} to the second \RE group.
-Here \emph{\_\_CITY} is a list of
-all the city names, which can be repalced with a string like \texttt{/boston|miami|LA/}. Note that, an ordinary word list pattern can be
-written as strings like \texttt{/(\_\_CITY)/} in \RE. (2)~For the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, the
-\REtag is different from the slot label.
-For example, the first and second \RE groups in the slot \RE of Fig.~\ref{atis_sample} will all be tagged as \emph{city},
-% the second \RE group in \texttt{/(from)\:(\_\_CITY)/} will be tagged as \emph{city},
-which is a simplified version of the slot label, and is related to three slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
-The reason that we use different \REs here is to give an example that \REs
-with output different from the target labels can also make improvements to \NN.
+\cparagraph{Slot Filling} We use two sets of \REs for slot filling. Given the group functionality of \RE, we can assign \REtags to our
+interested \textbf{\emph{\RE groups}} (the text surrounded by brackets). (1)~For the method in Sec.~\ref{interact_with_module}, since we
+need to annotate clue words for certain slot labels, its \REtags are the same as the slot labels. For example, the slot \RE in
+Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second group. Here
+\emph{\_\_CITY} is a list of all the city names, which can be replaced with a string like \texttt{/Boston|Miami|LA/}. Note that, an
+ordinary word list pattern can be written as strings like \texttt{/(\_\_CITY)/} in \RE. (2)~For the methods in Sec.~\ref{fusion_with_input}
+and \ref{fusion_with_output}, the \REtag is different from the slot label. For example, the first and second \RE groups in the slot \RE of
+Fig.~\ref{atis_sample} will all be tagged as \emph{city}, which is a simplified version of the slot label, and is related to three slot
+labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. The reason that we use different \REs here is to give an example that
+\REs with output different from the target labels can also make improvements to \NN.
+
+\z{The concept of \RE Groups is really confusing.}
+
+
+\cparagraph{Generating \REs} For this work, the overhead in developing \REs mainly stemmed from two aspects. The first is the number of \RE
+groups -- the more \RE groups we have, the higher precision we are likely to obtain, but a higher number of \RE groups also requires more
+time and efforts to generate. The second is the number of expressions separated by the disjunction operator, `$|$', in a \RE. Having a
+longer list of expressions can improve the coverage of the \RE, but writing the list also requires efforts. Later in this paper, we show
+that it is worth to spend modest efforts in generating \REs, and our approach can adapt to \RE sets of different qualities to effectively
+exploit the expressed knowledge.
 
 % We use another set of \texttt{RE}s for the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} because using simpler tags can significantly reduce the complexity of the \RE, and therefore making the generation of \RE much easier. For example, we need \texttt{/(from)\:(\_\_CITY)/} to identify \emph{fromloc.city}, but only \texttt{/(\_\_CITY)/} to identify \emph{city}.
 
-When writing \REs, since complicated \REs often lead to better performance but require more efforts to generate, \RE complexity is often an important trade-off that we need to make. Generally, two aspects affect the complexity most. First, \RE complexity increases with the number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with the number of \emph{or}s (the symbol $|$) in a \RE group. Here a group can be considered as a set of phrases that express the same meaning. Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
+%When writing \REs, since complicated \REs often lead to better performance but require more efforts to generate, \RE complexity is often an
+%important trade-off that we need to make. Generally, two aspects affect the complexity most. First, \RE complexity increases with the
+%number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with
+%the number of \emph{or}s (the symbol $|$) in a \RE group. Here a group can be considered as a set of phrases that express the same meaning.
+%Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
 % unless adding ambiguous phrases to the group
 
 % Note that, while the outputs are the intent or slot themselves in the examples above, the \RE output can also be a tag related to, but not the same as, the label that we want to predict.
