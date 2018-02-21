@@ -3,7 +3,7 @@
 
 One of the fundamental techniques in computer science is the regular expression (\RE), a language for specifying text search strings.  \RE is used for a wide range of natural language processing (\NLP) tasks like pattern matching, sentence classification, sequence labeling etc.~\cite{chang2014tokensregex}. 
 For example, in dialogue system, the \RE pattern \texttt{/\textasciicircum flights? from/} can help
-recognizing the sentence in Table~\ref{atis_sample} as expressing intent \emph{flights}, which indicates that the user is looking for
+recognizing the sentence in Fig.~\ref{atis_sample} as expressing intent \emph{flights}, which indicates that the user is looking for
 flight-related information. As a technique based on human-generated rules, it is explainable, tunable, and does not rely on training data,
 making it widely used in industry and especially in scenarios where the training data is limited (few-shot learning)~\cite{gc2015big}.
 
@@ -11,7 +11,7 @@ On the other hand, since all the synonyms and variations need to be explicitly s
 which leads to low coverage of the \REs. Therefore, in practice, \RE is often combined with data-driven methods like neural network
 (\NN), where \RE is considered as an easy-to-tune method to deal with a certain fraction of cases with high-precision.
 
-However, the value of \RE is more than that. When writing an \texttt{RE}, people have encoded their knowledge about the problem in it, which can be used to improve data-driven models like \NN. For example, the \RE itself has actually indicated the informative words
+However, the value of \RE is more than that. When writing a \texttt{RE}, people have encoded their knowledge about the problem in it, which can be used to improve data-driven models like \NN. For example, the \RE itself has actually indicated the informative words
 (\textbf{\emph{clue words}}) for its prediction.
 
 Since \NN proves to perform generally well in vairous \NLP tasks~\cite{goldberg2017neural}, in this paper,

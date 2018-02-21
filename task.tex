@@ -45,12 +45,9 @@ In this work, a \RE defines a mapping from a text \emph{pattern} to several \tex
 all texts that match the pattern. The search is designed to return every match on a sentence. If a matched pattern is found for a sentence,
 a \REtag is assigned to either the entire sentence (for intent detection) or some phrases of the sentence (for slot filling).
 
-\z{I think we should use `a' instead of `an' for \RE, because we say ``a regular expression" and `an' should be followed by a vowel i.e.,
-a,e,i,o,u. }
-
 
 If a \REtag indicates an intent, it would be the same as an intent label. For example, when applying the intent \RE in
-Fig.~\ref{atis_sample} to the sentence given in the same figure, we will get an \REtag of \emph{flight} that corresponds to the intent
+Fig.~\ref{atis_sample} to the sentence given in the same figure, we will get a \REtag of \emph{flight} that corresponds to the intent
 label of \emph{flight}.
 
 
@@ -66,7 +63,7 @@ For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.ci
 Here \emph{\_\_CITY} is a list of
 all the city names, which can be repalced with a string like \texttt{/boston|miami|LA/}. Note that, an ordinary word list pattern can be
 written as strings like \texttt{/(\_\_CITY)/} in \RE. (2)~For the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, the
-\RE tag is different from the slot label.
+\REtag is different from the slot label.
 For example, the first and second \RE groups in the slot \RE of Fig.~\ref{atis_sample} will all be tagged as \emph{city},
 % the second \RE group in \texttt{/(from)\:(\_\_CITY)/} will be tagged as \emph{city},
 which is a simplified version of the slot label, and is related to three slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
@@ -75,7 +72,7 @@ with output different from the target labels can also make improvements to \NN.
 
 % We use another set of \texttt{RE}s for the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} because using simpler tags can significantly reduce the complexity of the \RE, and therefore making the generation of \RE much easier. For example, we need \texttt{/(from)\:(\_\_CITY)/} to identify \emph{fromloc.city}, but only \texttt{/(\_\_CITY)/} to identify \emph{city}.
 
-When writing \REs, since complicated \REs often lead to better performance but require more efforts to generate, \RE complexity is often an important trade-off that we need to make. Generally, two aspects affect the complexity most. First, \RE complexity increases with the number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with the number of \emph{or}s (the symbol $|$) in an \RE group. Here a group can be considered as a set of phrases that express the same meaning. Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
+When writing \REs, since complicated \REs often lead to better performance but require more efforts to generate, \RE complexity is often an important trade-off that we need to make. Generally, two aspects affect the complexity most. First, \RE complexity increases with the number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with the number of \emph{or}s (the symbol $|$) in a \RE group. Here a group can be considered as a set of phrases that express the same meaning. Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
 % unless adding ambiguous phrases to the group
 
 % Note that, while the outputs are the intent or slot themselves in the examples above, the \RE output can also be a tag related to, but not the same as, the label that we want to predict.

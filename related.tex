@@ -13,7 +13,7 @@ Fourth, on the loss function side, people modify the loss function to model the 
 Since fusing in initialization and loss function often require special properties of the task, which is not applicable to our problem, we explore to fuse \RE patterns on the input side, \NN module side and output side.   
 
 \paragraph{RE and NN}
-As for the specific topic of \RE and \NN, previous work have tried using \RE to speed up the decoding of \NN~\cite{strauss2016regular} and translating natural language queries into \texttt{RE}s~\cite{locascio2016neural}. Our method, on the other side, tries to use \RE to improve the prediction ability of \NN.
+As for the specific topic of \RE and \NN, previous work have tried using \RE to speed up the decoding of \NN~\cite{strauss2016regular} and translating natural language queries into \REs~\cite{locascio2016neural}. Our method, on the other side, tries to use \RE to improve the prediction ability of \NN.
 
 \paragraph{Few-Shot Learning}
 Early work uses Bayesian framework to handle few-shot learning~\cite{fei2006one}. Recently, people either consider few-shot learning in a metric learning framework~\cite{koch2015siamese,vinyals2016matching}. or store instances in the memory network~\cite{santoro2016meta, kaiser2017learning} to match rare instances in the future.
