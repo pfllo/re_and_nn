@@ -72,8 +72,11 @@ The reason is probably that, the less \RE related parameters and the shorter dis
 However, since \texttt{logit} modifies output directly, the final prediction is more sensitive to the insufficiently trained parameters in \texttt{logit}, which leads to its worse results in the 5-shot setting.
 
 To compare with existing methods of combining \NN and rules, we also implement the famous teacher-student
-network~\cite{hu2016harnessing}, which proves to perform well on various tasks. They first use \FOL rules to rectify the output probability
-of \NN, and then let the \NN to learn from the rectified distribution, which requires a certain amount of data to support this process.
+network~\cite{hu2016harnessing}, which proves to perform well on various tasks.
+They let \NN learn from the posterior label distribution produced by \FOL rules in a teacher-student framework,
+% first use \FOL rules to rectify the output probability
+% of \NN, and then let the \NN to learn from the rectified distribution,
+which requires a certain amount of data to support this process.
 Therefore, although both \texttt{hu16} and \texttt{logit} are output side methods, since \texttt{logit} is easier to train, \texttt{logit}
 still performs better than \texttt{hu16} in these few-shot settings.
 % \todo{try to acknowledge that \texttt{hu16} belongs to \emph{fusion in output}}
@@ -95,7 +98,7 @@ Therefore, the attention loss and the attention related parameters are more of a
 % Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
 Take the sentence in Fig.~\ref{atis_sample} for example, we recognize \textsl{\underline{Boston}} as \emph{fromloc.city} because \textsl{\underline{Boston}} itself reprensents a city, and it follows a context word \textsl{\underline{from}}. Since this simple context is easily
 captured by \BLSTM, attention does not help much in this case.
-By examining the attention of \texttt{t\_att} trained on full dataset,
+By examining the attention of \texttt{t\_att} trained on the full dataset,
 we find instead of marking informative context words, the attention tends to concentrate on the target word itself, which
 further confirms our hypothesis on attention loss.
 

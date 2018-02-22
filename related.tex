@@ -6,8 +6,9 @@
 On the initialization side, Li et al.~\shortcite{li2017initializing} uses important n-grams to initialize the convolution filters. 
 % so that \NN can capture key n-grams in early training stage. 
 On the input side, Wang et al.~\shortcite{wang2017combining} uses knowledge base rules to find relevant concepts for short texts to augment input.
-On the output side, the teacher-student framework is widely used to let \NN learn from the posterior label distribution produced by \FOL rules~\cite{hu2016harnessing,hu2016deep,guo2017knowledge}.
-% Hu et al.~\shortcite{hu2016harnessing,hu2016deep} and Guo et al.~\shortcite{guo2017knowledge} rectifies the \NN output by posterior regularization, and let \NN learn from the rules in a teacher-student framework. 
+On the output side,
+% the teacher-student framework is widely used to let \NN learn from the posterior label distribution produced by \FOL rules~\cite{hu2016harnessing,hu2016deep,guo2017knowledge}.
+Hu et al.~\shortcite{hu2016harnessing,hu2016deep} and Guo et al.~\shortcite{guo2017knowledge} use \FOL rules to rectify the output probability of \NN, and then let \NN learn from the rectified distribution in a teacher-student framework.
 % \cite{guo2017knowledge} followed the same framework and adapted it to the knowledge graph embedding task.
 Xiao et al.~\shortcite{xiao2017symbolic}, on the other hand, modifies the decoding score of \NN by multiplying a weight derived from rules.
 On the loss function side, people modify the loss function to model the relationship between premise and conclusion~\cite{demeester2016lifted}, and fit both human-annotated and rule-annotated labels~\cite{alashkar2017examples}.
