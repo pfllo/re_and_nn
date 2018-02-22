@@ -93,11 +93,11 @@ p_i = \frac{logit_i}{\sum_{i}{logit_i}}, \quad\quad logit_i=\textbf{w}_i\textbf{
 \end{equation}
 where $\textbf{w}_i$, $logit_i$, $b_i$ are weight vector, logit, and bias for intent $i$, respectively.
 
-Secondly, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}),
+Second, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}),
 a \RE can also indicate that a sentence does not express intent $i$ (\textbf{\emph{negative \REs}}).
 %Therefore, to make use of negative \REs,
-We thus use another set of attentions (\textbf{\emph{negative attentions}}, in contrary to \textbf{\emph{positive attentions}})
-to compute a new set of logits for each intent using Eq.~\ref{label_att_eq} and \ref{label_prob_eq}.
+We thus use new set of attentions (\textbf{\emph{negative attentions}}, in contrary to \textbf{\emph{positive attentions}})
+to compute another set of logits for each intent with Eq.~\ref{label_att_eq} and \ref{label_prob_eq}.
 We denote the logits computed by positive attentions as $logit_{pi}$, and those by negative attentions as $logit_{ni}$, the final logit for intent $i$ is then:
 \begin{equation}
 logit_i = logit_{pi} - logit_{ni}
@@ -146,7 +146,7 @@ The final type of combination is to use \RE to modify the output of \NN, and we 
 % Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
 As mentioned in Section \ref{re_desc},
-the slot \RE patterns used in this section only output a simplified version of the slot label, for which we can further
+the slot \REs used in this section only output a simplified version of the slot label, for which we can further
 %Since the \REtag is related to the slot label, we can further
 annotate their corresponding target slot label.
 % To make connections between the \RE tag and the slot label, we further annotate all the slot labels that the output tag may lead to.
@@ -160,7 +160,7 @@ logit_i = logit'_i + w_i z_i
 where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that lead to label $i$.
 Here we do not assign a trainable weight for each \RE because it is very often that only a few sentences match a \RE.
 
-We modify logit instead of the final probability because logit is an unconstrained real value, which \red{matches??} $w_i z_i$ better than probability.
+We modify logit instead of the final probability because logit is an unconstrained real value, which \cyan{matches the property of} $w_i z_i$ better than probability.
 Further, when performing model ensemble,
 % kagglers have also proved emperically that,
 ensemble with logits is often empirically better than with the final probability (see the ensemble version of Juan et al.~\shortcite{juan2016field}), which is also the reason that we operate on logit %instead of probability

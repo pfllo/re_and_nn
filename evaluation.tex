@@ -1,6 +1,8 @@
 \section{Evaluation Methodology}
-Our experiments are designed to answer three questions: \textbf{Q1:} Does the use of \REs enhance the learning quality when the number of annotated
-instances is small?  \textbf{Q2:}  Does the use of \REs still help when using the full training data?
+Our experiments
+\cyan{aim to} %are designed
+to answer three questions: \textbf{Q1:} Does the use of \REs enhance the learning quality when the number of annotated
+instances is small?  \textbf{Q2:}  Does the use of \REs still helps when using the full training data?
  \textbf{Q3:}  How can we choose from different combination methods?
 %When do the three proposed methods work, and which method works best in each scenario?
 % \todo{how to refer to question (3) in exp?}
@@ -34,7 +36,7 @@ Specifically, we let the 3 most frequent intents have 300 training instances, an
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{Preparing REs}
-\label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by an \red{paid?unpaid?} annotator 
+\label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by an \cyan{paid} annotator 
 who is familiar \red{with the dataset.}
 % \footnote{Code and data are available at: [url redacted for double-blind review].}.
 It took the annotator in total less than 10 hours
@@ -43,9 +45,9 @@ like cities are obtained from the full training set. The majority of the time
 for %spent on 
 writing the \REs is proportional to the number of \RE groups. 
 It took about 1.5 hours to write the 54 intent \REs with on average 2.2 groups per \RE. It is straightforward
-to write the slot \REs for \red{the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}}, for which it took around
+to write the slot \REs for \cyan{the input and output side methods}, for which it took around
  1 hour to write the 60 \REs with averagely 1.7 groups. By contrast, writing slot \REs to guide attention requires more
-efforts as the annotator needs to carefully select clue words and \red{targets???} for the full slot label. As a result, it took about 
+efforts as the annotator needs to carefully select clue words and \cyan{annotate} the full slot label. As a result, it took about 
 5.5 hours to generate 115 \REs with on average 3.3 groups.
 % The performance of the sets of \REs used for the method described in
 % Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
