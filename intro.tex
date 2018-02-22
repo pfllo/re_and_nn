@@ -11,28 +11,29 @@ where the number of available training examples is small -- a problem known as f
 
 While powerful, \REs have a poor generalization ability because all synonyms and variations in a \RE must be explicitly specified. As a
 result, they often have a low coverage of \z{??}. To overcome this limitation, \REs are often combined with data-driven methods like neural
-network (\NN) based techniques. In this way, \REs are used as an easy-to-tune method which, hopefully, can deal with specific cases with
-high precision.
+network (\NN) based techniques. In this way, \REs are considered as an easy-to-tune method which, hopefully, can capture certain patterns
+with high precision.
 
-However, the value of \REs is more than that and existing approaches only scratch the surface of what could possibly be achieved with \REs.
+However, \REs are more capable than that and existing approaches only scratch the surface of what could possibly be achieved with \REs.
 When writing a \RE, developers have encoded their knowledge about the problem domain, which can be used to improve data-driven models. For
-example, a \RE itself often indicates the informative words (i.e., \textbf{\textit{clue words}}) within its pattern.
+example, a \RE often indicates informative words (i.e., \textbf{\textit{clue words}}) of certain patterns. If we can exploit such
+information, we can then \red{xx}.
 
-This paper presents a set of novel approaches for using \REs to improve \NNs -- a learning framework that has shown impressive
-breakthroughs in various \NLP tasks~\cite{goldberg2017neural}. By doing so, we are able to examine both high-precision \REs and those of
-low quality, since \NNs are known to be good at tolerating noises~\cite{xie2016disturblabel}. This may help reduce the difficulty of
-creating \REs, since high-precision \REs are usually more complex and harder to generate.
+This paper presents a novel approach to unlock the potential of \REs in \NLP. Our goal is to enable the use of high-precision \REs (but are
+time-consuming to generate) with those of low quality (but are easy to write). We achieve this by employing \NNs, a learning framework that
+are widely used in many \NLP tasks~\cite{goldberg2017neural} and are shown to be effective in tolerating noises in the training
+data~\cite{xie2016disturblabel}. This allows us to utilize a diverse set of \REs and at the same time to control the inevitable noises of
+ low quality \REs. The result is a new way of using \REs, with a generic framework for quality control.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
 
 % On the other hand, instead of encoding knowledge into massive labeled data, human tend to express their knowledge in a more compact way, i.e., the rules. The rules accumulated by domain experts makes it an excellent source to compensate the shortage of labeled data.
 
 
-Specifically, we explore fusing \RE with \NN from three different aspects: (1) On the \NN input side, we can use the \RE output as features and feed
-to \NN. This shares similar spirit with the stacking technique~\cite{wolpert1992stacked} for short text classification~\cite{wang2017combining}.
-%\red{and has also been used by~\cite{wang2017combining} to incorporate knowledge base rules in short text classification.}
-(2) On the \NN module side, since \REs explicitly highlight clue words for a
-specific tag, we can use \RE to guide the attention mechanism in \NN. (3) On the \NN output side, we can combine the output of \RE and \NN in
+Specifically, we exploit three ways to combine \REs with a \NN. First, we propose to use the evaluation outcome of \REs as the input
+features of a \NN. This shares a similar spirit with the stacking technique~\cite{wolpert1992stacked} for short text
+classification~\cite{wang2017combining}. (2) On the \NN module side, since \REs explicitly highlight clue words for a specific tag, we can
+use \RE to guide the attention mechanism in \NN. (3) On the \NN output side, we can combine the output of \RE and \NN in
 a direct but learnable way, so that the final output benefits from both directly. % \NN and \RE.
 %Hu et al.~\shortcite{hu2016harnessing} also explored this aspect by using first-order-logic (\FOL) constraints to
 %affect the \NN output in a teacher-student network manner. Different from their general framework, since \RE output is
