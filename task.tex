@@ -8,12 +8,12 @@
 \end{figure}
 
 \subsection{Problem Definition}
-%While our approach is generally applicable, to have concrete and measurable objectives, 
-Here, we investigate two \SLU tasks: \emph{intent
-detection} and \emph{slot filling}. The former is a sentence classification task where we learn a function to map an input sentence of $n$
-words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a corresponding \textbf{\emph{intent label}}, $c$. The latter is a sequence labeling task for
-which we learn a function to take in an input query sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to produce a corresponding
-labeling sequence, $\textbf{y}=[y_{1}, ..., y_{n}]$, where  $y_i$ is the \textbf{\emph{slot label}} of the
+%While our approach is generally applicable, to have concrete and measurable objectives,
+Our work targets two \SLU tasks: \emph{intent detection} and \emph{slot filling}. The former is a sentence classification task where we
+learn a function to map an input sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a corresponding \textbf{\emph{intent label}},
+$c$. The latter is a sequence labeling task for which we learn a function to take in an input query sentence of $n$ words,
+$\textbf{x}=[x_{1}, ..., x_{n}]$, to produce a corresponding labeling sequence, $\textbf{y}=[y_{1}, ..., y_{n}]$, where  $y_i$ is the
+\textbf{\emph{slot label}} of the
 corresponding word, $x_i$. % in the input query.
 
 
@@ -30,13 +30,13 @@ corresponding word, $x_i$. % in the input query.
 %flight-related information. We also need to identify the \emph{from\_city} and the \emph{to\_city} slots so that the we can return the
 %correct information.
 
-%\cparagraph{Example} 
-Take the sentence in Fig.~\ref{atis_sample} as an example. 
-%gives an example sentence from the ATIS (Airline Travel Information Systems) dataset~\cite{hemphill1990atis}. 
+%\cparagraph{Example}
+Take the sentence in Fig.~\ref{atis_sample} as an example.
+%gives an example sentence from the ATIS (Airline Travel Information Systems) dataset~\cite{hemphill1990atis}.
 A successful intent detector would suggest the intent of the sentence as \emph{flight}, i.e., querying
 about flight-related information. Slot filler, on the other hand, should identify the slots \emph{fromloc.city} and
 \emph{toloc.city} by labeling \underline{\textit{Boston}} and \underline{\textit{Miami}}, respectively,
-%the sentence 
+%the sentence
 using the begin-inside-outside (\texttt{BIO}) scheme.
 
 
@@ -45,18 +45,19 @@ using the begin-inside-outside (\texttt{BIO}) scheme.
 \subsection{The Use of Regular Expressions}
 \label{re_desc}
 
-In this work, a \RE defines a mapping from a text \emph{pattern} to several \textbf{\emph{\REtags}} which are  the same as or related to the
-\textbf{\emph{target labels}} (i.e., intent and slot labels). A search function takes in a \RE, applies it to all sentences, and return
-any texts that match the pattern. %The search is designed to return \red{every match on a sentence}. 
+In this work, a \RE defines a mapping from a text \emph{pattern} to several \textbf{\emph{\REtags}} which are  the same as or related to
+the \textbf{\emph{target labels}} (i.e., intent and slot labels). A search function takes in a \RE, applies it to all sentences, and
+returns
+any texts that match the pattern. %The search is designed to return \red{every match on a sentence}.
 %If  a sentence is matched by the given pattern,
 %its corresponding \REtag is assigned to either the sentence (for intent detection) or some phrases in the sentence (for slot filling).
-We then assign the corresponding \REtag to either the matched sentence (for intent detection) or some matched phrases (for slot filling).
+We assign the corresponding \REtag to either the matched sentence (for intent detection) or some matched phrases (for slot filling).
 
 
-If a \REtag indicates an intent, it would be the same as an intent label. 
-For example,  %when applying the intent \RE 
+If a \REtag indicates an intent, it would be the same as an intent label.
+For example,  %when applying the intent \RE
 in Fig.~\ref{atis_sample},
-% to the example sentence, 
+% to the example sentence,
 we get a \REtag of \emph{flight} that is the same as %corresponds to
  the intent label \emph{flight}.
 
@@ -70,8 +71,8 @@ For slot filling, we use two different sets of \REs. Given the group functionali
 annotate clue words for certain slot labels, its \REtags are the same as our target slot labels.
 For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second group.
 % \texttt{/(from)\:(\_\_CITY)/} will match the sentence in Figure~\ref{atis_sample}, and assign \emph{fromloc.city} to the second \RE group.
-Here, \emph{\_\_CITY} is a full list of city names, which can be replaced with a string like \texttt{/boston|miami|LA|.../}. 
-%Note that, an ordinary word list pattern can be written as strings like \texttt{/(\_\_CITY)/} in \RE. 
+Here, \emph{\_\_CITY} is a full list of city names, which can be replaced with a string like \texttt{/Boston|Miami|LA|.../}.
+%Note that, an ordinary word list pattern can be written as strings like \texttt{/(\_\_CITY)/} in \RE.
 (2)~For the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, the
 \REtag is different from the target slot label.
 For example, the first and second \RE groups in the slot \RE of Fig.~\ref{atis_sample} can be simply tagged as \emph{city},
@@ -82,10 +83,13 @@ with simplified output labels, can also make improvements to \NN.
 
 % We use another set of \texttt{RE}s for the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output} because using simpler tags can significantly reduce the complexity of the \RE, and therefore making the generation of \RE much easier. For example, we need \texttt{/(from)\:(\_\_CITY)/} to identify \emph{fromloc.city}, but only \texttt{/(\_\_CITY)/} to identify \emph{city}.
 
-%When writing \REs, 
-Intuitively, complicated \REs often lead to better performance but require more efforts to generate. %, \RE complexity is often an important trade-off that we need to make. Generally, 
-There are mainly two aspects affecting \RE complexity most, the number of \RE groups and the number of \emph{or}s (the symbol $|$) in a \RE group.
-The former often leads to better precision but lower coverage, while the latter usually results in higher coverage but slightly lower precision.
+%When writing \REs,
+Intuitively, complicated \REs often lead to better performance but require more efforts to generate. %, \RE complexity is often an
+important trade-off that we need to make. Generally, There are mainly two aspects affecting \RE complexity most, the number of \RE groups
+and the number of \emph{or}s (i.e., the disjunction operator $|$) in a \RE group. The former often leads to better precision but lower
+coverage, while the latter usually has a higher coverage but slightly lower precision.
+
+
 % First, \RE complexity increases with the number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with the number of \emph{or}s (the symbol $|$) in a \RE group. Here a group can be considered as a set of phrases that express the same meaning. Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
 % unless adding ambiguous phrases to the group
 
