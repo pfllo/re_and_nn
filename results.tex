@@ -95,9 +95,9 @@ Therefore, the attention loss and the attention related parameters are more of a
 % Since \BLSTM output already models some context, and attention does not help understanding the word itself, the attention is not that useful as in intent detection, making the attention loss more of a burden than benifit.
 Take the sentence in Fig.~\ref{atis_sample} for example, we recognize \textsl{\underline{Boston}} as \emph{fromloc.city} because \textsl{\underline{Boston}} itself reprensents a city, and it follows a context word \textsl{\underline{from}}. Since this simple context is easily
 captured by \BLSTM, attention does not help much in this case.
-% By examining the attention of \texttt{t\_att} trained on full dataset,
-% we find instead of marking informative context words, the attention tends to concentrate on the target word itself, which
-% further confirms our hypothesis on attention loss.
+By examining the attention of \texttt{t\_att} trained on full dataset,
+we find instead of marking informative context words, the attention tends to concentrate on the target word itself, which
+further confirms our hypothesis on attention loss.
 
 % However, due to the word list \RE groups like city list, the \REtag actually provides some type information about the target word.
 On the other hand, since the \REtags can provide extra information about the words in the sentence, \texttt{logit} and \texttt{feat} work better here.
