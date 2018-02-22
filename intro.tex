@@ -8,24 +8,30 @@ tasks like pattern matching, sentence classification, sequence labeling, etc.~\c
 %pattern \texttt{/\textasciicircum flights? from/} can help recognize the sentence in Fig.~\ref{atis_sample} has an intention of
 %\emph{flights}, indicating the user is looking for flight-related information.
 As a technique based on human-crafted rules, it is concise, explainable, tunable, and does not rely on much training data to generate. As
-such, it is widely use in industry, especially when the number of available training examples is limited.
+such, it is widely use in industry, especially when the number of available training examples is limited~\cite{gc2015big}.
 
 While powerful, \REs have a poor generalization ability as all synonyms and variations in a \RE must be explicitly specified. As a result,
-they often have a low coverage of \z{??}. To overcome this limitation, \REs are often combined with data-driven methods like neural network
-(\NN) based techniques, where a set of carefully-written \REs are used to capture certain patterns with high precision.
+they often have a low coverage of \z{??}. To overcome this limitation, \REs are often \cyan{used together} with data-driven methods like neural network
+(\NN) based techniques, where a set of carefully-written \REs are used to
+\cyan{handle a fraction of cases} %capture certain patterns
+with high precision, \cyan{leaving the rest for data-driven methods}.
 
 However, the use of \REs can go beyond simple pattern matching and existing approaches only scratch the surface of what could possibly be
-achieved. A \RE often encodes a developer's knowledge of the problem domain by including informative words (i.e., \textbf{\textit{clue
-words}}) of certain patterns. We argue that such information can help models to extract the implicit knowledge from the training data,
-which in turn enables data-driven methods to work effectively in the few-shot learning scenario~\cite{gc2015big} with a small volume of
+achieved. A \RE often encodes a developer's knowledge of the problem domain.
+\cyan{For example, a\RE itself often indicates the informative words (\textbf{\textit{clue words}}) within its pattern.}
+ % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns. 
+% We argue that such information can help models to extract the implicit knowledge from the training data,
+\cyan{We argue that such information can be \orange{transfered??} to data-driven methods with the help of some training data,} 
+which in turn enables data-driven methods to work effectively in the few-shot learning scenario with a small volume of
 annotated data.
+
 
 
 One of the major hurdles of combining \REs with data-driven methods is that \REs are often of different qualities -- while high-quality
 \REs are precise in capturing patterns, they are hard to generate, and although low quality \REs are easy to write, they can be noisy. This
 work seeks to overcome this hurdle by employing \NNs to control the noise. We choose \NNs because they are widely used in many \NLP
 tasks~\cite{goldberg2017neural}, are proven to be effective in tolerating noises~\cite{xie2016disturblabel}, and can improve the
-generalization ability of \REs. The result is a new way of using \REs, with a generic framework for quality control.
+generalization ability of \REs. The result is a new way of using \REs,  \cyan{\sout{with a generic framework for quality control}}.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
 
