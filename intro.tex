@@ -8,7 +8,8 @@ tasks like pattern matching, sentence classification, sequence labeling, etc.~\c
 %pattern \texttt{/\textasciicircum flights? from/} can help recognize the sentence in Fig.~\ref{atis_sample} has an intention of
 %\emph{flights}, indicating the user is looking for flight-related information.
 As a technique based on human-crafted rules, it is concise, explainable, tunable, and does not rely on much training data to generate. As
-such, it is widely used in industry, especially when the number of available training examples is limited \cyan{(few-shot learning)}~\cite{gc2015big}.\lb{few-shot learning need to be defined}. \lb{GC15 supports \RE are used when data is limited}
+such, it is widely used in industry, especially when the number of available training examples is limited - a problem known as few-shot
+learning~\cite{gc2015big}.
 % a problem known as few-shot learning.
 
 While powerful, \REs have a poor generalization ability as all synonyms and variations in a \RE must be explicitly specified. As a result,
@@ -18,13 +19,13 @@ they often have a low coverage of \z{??}. To overcome this limitation, \REs are 
 with high precision, \cyan{leaving the rest for data-driven methods}.
 
 However, the use of \REs can go beyond simple pattern matching.
-% and existing approaches only scratch the surface of what could possibly be achieved. 
+% and existing approaches only scratch the surface of what could possibly be achieved.
 A \RE often encodes a developer's knowledge of the problem domain.
 \cyan{For example, a \RE itself often indicates the informative words (\textbf{\textit{clue words}}) within its pattern.}
- % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns. 
+ % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns.
 % We argue that such information can help models to extract the implicit knowledge from the training data,
 % which in turn enables data-driven methods to work effectively in the few-shot learning scenario with a small volume of annotated data.
-\cyan{We argue that such information can be utilized by data-driven methods to achieve better prediction results, especially in the few-shot learning scenario} 
+\cyan{We argue that such information can be utilized by data-driven methods to achieve better prediction results, especially in the few-shot learning scenario}
 
 
 
@@ -35,14 +36,12 @@ A \RE often encodes a developer's knowledge of the problem domain.
 % tasks~\cite{goldberg2017neural}, are proven to be effective in tolerating noises~\cite{xie2016disturblabel}, and can improve the
 % generalization ability of \REs. The result is a new way of using \REs,  \cyan{\sout{with a generic framework for quality control}}.
 
-In this paper,
-we investigate the methods of using \RE to improve \NN, a successful learning framework in various \NLP tasks~\cite{goldberg2017neural}. 
-By doing so,  %different from the scenario where we only use high-precision \REs to handle a fraction of cases, 
-we are able to utilize both high-precision \REs (but are time-consuming to generate) and those \red{of low quality} (but are easy to write), % low-precision \REs, 
-since \NN is known to be good at
-tolerating noises~\cite{xie2016disturblabel}.
+In this paper, we investigate the use of \REs to improve \NNs, a successful learning framework in many \NLP
+tasks~\cite{goldberg2017neural}. By doing so,
+we are able to utilize both high-quality \REs (which are precise in capturing patterns but are time-consuming to generate) and those of low quality (that are easy to write, cut can be noisy), % low-precision \REs,
+since \NNs is known to be good at tolerating noises~\cite{xie2016disturblabel}.
 % This may help reduce the difficulty of creating \REs, since high-precision \REs
-% are usually more complex %than low-precision ones, and therefore are 
+% are usually more complex %than low-precision ones, and therefore are
 % hard to generate.
 
 % On the other side, since \NN models rely on distributed representation, they can generalize the \RE pattern so that phrases with similar meaning can also been matched, which may possibly result in better performance than using the \RE alone.
@@ -51,9 +50,8 @@ tolerating noises~\cite{xie2016disturblabel}.
 
 
 % We propose a novel approach to combine \REs with a \NN at different levels.
-Specifically, we explore fusing \RE with \NN from three different aspects:
-At the input layer, we propose to use the evaluation outcome of
-\REs as the input features of a \NN (Sec.\ref{fusion_with_input}).
+This paper propose a novel approach to combine \REs with \NNs at different levels.  At the input layer, we propose to use the evaluation
+outcome of \REs as the input features of a \NN (Sec.\ref{fusion_with_input}).
 %This shares a similar spirit with the stacking technique~\cite{wolpert1992stacked} for short text classification~\cite{wang2017combining}.
 At the network module level, we show how to
 exploit the knowledge encoded in \REs to guide the attention mechanism of a \NN (Sec.~\ref{interact_with_module}). At the output layer, we
@@ -87,4 +85,4 @@ significant better learning performance over the \RE-unaware method.
 
 Our contributions are as follows. (1) This is the first work to systematically investigate methods of combining \REs with \NNs. (2) The
 extensive experiments show that our methods clearly improve the \NN performance in both the few-shot learning and the full annotation
-settings. (3) Our analysis provides meaningful guidance to fusion method selection, and \RE annotation as well.
+settings. (3) We provide a set of guidance on how to select the fusion methods and \RE annotation.
