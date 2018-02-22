@@ -62,8 +62,8 @@ In our pilot experiments on the first method, the tag embedding is copied so man
 \cparagraph{Slot Filling}
 Since the output of slot \RE patterns are word-level tags, as shown in \circled{1} in Fig.~\ref{fig_overview_slot}, we can simply embed
 and average the \RE tags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
-%Further, since our slot labels follow the \BIO annotation paradigm, 
-Note that we also extend the slot \RE tags into the \BIO format, e.g.,  
+%Further, since our slot labels follow the \BIO annotation paradigm,
+Note that we also extend the slot \RE tags into the \BIO format, e.g.,
 the \REtag of phrase \textsl{\underline{New York}} is \emph{B-city I-city} if its original tag is \emph{city}.
 
 \subsection{Fusion on the NN Module Side}
@@ -75,7 +75,7 @@ Since the \RE itself has already highlighted the clue words (bold blue arrows an
 Taking the sentence in Fig.~\ref{atis_sample} for example, the {\small \RE: \texttt{/\textasciicircum flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are key words to decide the intent \emph{flight}. Therefore, the attention module in \NN should pay attention to these two words to get the correct prediction.
 
 We extend the base intent model by making two changes to better incorporate the guidance from \RE.
-First, since each intent has its own clue words, using a single sentence embedding for all intent %which is produced by only one set of attention, 
+First, since each intent has its own clue words, using a single sentence embedding for all intent %which is produced by only one set of attention,
 would make the attention less focused.
 % Considering we also know the intent that each \RE points to,
 Therefore, we let each intent $i$ use different attention $\textbf{a}_i$, which is then used to generate the sentence embedding $\textbf{s}_i$ for that intent:
@@ -93,10 +93,10 @@ p_i = \frac{logit_i}{\sum_{i}{logit_i}}, \quad\quad logit_i=\textbf{w}_i\textbf{
 \end{equation}
 where $\textbf{w}_i$, $logit_i$, $b_i$ are weight vector, logit, and bias for intent $i$, respectively.
 
-Secondly, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}), 
-a \RE can also indicate that a sentence does not express intent $i$ (\textbf{\emph{negative \REs}}). 
-%Therefore, to make use of negative \REs, 
-We thus use another set of attentions (\textbf{\emph{negative attentions}}, in contrary to \textbf{\emph{positive attentions}}) 
+Secondly, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}),
+a \RE can also indicate that a sentence does not express intent $i$ (\textbf{\emph{negative \REs}}).
+%Therefore, to make use of negative \REs,
+We thus use another set of attentions (\textbf{\emph{negative attentions}}, in contrary to \textbf{\emph{positive attentions}})
 to compute a new set of logits for each intent using Eq.~\ref{label_att_eq} and \ref{label_prob_eq}.
 We denote the logits computed by positive attentions as $logit_{pi}$, and those by negative attentions as $logit_{ni}$, the final logit for intent $i$ is then:
 \begin{equation}
@@ -109,21 +109,21 @@ loss_{att} = \sum_{i}{m_i\sum_{j}{t_{ij}log(\alpha_{ij})}}
 \label{att_loss}
 \end{equation}
 where $t_{ij} = 0$ when none of the matched \REs that leads to intent $i$ marks word $j$ as a clue word, otherwise $t_{ij} = 1/k_{i}$ where $k_i$ is the number of clue words
-% mark by \RE 
+% mark by \RE
 for intent $i$. $m_i$ is a 0-1 indicator that equals 1 when there is a matched \RE that leads to intent $i$. We use Eq.~\ref{att_loss} to compute positive attention loss $loss_{att\_p}$ for positive \REs and negative attention loss $loss_{att\_n}$ for negative ones. The final loss is:
 \begin{equation}
 loss = loss_{c} + \beta_p loss_{att\_p} + \beta_n loss_{att\_n}
 \end{equation}
 where $loss_{c}$ is the original classification loss, $\beta_p$ and $\beta_n$ are weights for the two attention losses.
 
-In practice, while with some noise, a positive \RE for intent $i$ can often be considered as negative \REs for other intents. 
+In practice, while with some noise, a positive \RE for intent $i$ can often be considered as negative \REs for other intents.
 %For example, the \RE \texttt{/\textasciicircum flights?\:from/} that leads to intent \emph{flight} also indicates that the sentence should not be labeled as intents like \emph{meal} and \emph{quantity}.
 We therefore use the positive \REs for intent $i$ as the negative \REs for other intents in our experiments.
 
 \cparagraph{Slot Filling}
-%While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) mechanism 
-%as we do in intent prediction, we will face an efficiency problem in slot filling. 
-The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction 
+%While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) mechanism
+%as we do in intent prediction, we will face an efficiency problem in slot filling.
+The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction
 may not be suitable for slot filling, since we need to compute attention for each word, which will result in much more
 computation and memory storage.\footnote{Since we need to assign a label to each word, if we still compute attention for each slot label, we
 will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of tags and $n$ is the sentence
@@ -145,9 +145,9 @@ The final type of combination is to use \RE to modify the output of \NN, and we 
 
 % Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
-As mentioned in Section \ref{re_desc}, 
-the slot \RE patterns used in this section only output a simplified version of the slot label, for which we can further 
-%Since the \REtag is related to the slot label, we can further 
+As mentioned in Section \ref{re_desc},
+the slot \RE patterns used in this section only output a simplified version of the slot label, for which we can further
+%Since the \REtag is related to the slot label, we can further
 annotate their corresponding target slot label.
 % To make connections between the \RE tag and the slot label, we further annotate all the slot labels that the output tag may lead to.
 For example, a \RE that outputs tag \emph{city} will lead to three target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
@@ -163,5 +163,5 @@ Here we do not assign a trainable weight for each \RE because it is very often t
 We modify logit instead of the final probability because logit is an unconstrained real value, which \red{matches??} $w_i z_i$ better than probability.
 Further, when performing model ensemble,
 % kagglers have also proved emperically that,
-ensemble with logits is often empirically better than with the final probability (see the ensemble version of Juan et al.~\shortcite{juan2016field}), which is also the reason that we operate on logit %instead of probability 
+ensemble with logits is often empirically better than with the final probability (see the ensemble version of Juan et al.~\shortcite{juan2016field}), which is also the reason that we operate on logit %instead of probability
 in Sec.~\ref{interact_with_module}.
