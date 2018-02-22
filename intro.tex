@@ -23,7 +23,7 @@ annotated data.
 
 One of the major hurdles of combining \REs with data-driven methods is that \REs are often of different qualities -- while high-quality
 \REs are precise in capturing patterns, they are hard to generate, and although low quality \REs are easy to write, they can be noisy. This
-work seeks to overcome this hurdle by employing \NNs to control the noise. We choose \NNs because it is widely used in many \NLP
+work seeks to overcome this hurdle by employing \NNs to control the noise. We choose \NNs because they are widely used in many \NLP
 tasks~\cite{goldberg2017neural} and are proven to be effective in tolerating noises~\cite{xie2016disturblabel}. The result is a new way of
 using \REs, with a generic framework for quality control.
 
@@ -36,7 +36,7 @@ We propose a novel approach to combine \REs with a \NN at different levels. At t
 \REs as the input features of a \NN (Sec.\ref{fusion_with_input}). This shares a similar spirit with the stacking
 technique~\cite{wolpert1992stacked} for short text classification~\cite{wang2017combining}. At the network module level, we show how to
 exploit the knowledge encoded in \REs to guide the attention mechanism of a \NN (Sec.~\ref{interact_with_module}). At the output layer, we
-combine the evaluation outcome of a \RE with the \NN output in a learnable way (Sec.~\ref{fusion_with_output}). This allows the learning
+combine the evaluation outcome of a \RE with the \NN output in a learnable manner (Sec.~\ref{fusion_with_output}). This allows the learning
 framework to exploit a diverse set of \REs while controlling the noises brought by low-quality \REs.
 
 %(2) On the \NN module side, since \REs explicitly highlight clue words for a specific tag, we can use \RE to guide the attention mechanism
