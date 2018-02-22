@@ -7,10 +7,12 @@ instances is small? (2) Does the use of \REs help when using the full training d
 \subsection{Datasets}
 \label{sec_datasest}
 
-We use the ATIS dataset~\cite{hemphill1990atis} to evaluate our approach. This dataset is widely used in \SLU research. The dataset
-includes queries of flights, meal and etc. We follow the setup of \cite{liu2016attention} by using 4978 queries for training and 893 for
-testing. These queries include 18 intents and 127 slot labels. Numbers are replaced with special tokens like \textsl{\underline{DIGIT*m}},
-where \emph{m} is the number of digits in the original string. Different from previous work, we also split words like
+We use the ATIS dataset~\cite{hemphill1990atis} to evaluate our approach. This dataset is widely used in \SLU research, and
+includes queries of flights, meal, etc. We follow the setup of Liu and Lane~\shortcite{liu2016attention} by using 4978 queries for training and 893 for
+testing, with 18 intents and 127 slot labels.
+% Numbers are replaced with special tokens like \textsl{\underline{DIGIT*m}},
+% where \emph{m} is the number of digits in the original string.
+Different from previous work, we also split words like
 \textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} to reduce the number of words that do not have a pre-trained word
 embedding, which is important to few-shot learning.
 
@@ -26,20 +28,25 @@ All settings use the original test set.
 
 Since most few-shot learning methods require either extra classes or classes with enough data for training, we also explore the
 \textbf{\emph{partial few-shot learning setting}} for intent detection to make fair comparison with existing few-shot learning methods.
-Specifically, we let the 3 most frequent intents have 300 training instances, and the rest of the few-shot dataset remains untouched.
+Specifically, we let the 3 most frequent intents have 300 training instances, and the rest remains untouched.
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
 
 \subsection{Preparing REs}
 \label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by an undergraduate who is familiar with the
-dataset\footnote{Code and data are available at: [url redacted for double-blind review].}.  It took the student in total less than 10 hours
+dataset.
+% \footnote{Code and data are available at: [url redacted for double-blind review].}.
+It took the student in total less than 10 hours
 to develop all the \REs, but a domain expert can accomplish the task faster. We use the 20-shot data to develop the \REs, but word lists
-like cities are obtained from the full training set. The majority of the time spent on writing the \REs is proportional to the number of
-\RE groups. It took the student 1.5 hours to write the 54 intent \REs where each \RE has on average 2.2 \RE groups. It is straightforward
-to write the slot \REs for the two methods described in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, for which it took the
-student 1 hour to write the 60 \REs with on average 1.7 group per \RE. By contrast, writing slot \REs to guide attention requires more
-efforts as the developer need to carefully select clue words and target for the full slot label. As a result, it took the student 5.5 hours
-to generate 11 \REs with on aver 3.3 \RE groups per \RE. The resulting performance for the set of \REs used for the method described in
-Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
+like cities are obtained from the full training set. The majority of the time 
+of %spent on 
+writing the \REs is proportional to the number of
+\RE groups. It took the student 1.5 hours to write the 54 intent \REs with on average 2.2 groups per \RE. It is straightforward
+to write the slot \REs for the methods in Sec.~\ref{fusion_with_input} and \ref{fusion_with_output}, for which it took the
+student 1 hour to write the 60 \REs with averagely 1.7 groups. By contrast, writing slot \REs to guide attention requires more
+efforts as the developer needs to carefully select clue words and target for the full slot label. As a result, it took the student 5.5 hours
+to generate 115 \REs with on average 3.3 groups.
+% The performance of the sets of \REs used for the method described in
+% Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
 
 %Writing an intent \RE takes about 1-2 minutes. In this work, the student spent 1.5 hours to write the 54 \REs, with on average 2.2 \RE
 %groups for each \RE. The student finds that writing the slot \RE for the methods described in Sec.~\ref{fusion_with_input} and
@@ -78,29 +85,35 @@ Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
 
 \subsection{Experimental Setup}
 \cparagraph{Hyper-parameters}
-Our hyper-parameters for training the \NN models are similar to the ones used in \cite{liu2016attention}, which give comparable results on
-the original dataset. Specifically, we set the batch size to 16, the dropout probability to 0.5, the \BLSTM size to 200 (100 for each
-direction), and the attention loss weight to 16 (both positive and negative) for few-shot and 1 when we have more data (see
-Sec.~\ref{sec:experiments}). We use the 100-dimensional GloVe word vector~\cite{pennington2014glove}, and the Adam optimizer~\cite{kingma2014adam} with a learning rate of 0.001.
+Our hyper-parameters for \BLSTM are similar to the ones used in Liu and Lane~\shortcite{liu2016attention},
+% We use similar hyper-parameters to Liu and Lane~\shortcite{liu2016attention} for \BLSTM,
+% which gives comparable results on the original dataset.
+% Specifically, we set the batch size to 16, the dropout probability to 0.5, the \BLSTM size to 200 (100 for each direction),
+Specifically, we use batch size 16, dropout probability 0.5, \BLSTM cell size 100.
+The attention loss weight is 16 (both positive and negative) for full few-shot and 1 for other settings.
+We use the 100d GloVe word vector~\cite{pennington2014glove}, and the Adam optimizer~\cite{kingma2014adam} with learning rate 0.001.
 
 \cparagraph{Evaluation Metric}
 We report accuracy and macro-F1 for intent detection, and micro/macro-F1 for slot filling.
 Micro/macro-F1 are the harmonic mean of micro/macro precision and recall.
 Macro-precision/recall are calculated by averaging precision/recall of each label, and micro-precision/recall are averaged over each prediction.
-While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
+% While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
 
 \cparagraph{Naming Conventions}
-We use the following naming conventions when discussing our experimental results:
+% We use the following naming conventions when discussing our experimental results:
 %
-\texttt{BLSTM} refers to our base model,
-\texttt{+feat} means using \REtag as feature (input side method in Sec.~\ref{fusion_with_input}),
-\ptatt refers to the two-side attention method without attention loss,
-\texttt{+posi} and \texttt{+neg} refer to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (\NN module side method in Sec.~\ref{interact_with_module}),
-\texttt{+logit} means using \REtag to modify \NN output (output side methods in Sec.~\ref{fusion_with_output}),
+\texttt{BLSTM} is our base model,
+\texttt{+feat} means using \REtag as feature (Sec.~\ref{fusion_with_input}),
+% input side method in
+\ptatt is the two-side attention method without attention loss,
+\texttt{+posi} and \texttt{+neg} refer to using positive and negative attention loss respectively, \texttt{+both} refers to using both attention losses (Sec.~\ref{interact_with_module}),
+% \NN module side method in
+\texttt{+logit} means using \REtag to modify \NN output (Sec.~\ref{fusion_with_output}),
+% output side methods in
 \texttt{RE} refers to using \RE output as prediction directly\footnote{
 For slot filling, \REs for Sec.~\ref{interact_with_module} are used.},
-\texttt{+hu16} means the method of Hu et al.~\shortcite{hu2016harnessing},
-\texttt{+mem} means adding the memory module that performs well on few-shot learning~\cite{kaiser2017learning}\footnote{
+\texttt{+hu16} is the method of Hu et al.~\shortcite{hu2016harnessing},
+\texttt{+mem} is the memory module of Kaiser et al.~\shortcite{kaiser2017learning}\footnote{
 We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
 },
-\LL means the state-of-art joint model~\cite{liu2016attention} in ATIS.
+\LL is the state-of-art joint model~\cite{liu2016attention} in ATIS.
