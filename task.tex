@@ -3,11 +3,15 @@
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=0.49\textwidth]{figure/motivation.pdf}\\
+  \vspace{-2mm}
   \caption{A sentence from the ATIS dataset. \REs can be used to detect the intent and label slots.}
   \label{atis_sample}
+  \vspace{-3mm}
 \end{figure}
 
+\vspace{-2mm}
 \subsection{Problem Definition}
+\vspace{-2mm}
 %While our approach is generally applicable, to have concrete and measurable objectives,
 Our work targets two \SLU tasks: \emph{intent detection} and \emph{slot filling}. The former is a sentence classification task where we
 learn a function to map an input sentence of $n$ words, $\textbf{x}=[x_{1}, ..., x_{n}]$, to a corresponding \textbf{\emph{intent label}},
@@ -43,7 +47,7 @@ using the begin-inside-outside (\texttt{BIO}) scheme.
 
 
 \subsection{The Use of Regular Expressions}
-\label{re_desc}
+\label{re_desc} \vspace{-2mm}
 
 In this work, a \RE defines a mapping from a text \emph{pattern} to several \textbf{\emph{\REtags}} which are  the same as or related to
 the \textbf{\emph{target labels}} (i.e., intent and slot labels). A search function takes in a \RE, applies it to all sentences, and

@@ -8,11 +8,11 @@ tasks like pattern matching, sentence classification, sequence labeling, etc.~\c
 %pattern \texttt{/\textasciicircum flights? from/} can help recognize the sentence in Fig.~\ref{atis_sample} has an intention of
 %\emph{flights}, indicating the user is looking for flight-related information.
 As a technique based on human-crafted rules, it is concise, explainable, tunable, and does not rely on much training data to generate. As
-such, it is widely adopted in industry, especially in scenarios where the number of available training examples is limited.
+such, it is widely use in industry, especially when the number of available training examples is limited.
 
-While powerful, \REs have a poor generalization ability because all synonyms and variations in a \RE must be explicitly specified. As a
-result, they often have a low coverage of \z{??}. To overcome this limitation, \REs are often combined with data-driven methods like neural
-network (\NN) based techniques, where a set of carefully-written \REs are used to capture certain patterns with high precision.
+While powerful, \REs have a poor generalization ability as all synonyms and variations in a \RE must be explicitly specified. As a result,
+they often have a low coverage of \z{??}. To overcome this limitation, \REs are often combined with data-driven methods like neural network
+(\NN) based techniques, where a set of carefully-written \REs are used to capture certain patterns with high precision.
 
 However, the use of \REs can go beyond simple pattern matching and existing approaches only scratch the surface of what could possibly be
 achieved. A \RE often encodes a developer's knowledge of the problem domain by including informative words (i.e., \textbf{\textit{clue
@@ -33,8 +33,9 @@ using \REs, with a generic framework for quality control.
 
 
 We propose a novel approach to combine \REs with a \NN at different levels. At the input layer, we propose to use the evaluation outcome of
-\REs as the input features of a \NN (Sec.\ref{fusion_with_input}). This shares a similar spirit with the stacking
-technique~\cite{wolpert1992stacked} for short text classification~\cite{wang2017combining}. At the network module level, we show how to
+\REs as the input features of a \NN (Sec.\ref{fusion_with_input}).
+%This shares a similar spirit with the stacking technique~\cite{wolpert1992stacked} for short text classification~\cite{wang2017combining}.
+At the network module level, we show how to
 exploit the knowledge encoded in \REs to guide the attention mechanism of a \NN (Sec.~\ref{interact_with_module}). At the output layer, we
 combine the evaluation outcome of a \RE with the \NN output in a learnable manner (Sec.~\ref{fusion_with_output}). This allows the learning
 framework to exploit a diverse set of \REs while controlling the noises brought by low-quality \REs.
