@@ -8,19 +8,20 @@ classification, sequence labeling, etc.~\cite{chang2014tokensregex}.
 %pattern \texttt{/\textasciicircum flights? from/} can help recognize the sentence in Fig.~\ref{atis_sample} has an intention of
 %\emph{flights}, indicating the user is looking for flight-related information.
 As a technique based on human-crafted rules, it is concise, explainable, tunable, and does not rely on much training data to generate. As
-such, it is commonly used in industry, especially when the number of available training examples is limited -- a problem known as few-shot
+such, it is commonly used in industry, especially when available training examples are limited -- a problem known as few-shot
 learning~\cite{gc2015big}.
 % a problem known as few-shot learning.
 
 While powerful, \REs have a poor generalization ability because all synonyms and variations in a \RE must be explicitly specified. As a
-result, they often have a low coverage of \z{low coverage of what??}. To overcome this limitation, \REs are often used together with
+result, they often have a low coverage of \z{low coverage of what??}\lb{change coverage to recall?}. To overcome this limitation, \REs are often used together with
 data-driven methods like neural network (\NN) based techniques, where a set of carefully-written \REs are used to handle certain cases with
 high precision, leaving the rest for a data-driven method.
 
 However, the use of \REs can go beyond simple pattern matching.
+\cyan{Besides considered as an independent classifier, }
 % and existing approaches only scratch the surface of what could possibly be achieved.
-A \RE often encodes a developer's knowledge of the problem domain, which indicates e.g., the informative words (\textbf{\textit{clue
-words}}) within its pattern.
+a \RE \cyan{also} encodes a developer's knowledge of the problem domain, which indicates e.g., the informative words (\textbf{\textit{clue
+words}}) within its \cyan{surface form}. %pattern.
  % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns.
 % We argue that such information can help models to extract the implicit knowledge from the training data,
 % which in turn enables data-driven methods to work effectively in the few-shot learning scenario with a small volume of annotated data.
