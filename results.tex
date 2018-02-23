@@ -178,7 +178,7 @@ As shown in Table~\ref{tab_intent_few_fill}, \texttt{mem} works better than \BLS
 Note that, the memory module requires the input sentence to have only one embedding, thus we only use one set of positive attention for combination.
 
 As for slot filling, since we already have extra data for frequent tags in the original few-shot data (see Sec.~\ref{sec_datasest}), we use them directly to run the memory module. As shown in the bottom of Table \ref{tab_full_few}, \texttt{mem} also improves the base \BLSTM, and receives further boost when combined with our \texttt{feat} method.%, which gives \texttt{mem} a further boost.
-\footnote{For compactness, we only combine the best-performing fusion method in each task with \texttt{mem}, while others can be easily combined as well.}
+\footnote{For compactness, we only combine the best method in each task with \texttt{mem}, but others can also be combined.}
 % \footnote{
 % \texttt{logit} may not be able to applied to methods with other output form, e.g., matching based method~\cite{koch2015siamese}.}.
 
