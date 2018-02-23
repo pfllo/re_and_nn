@@ -44,10 +44,10 @@ The model for slot filling is more straightforward. Given the output of \BLSTM, 
 softmax classifier which takes $\textbf{h}_i$ as input (the attention aggregation in Fig.~\ref{fig_overview} is used in Sec.~\ref{interact_with_module}).
 
 
-\subsection{Fusion on the Input Side}
+\subsection{Fusion at the Input Level}
 \label{fusion_with_input}
 % Similar to the stacking technique \cite{wolpert1992stacked}, a straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as input of \NN models.
-On the input side, we use the output of \RE patterns as feature, and feed them as input to \NN models.
+At the input level, we use the output of \RE patterns as feature, and feed them as input to \NN models.
 
 \cparagraph{Intent Detection}
 Our \REtag for intent detection is the same as our target intent label.
@@ -70,7 +70,7 @@ and average the \RE tags into a vector $\textbf{f}_i$ for each word, and append 
 Note that we also extend the slot \RE tags into the \BIO format, e.g.,
 the \REtag of phrase \textsl{\underline{New York}} is \emph{B-city I-city} if its original tag is \emph{city}.
 
-\subsection{Fusion on the NN Module Side}
+\subsection{Fusion at the Network Module Level}
 \label{interact_with_module}
 Since the \RE itself has already highlighted the clue words (bold blue arrows and words in \circled{2} of Fig.~\ref{fig_overview}) for its output tag, it can therefore help us guide the attention module in \NN.
 % In \circled{2} of Fig.~\ref{fig_overview}, the bold blue arrows and words indicates the clue words marked by \RE.
@@ -143,7 +143,7 @@ The final prediction $\textbf{p}_i$ for word $i$ is:
 \end{equation}
 where $\textbf{W}_{p}$, $\textbf{W}_{n}$, $\textbf{b}_{p}$, $\textbf{b}_{n}$ are weight matrices and bias vectors for positive and negative attention, respectively. Here we append the \BLSTM output $\textbf{h}_i$ to $\textbf{s}_{pi}$ and $\textbf{s}_{ni}$ because the word $i$ itself also plays a crucial part in identifying its slot label.
 
-\subsection{Fusion on the Output Side}
+\subsection{Fusion at the Output Level}
 \label{fusion_with_output}
 The final type of combination is to use \RE to modify the output of \NN, and we take the same method for both tasks (see \circled{3} in Fig.~\ref{fig_overview}).
 
