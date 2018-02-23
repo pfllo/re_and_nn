@@ -46,42 +46,50 @@ aggregation in Fig.~\ref{fig_overview} is employed by the network module level m
 \subsection{Using \REs at the Input Level}
 \label{fusion_with_input}
 % Similar to the stacking technique \cite{wolpert1992stacked}, a straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as input of \NN models.
-At the input level, we use the output of \RE patterns as feature, and feed them as input to \NN models.
+At the input level, we use the evaluation outcomes of \REs as features which are fed to \NN models.
 
 \cparagraph{Intent Detection}
 Our \REtag for intent detection is the same as our target intent label.
 % \footnote{If no \RE matches, we will assign a special tag indicating no matches. This process is applied to all the settings.}
-Due to the imperfection of the \REs, one sentence may be matched by more than one \REs, thus have several \RE tags which may possibly conflict with each other. For example, the
-sentence \textsl{\underline{list the delta airlines flights to Miami}} may match a \RE: {\small \texttt{/list(\;the)?\;\_\_AIRLINE/}} that outputs
-tag \emph{airline}, and another \RE: {\small \texttt{/list(\,\textbackslash w+)\{0,3\} flights?/}} that outputs tag \emph{flight}.
+Because real-world \REs are unlikely to be perfect, one sentence may be matched by more than one \RE. This may result in several \REtags
+that are conflict with each other. For instance, the sentence \textsl{\underline{list the Delta airlines flights to Miami}} can match a
+\RE: {\small \texttt{/list(\;the)?\;\_\_AIRLINE/}} that outputs tag \emph{airline}, and another \RE: {\small \texttt{/list(\,\textbackslash
+w+)\{0,3\} flights?/}} that outputs tag \emph{flight}.
 % \footnote{\texttt{\_\_WORD} matches a single word, which can be \texttt{/\textbackslash w+/}.}
 
-% Many paper has proved that, embed the discrete feature is an effective method to combine features in \NN \cite{zeng2014relation, guo2017deepfm}.
-Since there may exist several \REtags for each sentence, we average the tag embeddings to form an aggregated embedding as input.
-Intuitively, there are two ways to add the embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier (see \circled{1} in Fig.~\ref{fig_overview_intent}).
-% Note that, in the first method, the tag embedding is actually copied $n$ times, where $n$ is the sentence length.
-In our pilot experiments on the first method, the tag embedding is copied so many times that tends to make the \NN heavily relies on the \REtags, making the performance similar to using \RE alone in few-shot settings. We therefore adopt the second method in this paper.
+To tackle the conflicting situations illustrated above, we average the tag embeddings to form an aggregated embedding as the \NN input.
+Intuitively, there are two ways to use the aggregated embedding. We can  append the aggregated embedding to either the embedding of every
+input word, or the input of the softmax classifier (see \circled{1} in Fig.~\ref{fig_overview_intent}). To determine which method to use,
+we perform a pilot study. We found that the first method causes the tag embedding to be copied many times; consequently, the \NN tends to
+heavily relies on the \REtags, and the resulting performance is similar to the one given by using \REs alone in few-shot settings. Thus, we
+adopt the second approach.
+% In our pilot experiments on the
+%first method, the tag embedding is copied so many times that tends to make the \NN heavily relies on the \REtags, making the performance
+%similar to using \RE alone in few-shot settings. We therefore adopt the second method in this paper.
 
-\cparagraph{Slot Filling}
-Since the output of slot \RE patterns are word-level tags, as shown in \circled{1} in Fig.~\ref{fig_overview_slot}, we can simply embed
-and average the \REtags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
+\cparagraph{Slot Filling} Since the evaluation outcomes slot \REs are word-level tags (as shown in \circled{1} in
+Fig.~\ref{fig_overview_slot}), we can simply embed and average the \REtags into obtain a vector $\textbf{f}_i$ for each word, and append it
+to the corresponding word embedding $\textbf{w}_i$.
 %Further, since our slot labels follow the \BIO annotation paradigm,
-Note that we also extend the slot \RE tags into the \BIO format, e.g.,
-the \REtag of phrase \textsl{\underline{New York}} is \emph{B-city I-city} if its original tag is \emph{city}.
+Note that we also extend the slot \REtags into the \BIO format, e.g., the \REtag of phrase \textsl{\underline{New York}} is \emph{B-city
+I-city} if its original tag is \emph{city}.
 
 \subsection{Using \REs at the Network Module Level}
-\label{interact_with_module}
-Since the \RE itself has already highlighted the clue words (bold blue arrows and words in \circled{2} of Fig.~\ref{fig_overview}) for its output tag, it can therefore help us guide the attention module in \NN.
-% In \circled{2} of Fig.~\ref{fig_overview}, the bold blue arrows and words indicates the clue words marked by \RE.
+\label{interact_with_module} At this level, we exploit ways to utilize the clue words in the surface form of a \RE (bold blue arrows and
+words in \circled{2} of Fig.~\ref{fig_overview}) to guide the attention module in \NNs.
 
-\cparagraph{Intent Detection}
-Taking the sentence in Fig.~\ref{atis_sample} for example, the \RE: {\small\texttt{/\textasciicircum flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are key words to decide the intent \emph{flight}. Therefore, the attention module in \NN should pay attention to these two words to get the correct prediction.
+%Since the \RE itself has already highlighted the clue words (bold blue arrows and words in \circled{2} of Fig.~\ref{fig_overview}) for its output tag, it can therefore help us guide the attention module in \NN.
 
-We extend the base intent model by making two changes to better incorporate the guidance from \RE.
-First, since each intent has its own clue words, using a single sentence embedding for all intent %which is produced by only one set of attention,
+\cparagraph{Intent Detection} Taking the sentence in Fig.~\ref{atis_sample} for example, the \RE: {\small\texttt{/\textasciicircum
+flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are the key words to decide the intent
+\emph{flight}. Therefore, the attention module in \NNs should leverage these two words to get the correct prediction. To this end, we
+extend the base intent model by making two changes to incorporate the guidance from \REs.
+
+First, since each intent has its own clue words, using a single sentence embedding for all intentions %which is produced by only one set of attention,
 would make the attention less focused.
 % Considering we also know the intent that each \RE points to,
-Therefore, we let each intent $i$ use different attention $\textbf{a}_i$, which is then used to generate the sentence embedding $\textbf{s}_i$ for that intent:
+Therefore, we let each intention $i$ use different attention $\textbf{a}_i$, which is then used to generate the sentence embedding
+$\textbf{s}_i$ for that intent:
 \begin{equation}
 \textbf{s}_i = \sum_{j}{\alpha_{ij}\textbf{h}_j}, \quad
 \alpha_{ij}=\frac{exp(\textbf{h}_j^T\textbf{W}_a\textbf{c}_i)}{\sum_{j}{exp(\textbf{h}_j^T\textbf{W}_a\textbf{c}_i)}}
@@ -99,21 +107,24 @@ where $\textbf{w}_i$, $logit_i$, $b_i$ are weight vector, logit, and bias for in
 Second, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}),
 a \RE can also indicate that a sentence does not express intent $i$ (\textbf{\emph{negative \REs}}).
 %Therefore, to make use of negative \REs,
-We thus use new set of attentions (\textbf{\emph{negative attentions}}, in contrary to \textbf{\emph{positive attentions}})
-to compute another set of logits for each intent with Eq.~\ref{label_att_eq} and \ref{label_prob_eq}.
-We denote the logits computed by positive attentions as $logit_{pi}$, and those by negative attentions as $logit_{ni}$, the final logit for intent $i$ is then:
+We thus use a new set of attention (\textbf{\emph{negative attentions}}, in contrast to \textbf{\emph{positive attentions}}), to compute
+another set of logits for each intent with Eqs.~\ref{label_att_eq} and \ref{label_prob_eq}. We denote the logits computed by positive
+attentions as $logit_{pi}$, and those by negative attention as $logit_{ni}$, the final logit for intent $i$ can then be calculated as:
 \begin{equation}
 logit_i = logit_{pi} - logit_{ni}
 \end{equation}
 
-To use \RE patterns to guide the attention, we add an attention loss to the final loss:
+To use \REs to guide attention, we add an attention loss to the final loss:
 \begin{equation}
 loss_{att} = \sum_{i}{m_i\sum_{j}{t_{ij}log(\alpha_{ij})}}
 \label{att_loss}
 \end{equation}
-where $t_{ij} = 0$ when none of the matched \REs that leads to intent $i$ marks word $j$ as a clue word, otherwise $t_{ij} = 1/k_{i}$ where $k_i$ is the number of clue words
+where $t_{ij}$ is set to $0$ when none of the matched \REs leads a result that intent $i$ marks word $j$ as a clue word -- otherwise
+$t_{ij}$ is set to $1/k_{i}$ where $k_i$ is the number of clue words
 % mark by \RE
-for intent $i$. $m_i$ is a 0-1 indicator that equals 1 when there is a matched \RE that leads to intent $i$. We use Eq.~\ref{att_loss} to compute positive attention loss $loss_{att\_p}$ for positive \REs and negative attention loss $loss_{att\_n}$ for negative ones. The final loss is:
+for intent $i$; $m_i$ is a 0-1 indicator that is set to 1 when there is a matched \RE that leads to intent $i$. We use Eq.~\ref{att_loss}
+to compute the positive attention loss, $loss_{att\_p}$, for positive \REs and negative attention loss, $loss_{att\_n}$, for negative ones.
+The final loss is computed as:
 \begin{equation}
 loss = loss_{c} + \beta_p loss_{att\_p} + \beta_n loss_{att\_n}
 \end{equation}
