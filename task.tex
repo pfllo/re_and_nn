@@ -69,8 +69,8 @@ we get a \REtag of \emph{flight} that is the same as %corresponds to
 % Figure~\ref{atis_sample} for intention detection, we get a \REtag of \emph{flight}.
 
 For slot filling, we use two different sets of \REs. Given the group functionality of \RE, we can assign \REtags to our interested
-\textbf{\emph{\RE groups}} (i.e., the expressions defined inside parentheses of a \RE). \REtags are given different meanings, depending on
-how the corresponding \REs are used. When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
+\textbf{\emph{\RE groups}} (i.e., the expressions defined inside parentheses of a \RE). The translation from \REtags to slot labels depends
+on how the corresponding \REs are used. When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
 \REtags are the same as the target slot labels because our goal is to annotate clue words for certain slot labels. For instance, the slot
 \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second one. In this
 example, the macro \emph{\_\_CITY} is the list of the target city names, which can be replaced with a string like
@@ -100,9 +100,9 @@ evaluation outcome does not exactly match our learning objective.
 %When writing \REs,
 Intuitively, complicated \REs can lead to better performance but require more efforts to generate. %, \RE complexity is often an
  Generally, there are mainly two aspects affecting \RE complexity most, the number of \RE groups
-and the number of \emph{or} clauses (i.e., the expressions separated by the disjunction operator $|$) in a \RE group. Having a larger
-number of \RE groups often leads to better precision but lower coverage on pattern matching, while a larger number of \emph{or} clauses
-usually gives a higher coverage but slightly lower precision.
+and \emph{or} clauses (i.e., expressions separated by the disjunction operator $|$) in a \RE group. Having a larger number of \RE groups
+often leads to better precision but lower coverage on pattern matching, while a larger number of \emph{or} clauses usually gives a higher
+coverage but slightly lower precision.
 
 
 % First, \RE complexity increases with the number of \RE groups. This kind of complexity will lead to better precision but lower coverage. Second, \RE complexity also increases with the number of \emph{or}s (the symbol $|$) in a \RE group. Here a group can be considered as a set of phrases that express the same meaning. Therefore, this kind of complexity usually results in higher coverage and slightly lower precision.
