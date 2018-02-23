@@ -130,18 +130,17 @@ loss = loss_{c} + \beta_p loss_{att\_p} + \beta_n loss_{att\_n}
 \end{equation}
 where $loss_{c}$ is the original classification loss, $\beta_p$ and $\beta_n$ are weights for the two attention losses.
 
-In practice, while with some noise, a positive \RE for intent $i$ can often be considered as negative \REs for other intents.
-%For example, the \RE \texttt{/\textasciicircum flights?\:from/} that leads to intent \emph{flight} also indicates that the sentence should not be labeled as intents like \emph{meal} and \emph{quantity}.
-We therefore use the positive \REs for intent $i$ as the negative \REs for other intents in our experiments.
+In practice, a positive \RE for intent $i$ can often be treated as negative \REs for other intents. As such, we use the positive \REs for
+intent $i$ as the negative \REs for other intents in our experiments.
 
 \cparagraph{Slot Filling}
 %While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) mechanism
 %as we do in intent prediction, we will face an efficiency problem in slot filling.
-The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction
-may not be suitable for slot filling, since we need to compute attention for each word, which will result in much more
-computation and memory storage.\footnote{Since we need to assign a label to each word, if we still compute attention for each slot label, we
-will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of tags and $n$ is the sentence
-length. The \BIO tagging format will further double the number of tags.}
+The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction is unsuitable for slot
+filling. \cyan{This is because for slot filling we need to compute attention for each word, which as a result will demand more computation
+and memory resources than doing that for intent detection}.\footnote{Since we need to assign a label to each word, if we still compute
+attention for each slot label, we will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of
+tags and $n$ is the sentence length. The \BIO tagging format will further double the number of tags.}
 
 We thus use a simplified version of the two-side attention, where all the slot labels share the same set of positive and negative attention.
 Specifically, to predict the slot label of word $i$, we use Eq.~\ref{eq:simple_att} (with $\textbf{c}$ replaced with the \BLSTM output of word $i$, $\textbf{h}_i$) to generate a sentence embedding $\textbf{s}_{pi}$ from positive attention, and another one $\textbf{s}_{ni}$ from negative attention.
@@ -154,28 +153,30 @@ The prediction $\textbf{p}_i$ for word $i$ is:
 where $\textbf{W}_{p}$, $\textbf{W}_{n}$, $\textbf{b}_{p}$, $\textbf{b}_{n}$ are weight matrices and bias vectors for positive and negative attention, respectively. Here we append the \BLSTM output $\textbf{h}_i$ to $\textbf{s}_{pi}$ and $\textbf{s}_{ni}$ because the word $i$ itself also plays a crucial part in identifying its slot label.
 
 \subsection{Using \REs at the Output Level}
-\label{fusion_with_output}
-The final type of combination is to use \RE to modify the output of \NN, and we take the same method for both tasks (see \circled{3} in Fig.~\ref{fig_overview}).
+\label{fusion_with_output} At the output level, \REs are used to amend the output of \NNs, where we take the same method for intent
+detection and slot filling (see \circled{3} in Fig.~\ref{fig_overview}).
 
 % Therefore, instead using a teach-student framework, this enables us to directly influence the logits of each label in a trainable way, so that we do not need to assign a weight for each pattern, and significantly reduces the number of hyper-parameters.
 
-As mentioned in Section \ref{re_desc},
-the slot \REs used in this section only output a simplified version of the slot label, for which we can further
+As mentioned in Sec.~\ref{re_desc}, the slot \REs used in the output level only produce a simplified version of the slot label, for which
+we can further
 %Since the \REtag is related to the slot label, we can further
-annotate their corresponding target slot label.
+refine their corresponding target slot label.
 % To make connections between the \RE tag and the slot label, we further annotate all the slot labels that the output tag may lead to.
-For example, a \RE that outputs tag \emph{city} will lead to three target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
+For example, a \RE that outputs tag \emph{city} can be extended to three target slot labels: \emph{fromloc.city}, \emph{toloc.city},
+\emph{stoploc.city}.
 % Actually, annotating this kind of connections is not difficult, since the \RE tags are generally somewhat related to the target label that we are trying to predict, otherwise the \RE tags will not be able to provide useful information for the prediction.
 
-Let $z_i$ be a 0-1 indicator of whether at least one \RE pattern that leads to target label $i$ matches the input sentence, then the final logits of label $i$ for the sentence (or a specific word for slot filling) is:
+Let $z_i$ be a 0-1 indicator of whether there is at least one \RE that leads to target label $i$ for a matched sentence, the final logits
+of label $i$ for the sentence (or a specific word for slot filling) is:
 \begin{equation}
 logit_i = logit'_i + w_i z_i
 \end{equation}
-where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that lead to label $i$.
-Here we do not assign a trainable weight for each \RE because it is very often that only a few sentences match a \RE.
+where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that
+lead to label $i$. Here we do not assign a trainable weight for each \RE because it is often that only a few sentences match a \RE.
 
 We modify logit instead of the final probability because logit is an unconstrained real value, which \cyan{matches the property of} $w_i z_i$ better than probability.
 Further, when performing model ensemble,
 % kagglers have also proved emperically that,
-ensemble with logits is often empirically better than with the final probability (see the ensemble version of Juan et al.~\shortcite{juan2016field}), which is also the reason that we operate on logit %instead of probability
+ensemble with logits is often empirically better than with the final probability -- see the ensemble version of Juan et al.~\shortcite{juan2016field}. This is also the reason why we operate on logit %instead of probability
 in Sec.~\ref{interact_with_module}.

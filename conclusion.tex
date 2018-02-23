@@ -1,9 +1,7 @@
 \section{Conclusions}
-In this paper, we systematically investigate the methods of combining \NN and \RE from three different levels in typical \SLU tasks. 
-The experiments with different amounts of training data show that combining \NN and \RE clearly improves the \NN performance on both few-shot learning settings, and the  full dataset setting. 
-%While most of our methods work, 
-We find that the amount of implicit knowledge that our fusion methods receives from \REs affects the performance most.
-% and our methods are compatable with existing few-shot learning methods like memory network.
-Specifically, using \REs to guide the attention module works best for intent detection, and using \REtags as feature is the best for slot filling.
-% The best-performing method for intent detection (sentence classification) is using \RE to guide the attention module, and using \REtags as feature is the best for slot filling (sequence labeling).
-We also discuss where the complexity of \REs comes from, and find that complex \REs do yield better results, but simple \REs can help \NN models as well.
+In this paper, we investigate different ways for combining \NNs and \REs for solving typical \SLU tasks. Our experiments demonstrate that
+combining \NNs and \REs clearly improves the \NN performance on both the few-shot learning and the  full dataset settings. We show that by
+exploiting the implicit knowledge encoded within \REs, one can significantly improve the learning performance. Specifically, we observe
+that using \REs to guide the attention module works best for intent detection, and using \REtags as features is an effective approach for
+slot filling. We provide interesting insights on how \REs of various forms can be employed to improve \NNs, showing that while complex \REs
+tend to yield better results, simple \REs are also useful.
