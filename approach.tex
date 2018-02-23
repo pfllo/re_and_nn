@@ -19,8 +19,7 @@ Sec.~\ref{fusion_with_input}, \ref{interact_with_module}, \ref{fusion_with_outpu
 \end{figure*}
 
 \section{Our Approach}
-\vspace{-2mm}
-As depicted in Fig.~\ref{fig_overview}, we propose  to combine \NN and \REs from three different aspects.
+\vspace{-2mm} As depicted in Fig.~\ref{fig_overview}, we propose  to combine \NNs and \REs from three different angles.
  % for intent detection and slot filling.
 % We present each method in the following sub-sections, starting by describing the base \NN model used by all the three methods.
 
@@ -29,9 +28,9 @@ We use the Bi-directional LSTM (\BLSTM) as our base \NN model, which is effectiv
 filling~\cite{liu2016attention}.
 % Further, to obtain sentence embedding for intent detection, we use a self-attention layer upon the \BLSTM output.
 
-\cparagraph{Intent Detection}
-As shown in Fig.~\ref{fig_overview}, given the word embeddings $[\textbf{x}_1, ..., \textbf{x}_n]$ as input, where $n$ is the sentence length, \BLSTM outputs a vector $\textbf{h}_i$ for each word $i$.
-Then, we use a self-attention layer to compute the sentence embedding $\textbf{s}$:
+\cparagraph{Intent Detection} As shown in Fig.~\ref{fig_overview}, the \BLSTM takes as input the word embeddings $[\textbf{x}_1, ...,
+\textbf{x}_n]$ of a n-word sentence, and produces a vector $\textbf{h}_i$ for each word $i$. A self-attention layer then takes in the
+vectors produced by the \BLSTM to compute the sentence embedding $\textbf{s}$:
 \begin{equation}
 \textbf{s} = \sum_{i}{\alpha_i\textbf{h}_i}, \quad \alpha_i=\frac{exp(\textbf{h}_i^T\textbf{Wc})}{\sum_{i}{exp(\textbf{h}_i^T\textbf{Wc})}}
 \label{eq:simple_att}
@@ -44,7 +43,7 @@ The model for slot filling is more straightforward. Given the output of \BLSTM, 
 softmax classifier which takes $\textbf{h}_i$ as input (the attention aggregation in Fig.~\ref{fig_overview} is used in Sec.~\ref{interact_with_module}).
 
 
-\subsection{Fusion at the Input Level}
+\subsection{Using \REs at the Input Level}
 \label{fusion_with_input}
 % Similar to the stacking technique \cite{wolpert1992stacked}, a straightforward way to combine \RE and \NN is to use the output of \RE patterns as feature, and feed them as input of \NN models.
 At the input level, we use the output of \RE patterns as feature, and feed them as input to \NN models.
