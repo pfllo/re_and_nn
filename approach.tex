@@ -52,7 +52,7 @@ At the input level, we use the output of \RE patterns as feature, and feed them 
 \cparagraph{Intent Detection}
 Our \REtag for intent detection is the same as our target intent label.
 % \footnote{If no \RE matches, we will assign a special tag indicating no matches. This process is applied to all the settings.}
-Due to the imperfection of the \REs, one sentence may be matched by \REs, thus have several \RE tags which may possibly conflict with each other. For example, the
+Due to the imperfection of the \REs, one sentence may be matched by more than one \REs, thus have several \RE tags which may possibly conflict with each other. For example, the
 sentence \textsl{\underline{list the delta airlines flights to Miami}} may match a \RE: {\small \texttt{/list(\;the)?\;\_\_AIRLINE/}} that outputs
 tag \emph{airline}, and another \RE: {\small \texttt{/list(\,\textbackslash w+)\{0,3\} flights?/}} that outputs tag \emph{flight}.
 % \footnote{\texttt{\_\_WORD} matches a single word, which can be \texttt{/\textbackslash w+/}.}
@@ -61,11 +61,11 @@ tag \emph{airline}, and another \RE: {\small \texttt{/list(\,\textbackslash w+)\
 Since there may exist several \REtags for each sentence, we average the tag embeddings to form an aggregated embedding as input.
 Intuitively, there are two ways to add the embedding: (1) append it to the embedding of every input word, (2) append it to the input of the softmax classifier (see \circled{1} in Fig.~\ref{fig_overview_intent}).
 % Note that, in the first method, the tag embedding is actually copied $n$ times, where $n$ is the sentence length.
-In our pilot experiments on the first method, the tag embedding is copied so many times that tends to dominate the \NN heavily relying on the \REtags, making the performance similar to using \RE alone in few-shot settings. We therefore adopt the second method in this paper.
+In our pilot experiments on the first method, the tag embedding is copied so many times that tends to make the \NN heavily relies on the \REtags, making the performance similar to using \RE alone in few-shot settings. We therefore adopt the second method in this paper.
 
 \cparagraph{Slot Filling}
 Since the output of slot \RE patterns are word-level tags, as shown in \circled{1} in Fig.~\ref{fig_overview_slot}, we can simply embed
-and average the \RE tags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
+and average the \REtags into a vector $\textbf{f}_i$ for each word, and append it to the corresponding word embedding $\textbf{w}_i$.
 %Further, since our slot labels follow the \BIO annotation paradigm,
 Note that we also extend the slot \RE tags into the \BIO format, e.g.,
 the \REtag of phrase \textsl{\underline{New York}} is \emph{B-city I-city} if its original tag is \emph{city}.
@@ -76,7 +76,7 @@ Since the \RE itself has already highlighted the clue words (bold blue arrows an
 % In \circled{2} of Fig.~\ref{fig_overview}, the bold blue arrows and words indicates the clue words marked by \RE.
 
 \cparagraph{Intent Detection}
-Taking the sentence in Fig.~\ref{atis_sample} for example, the {\small \RE: \texttt{/\textasciicircum flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are key words to decide the intent \emph{flight}. Therefore, the attention module in \NN should pay attention to these two words to get the correct prediction.
+Taking the sentence in Fig.~\ref{atis_sample} for example, the \RE: {\small\texttt{/\textasciicircum flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are key words to decide the intent \emph{flight}. Therefore, the attention module in \NN should pay attention to these two words to get the correct prediction.
 
 We extend the base intent model by making two changes to better incorporate the guidance from \RE.
 First, since each intent has its own clue words, using a single sentence embedding for all intent %which is produced by only one set of attention,
@@ -133,9 +133,9 @@ computation and memory storage.\footnote{Since we need to assign a label to each
 will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of tags and $n$ is the sentence
 length. The \BIO tagging format will further double the number of tags.}
 
-We thus use a simplified version of the two-side attention, where all the tags share the same set of positive and negative attention.
-Specifically, to predict the slot label of word $i$, we use Eq.~\ref{eq:simple_att} (with $\textbf{c}$ replaced with the \BLSTM output of word $i$, $\textbf{h}_i$) to generate one sentence embedding $\textbf{s}_{pi}$ from positive attention, and another embedding $\textbf{s}_{ni}$ from negative attention.
-The final prediction $\textbf{p}_i$ for word $i$ is:
+We thus use a simplified version of the two-side attention, where all the slot labels share the same set of positive and negative attention.
+Specifically, to predict the slot label of word $i$, we use Eq.~\ref{eq:simple_att} (with $\textbf{c}$ replaced with the \BLSTM output of word $i$, $\textbf{h}_i$) to generate a sentence embedding $\textbf{s}_{pi}$ from positive attention, and another one $\textbf{s}_{ni}$ from negative attention.
+The prediction $\textbf{p}_i$ for word $i$ is:
 \begin{equation}
 \begin{split}
 \textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) \\- (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n))
