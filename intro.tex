@@ -18,10 +18,10 @@ data-driven methods like neural network (\NN) based techniques, where a set of c
 high precision, leaving the rest for a data-driven method.
 
 However, the use of \REs can go beyond simple pattern matching.
-\cyan{Besides considered as an independent classifier, }
 % and existing approaches only scratch the surface of what could possibly be achieved.
-a \RE \cyan{also} encodes a developer's knowledge of the problem domain, which indicates e.g., the informative words (\textbf{\textit{clue
-words}}) within its \cyan{surface form}. %pattern.
+Our key insight is that a \RE often encodes a developer's knowledge of the problem domain, which indicates e.g., the informative words
+(\textbf{\textit{clue
+words}}) in its surface form. %pattern.
  % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns.
 % We argue that such information can help models to extract the implicit knowledge from the training data,
 % which in turn enables data-driven methods to work effectively in the few-shot learning scenario with a small volume of annotated data.
@@ -37,10 +37,15 @@ learning scenario.
 % tasks~\cite{goldberg2017neural}, are proven to be effective in tolerating noises~\cite{xie2016disturblabel}, and can improve the
 % generalization ability of \REs. The result is a new way of using \REs,  \cyan{\sout{with a generic framework for quality control}}.
 
-In this paper, we investigate the use of \REs to improve \NNs -- a successful learning framework in many \NLP
-tasks~\cite{goldberg2017neural}. \red{By doing so,
-we are able to utilize both high-quality \REs (which are precise in capturing patterns but are time-consuming to generate) and those of low quality (that are easy to write, but can be noisy), % low-precision \REs,
-since \NNs are known to be good at tolerating noises~\cite{xie2016disturblabel}.}
+This work investigates the use of \REs to improve \texttt{NNs} -- a successful learning framework in many \NLP
+tasks~\cite{goldberg2017neural}. This unique combination also enables the resulting framework to exploit \NNs' noise tolerance
+capability~\cite{xie2016disturblabel}. This feature allows one to utilize a diverse set of \REs (Sec.\ref{re_desc}), including those
+carefully-tuned complex pattern (which are high precision but are time-consuming to generate) and those simple ones (that are easy to
+write, but can be noisy and less accurate).
+
+%\red{By doing so,
+%we are able to utilize both high-quality \REs (which are precise in capturing patterns but are time-consuming to generate) and those of low quality (that are easy to write, but can be noisy), % low-precision \REs,
+%since \NNs are known to be good at tolerating noises~\cite{xie2016disturblabel}.}
 % This may help reduce the difficulty of creating \REs, since high-precision \REs
 % are usually more complex %than low-precision ones, and therefore are
 % hard to generate.
