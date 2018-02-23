@@ -73,10 +73,10 @@ Besides, \tatt alone works better than \texttt{BLSTM} when we have enough data, 
 As for other proposed methods, the output level method (\texttt{logit}) works generally better than the input level one (\texttt{feat}), except for the 5-shot case.
 The reason may be that, the less \RE related parameters and 
 % \red{more direct effect of these parameters to the final output}
-\cyan{the shorter distance that the gradient needs to travel from the loss to these parameters}
+the shorter distance that the gradient needs to travel from the loss to these parameters
 % the shorter distance from these parameters
 make \texttt{logit} easier to train. 
-However, since \texttt{logit} modifies the output directly, the final prediction is more sensitive to the insufficiently trained \cyan{weights} in \texttt{logit}, which leads to its inferior results in the 5-shot setting.
+However, since \texttt{logit} modifies the output directly, the final prediction is more sensitive to the insufficiently trained weights in \texttt{logit}, which leads to its inferior results in the 5-shot setting.
 
 To compare with existing methods of combining \NN and rules, we also implement the teacher-student
 network~\cite{hu2016harnessing}, %which is designed to combine \NNs and \FOL. %proves to perform well on various tasks.
