@@ -163,20 +163,20 @@ we can further
 %Since the \REtag is related to the slot label, we can further
 annotate their corresponding target slot labels.
 % To make connections between the \RE tag and the slot label, we further annotate all the slot labels that the output tag may lead to.
-For instance, a \RE that outputs \emph{city} can be extended to three target labels: \emph{fromloc.city}, \emph{toloc.city},
+For instance, a \RE that outputs \emph{city} can lead to three target labels: \emph{fromloc.city}, \emph{toloc.city},
 \emph{stoploc.city}.
 % Actually, annotating this kind of connections is not difficult, since the \RE tags are generally somewhat related to the target label that we are trying to predict, otherwise the \RE tags will not be able to provide useful information for the prediction.
 
-Let $z_i$ be a 0-1 indicator of whether there is at least one \RE that leads to target label $i$ for a matched sentence, the final logits
+Let $z_i$ be a 0-1 indicator of whether there is at least one \RE that leads to target label $i$ matches the sentence, the final logits
 of label $i$ for the sentence (or a specific word for slot filling) is:
 \begin{equation}
 logit_i = logit'_i + w_i z_i
 \end{equation}
 where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that
-lead to label $i$. Here we do not assign a trainable weight for each \RE because it is often that only a few sentences match a \RE.
+lead to target label $i$. Here we do not assign a trainable weight for each \RE because it is often that only a few sentences match a \RE.
 
 We modify logit instead of the final probability because logit is an unconstrained real value, which matches the property of $w_i z_i$ better than probability.
 Further, when performing model ensemble,
 % kagglers have also proved emperically that,
-ensemble with logits is often empirically better than with the final probability -- see the ensemble version of Juan et al.~\shortcite{juan2016field}. This is also the reason why we operate on logit %instead of probability
+ensembling with logits is often empirically better than with the final probability -- see the ensemble version of Juan et al.~\shortcite{juan2016field}. This is also the reason why we operate on logit %instead of probability
 in Sec.~\ref{interact_with_module}.
