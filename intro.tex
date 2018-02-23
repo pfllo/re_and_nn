@@ -13,16 +13,16 @@ learning~\cite{gc2015big}.
 % a problem known as few-shot learning.
 
 While powerful, \REs have a poor generalization ability because all synonyms and variations in a \RE must be explicitly specified. As a
-result, %they often have a low coverage of \z{low coverage of what??}\lb{change coverage to recall?}. To overcome this limitation, 
-\REs are often ensembled  with other
-data-driven methods like neural network (\NN) based techniques, where a set of carefully-written \REs are used to handle certain cases with
-high precision, leaving the rest for data-driven methods.
+result, %they often have a low coverage of \z{low coverage of what??}\lb{change coverage to recall?}. To overcome this limitation,
+\REs are often ensembled  with data-driven methods like neural network (\NN) based techniques, where a set of carefully-written \REs are
+used to handle certain cases with high precision, leaving the rest for data-driven methods.
 
 However, the use of \REs can go beyond simple pattern matching.
-Besides considered as a separate classifier to be ensembled, 
+Besides considered as a separate classifier to be ensembled,
 % and existing approaches only scratch the surface of what could possibly be achieved.
-a \RE \cyan{also} encodes a developer's knowledge for the problem domain, \red{which could be the informative words (\textbf{\textit{clue
-words}}) within its \cyan{surface form} and so on.} %pattern.
+a \RE \cyan{also} encodes a developer's knowledge for the problem domain. \red{The knowledge could be, for example,  the informative words
+(\textbf{\textit{clue
+words}}) within a \RE's \cyan{surface form}.} %pattern.
  % by including informative words (i.e., \textbf{\textit{clue words}}) of certain patterns.
 % We argue that such information can help models to extract the implicit knowledge from the training data,
 % which in turn enables data-driven methods to work effectively in the few-shot learning scenario with a small volume of annotated data.
@@ -39,10 +39,10 @@ learning scenario.
 % generalization ability of \REs. The result is a new way of using \REs,  \cyan{\sout{with a generic framework for quality control}}.
 
 In this paper, we investigate the use of \REs to improve \NNs -- a successful learning framework in many \NLP
-tasks~\cite{goldberg2017neural}. 
-This combination allows us to exploit the conciseness and effectiveness of \REs and the strong generalization ability of \NNs. 
+tasks~\cite{goldberg2017neural}.
+This combination allows us to exploit the conciseness and effectiveness of \REs and the strong generalization ability of \NNs.
 %By doing so, we are able to benefit from both \REs' effectiveness and \NNs' strong generalization ability.
-This also provides us an opportunity to learn from various kinds of  \REs, 
+It also provides us an opportunity to learn from various kinds of  \REs,
 %utilize both high-quality \REs (which are precise in capturing patterns but are time-consuming to generate) and those of low quality (that are easy to write, but can be noisy), % low-precision \REs,
 since \NNs are known to be good at tolerating noises~\cite{xie2016disturblabel}.
 % This may help reduce the difficulty of creating \REs, since high-precision \REs
