@@ -72,7 +72,7 @@ we get a \REtag of \emph{flight} that is the same as %corresponds to
 % Figure~\ref{atis_sample} for intention detection, we get a \REtag of \emph{flight}.
 
 For slot filling, we use two different sets of \REs. Given the group functionality of \RE, we can assign \REtags to our interested
-\textbf{\emph{\RE groups}} (the text surrounded by brackets). (1)~For the method in Sec.~\ref{interact_with_module}, since we need to
+\textbf{\emph{\RE groups}} (the text surrounded by parenthese). (1)~For the method in Sec.~\ref{interact_with_module}, since we need to
 annotate clue words for certain slot labels, its \REtags are the same as our target slot labels.
 For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second group.
 % \texttt{/(from)\:(\_\_CITY)/} will match the sentence in Figure~\ref{atis_sample}, and assign \emph{fromloc.city} to the second \RE group.
@@ -92,7 +92,7 @@ with simplified output labels, can also make improvements to \NN.
 Intuitively, complicated \REs can lead to better performance but require more efforts to generate. %, \RE complexity is often an
  Generally, there are mainly two aspects affecting \RE complexity most, the number of \RE groups
 and the number of \emph{or} clauses (i.e., the expressions separated by the disjunction operator $|$) in a \RE group. Having a larger
-number of \RE groups often leads to better, finer-grained precision but lower coverage on pattern matching, while a larger number of
+number of \RE groups often leads to better, finer-grained\cyan{??} precision but lower coverage on pattern matching, while a larger number of
 \emph{or} clauses usually gives a higher coverage but slightly lower precision.
 
 
