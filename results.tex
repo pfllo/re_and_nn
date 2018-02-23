@@ -54,9 +54,10 @@ RE Output & RE & \multicolumn{3}{|c|}{70.31 / 68.98} & \multicolumn{3}{|c|}{42.3
 \hline
 \end{tabular}
 }
-% \caption{Results on Full/Partial Few-Shot Learning Settings.}
+\caption{Results on Full/Partial Few-Shot Learning Settings.}
 % \caption{\cyan{Results on full few-shot learning settings (slot filling does not distinguish full/partial few-shot).}}
-\caption{\cyan{Results on Full Few-Shot Learning. Slot filling does not distinguish full/partial few-shot.}}
+% \caption{\cyan{Results on Full Few-Shot Learning. Note that, since frequent slot labels exceed the target shot count, for slot filling, we use the same dataset for both full and partial few-shot settings.}}
+% \caption{\cyan{Results on Full Few-Shot Learning. We use the same dataset for both full and partial few-shot learning.}}
 \label{tab_full_few}
 \vspace{-1em}
 \end{table*}
@@ -238,7 +239,7 @@ As seen in Table \ref{tab_full}, for intent detection, while \texttt{two+both} s
 This shows that, since both \REtag and annotated data provide intent labels for the input sentence, the value of the extra noisy tag from \RE become limited as we have more annotated data.
 % comparated with the knowledge learned from labeled data, the \REtag is much more noisy.
 However, since there is no guidance on attention in the annotations, the clue words from \RE are still useful.
-Further, since \texttt{feat} concatenates \REtags at the input level, the powerful \NN \cyan{following the \REtag} makes it more likely to overfit than \texttt{logit}, therefore \texttt{feat} performs even worse than \BLSTM.
+Further, since \texttt{feat} concatenates \REtags at the input level, the powerful \NN makes it more likely to overfit than \texttt{logit}, therefore \texttt{feat} performs even worse than \BLSTM.
 % This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While \NN can learn to assign low weights for \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and therefore leading to bad results of \texttt{feat}.
 
 As for slot filling, \texttt{feat} and \texttt{logit} still works.
@@ -254,7 +255,7 @@ However, \texttt{hu16} is a general framework to combine \FOL rules, which is mo
 Further, \texttt{mem} generally works in this setting, and can receive further improvement
 %we can also make improvements 
 by combining our fusion methods.
-\cyan{We can also see that \texttt{two+both} works clearly better than the state-of-art method (\LL) in intent detection, which jointly models the two tasks. And \texttt{mem+feat} is comparative to \LL in slot filling.}
+We can also see that \texttt{two+both} works clearly better than the state-of-art method (\LL) in intent detection, which jointly models the two tasks. And \texttt{mem+feat} is comparative to \LL in slot filling.
 % \red{We can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data.}
 % \footnote{
 % Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest})}.
