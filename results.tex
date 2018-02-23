@@ -295,9 +295,10 @@ We choose to control the \RE complexity by modifying the number of groups.
 %
 Specifically, we reduce the number of groups for existing \REs to decrease \RE complexity.
 To mimic the process of writing simple \REs from scratch, we try our best to keep the key \RE groups.
-For intent detection, all the \REs are reduced to at most 2 groups, % (groups matching a sequence of any words are excluded), 
-and 17 \REs are simplified.
-As for slot filling, we also reduce the \REs to at most 2 groups, and for some simples case, we further reduce them into  word-list patterns, e.g., \texttt{(\_\_CITY)}. In total, 21 \REs are simplified.
+For intent detection, all the \REs are reduced to at most 2 groups. % (groups matching a sequence of any words are excluded), 
+% and 17 \REs are simplified.
+As for slot filling, we also reduce the \REs to at most 2 groups, and for some simples case, we further reduce them into  word-list patterns, e.g., \texttt{(\_\_CITY)}. 
+% In total, 21 \REs are simplified.
 %\red{As for slot filling, since the \REs with more than 2 groups are limited (only 7), we choose a more aggressive strategy that all the \REs are reduced to word-list patterns, e.g., \texttt{(\_\_CITY)}.
 %However, the \REs trying to tag a \RE group that matches a number or a common word can have at most 2 groups, since it is not distinguishable at all without some context.
 %In total, 21 \REs are affected.}
