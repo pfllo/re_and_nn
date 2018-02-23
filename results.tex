@@ -22,7 +22,7 @@ To answer \textbf{Q1} , we first explore the full few-shot learning scenario.
 \rowcolor{Gray}Base Model & BLSTM & 45.28 / 60.02 & 60.62 / 64.61 & 63.60 / 80.52
 & 60.78 / 83.91 & 74.28  / 90.19 & 80.57 / 93.08  \\
 \hline
-Input Side & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20
+Input Level & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20
 & \textbf{66.84} / \textbf{88.96} & 79.67 / \textbf{93.64} & 84.95 / 95.00  \\
 \hline
 
@@ -30,10 +30,10 @@ Input Side & +feat & 49.40 / 63.72 & 64.34 / 73.46 & 65.16 / 83.20
 & 63.68 / 86.18 & 76.12 / 91.64  & 83.71 / 94.43 \\
 \cline{2-8}
 
-\rowcolor{Gray} \multirow{-2}{*}{Output Side}& +hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10
+\rowcolor{Gray} \multirow{-2}{*}{Output Level}& +hu16 & 47.22 / 56.22 & 61.83 / 68.42 & 67.40 / 84.10
 & 63.37 / 85.37 & 75.67 / 91.06 & 80.85 / 93.47  \\
 \hline
-\multirow{2}{*}{\vspace{-2.2em}NN Module Side} & +two & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65
+\multirow{2}{*}{\vspace{-2.2em}\tabincell{c}{Network Module \\ Level}} & +two & 40.44 / 57.22 & 60.72 / 75.14 & 62.88 / 83.65
 & 60.38 / 83.63 & 73.22 / 90.08 & 79.58 / 92.57  \\
 \cline{2-8}
 & +two+posi & 50.90 / 74.47 & 68.69 / 84.66 & 72.43 / 85.78
@@ -54,7 +54,8 @@ RE Output & RE & \multicolumn{3}{|c|}{70.31 / 68.98} & \multicolumn{3}{|c|}{42.3
 \hline
 \end{tabular}
 }
-\caption{Results on Full/Partial Few-Shot Learning Settings.}
+% \caption{Results on Full/Partial Few-Shot Learning Settings.}
+\caption{\cyan{Results on full few-shot learning settings (for slot filling, partial few-shot equals full few-shot).}}
 \label{tab_full_few}
 \end{table*}
 
@@ -67,9 +68,13 @@ However, \texttt{neg} works slightly better in the 20-shot setting, which is pos
 % Not surprisingly, we get the best results when positive and negative patterns are combined.
 Besides, \tatt alone works better than \texttt{BLSTM} when we have enough data, indicating again the advantage of our two-side attention architecture.
 
-As for other proposed methods, the output side method (\texttt{logit}) works generally better than input level one (\texttt{feat}), except for the 5-shot case.
-The reason may be that, the less \RE related parameters and \red{more direct effect of these parameters to the final output} make \texttt{logit} easier to train. % the shorter distance from these parameters
-However, since \texttt{logit} modifies the output directly, the final prediction is more sensitive to the insufficiently trained \red{weights/parameters??} in \texttt{logit}, which leads to its inferior results in the 5-shot setting.
+As for other proposed methods, the output level method (\texttt{logit}) works generally better than the input level one (\texttt{feat}), except for the 5-shot case.
+The reason may be that, the less \RE related parameters and 
+% \red{more direct effect of these parameters to the final output}
+\cyan{the shorter distance that the gradient needs to travel from the loss to these parameters}
+% the shorter distance from these parameters
+make \texttt{logit} easier to train. 
+However, since \texttt{logit} modifies the output directly, the final prediction is more sensitive to the insufficiently trained \cyan{weights} in \texttt{logit}, which leads to its inferior results in the 5-shot setting.
 
 To compare with existing methods of combining \NN and rules, we also implement the teacher-student
 network~\cite{hu2016harnessing}, %which is designed to combine \NNs and \FOL. %proves to perform well on various tasks.
@@ -242,10 +247,11 @@ And, different from few-shot settings, \texttt{two+both} has better macro-F1 tha
 However, \texttt{hu16} is a general framework to combine \FOL rules, which is more indirect in transferring knowledge from rules to \NN than our methods. Therefore, it is still  inferior to our attention loss in intent detection and our \texttt{feat} in slot filling, which are designed to learn from \REs.
 % The reason that it still performs worse than attention loss intent detection and in slot filling, is
 
-Further, \texttt{mem} generally works in this setting, and can receive further improvement by 
+Further, \texttt{mem} generally works in this setting, and can receive further improvement
 %we can also make improvements 
 by combining our fusion methods.
-\red{We can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data.}
+\cyan{We can also see that \texttt{two+both} works clearly better than the state-of-art method (\LL) in intent detection, which jointly models the two tasks. And \texttt{mem+feat} is comparative to \LL in slot filling.}
+% \red{We can also see that our base model achieves comparative results to the joint model of  Liu and Lane~\shortcite{liu2016attention}, which achieves state-of-art results on the ATIS data.}
 % \footnote{
 % Since slot filling is evaluated in phrase level, there is almost no difference in F1 when we convert the prediction on our split data format to the original format (see Section \ref{sec_datasest})}.
 % Besides, the state-of-art results on the ATIS data produced by \cite{liu2016attention} is also included (\LL). We can see that our base \BLSTM model achieves comparative results to \LL, confirming that the improvements from our fusion method does not come from the inferior ability of the base model), making our results still comparatable to \LL.}.

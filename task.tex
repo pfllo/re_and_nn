@@ -74,12 +74,12 @@ depending on how the corresponding \REs are used. When \REs are used at the netw
 corresponding \REtags are the same as the target slot labels because our goal is to annotate clue words for certain slot labels. For
 example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second
 one. In this example, the macro \emph{\_\_CITY} is the list of the target city names, which can be replaced with a string like
-\texttt{/Boston|Miami|LA|.../}. If \REs are use in the input (Sec.~\ref{fusion_with_input}) and the output layers
+\texttt{/Boston|Miami|LA|.../}. If \REs are used in the input (Sec.~\ref{fusion_with_input}) and the output layers
 (Sec.~\ref{fusion_with_output}) of a \NN, the corresponding \REtag would be different from the target slot label. In this context, the
-first and second \RE groups of the slot \RE of Fig.~\ref{atis_sample} would be simply tagged as \emph{city} to capture the commonalty of
-three target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. \cyan{The purpose of abstracting the \REtag to a
+first and second \RE groups of the slot \RE of Fig.~\ref{atis_sample} would be simply tagged as \emph{city} to capture the commonality of
+three target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. The purpose of abstracting the \REtag to a
 simplified version of multiple target slot labels is to maximize the applicability of \REs, so that \REs can still be useful when their
-evaluation outcome does not exactly match our learning objective. }
+evaluation outcome does not exactly match our learning objective.
 %
 %(1)~For the method in Sec.~\ref{interact_with_module}, since we need to annotate clue words for certain slot labels, its \REtags are the
 %same as our target slot labels. For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group
