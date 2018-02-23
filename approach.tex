@@ -137,7 +137,7 @@ intent $i$ as the negative \REs for other intents in our experiments.
 %While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) mechanism
 %as we do in intent prediction, we will face an efficiency problem in slot filling.
 The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction is unsuitable for slot
-filling. \cyan{This is because for slot filling we need to compute attention for each word, which as a result will demand more computation
+filling. \blue{This is because for slot filling we need to compute attention for each word, which as a result will demand more computation
 and memory resources than doing that for intent detection}.\footnote{Since we need to assign a label to each word, if we still compute
 attention for each slot label, we will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of
 tags and $n$ is the sentence length. The \BIO tagging format will further double the number of tags.}
