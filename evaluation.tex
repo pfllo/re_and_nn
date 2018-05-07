@@ -1,8 +1,8 @@
 \section{Evaluation Methodology}
 Our experiments
 aim to %are designed
-to answer three questions: \textbf{Q1:} Does the use of \REs enhance the learning quality when the number of annotated
-instances is small?  \textbf{Q2:}  Does the use of \REs still helps when using the full training data?
+answer three questions: \textbf{Q1:} Does the use of \REs enhance the learning quality when the number of annotated
+instances is small?  \textbf{Q2:}  Does the use of \REs still help when using the full training data?
  \textbf{Q3:}  How can we choose from different combination methods?
 %When do the three proposed methods work, and which method works best in each scenario?
 % \todo{how to refer to question (3) in exp?}
@@ -17,7 +17,7 @@ testing, with 18 intent labels and 127 slot labels.
 % where \emph{m} is the number of digits in the original string.
 %Different from previous work, 
 We also split words like
-\textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} to reduce the number of words that do not have a pre-trained word
+\textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} during the tokenization phase to reduce the number of words that do not have a pre-trained word
 embedding, which is helpful for few-shot learning.
 
 To answer  \textbf{Q1} , we also exploit the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we randomly
@@ -40,15 +40,21 @@ This is also a common scenario in real world, where we often have several freque
 who is familiar with the domain.
 % \footnote{Code and data are available at: [url redacted for double-blind review].}.
 It took the annotator in total less than 10 hours
-to develop all the \REs, while a domain expert can accomplish the task faster. We use the 20-shot data to develop the \REs, but word lists
-like cities are obtained from the full training set. The majority of the time 
+to develop all the \REs, while a domain expert can accomplish the task faster. 
+We use the 20-shot training data to develop the \REs, but word lists
+like cities are obtained from the full training set. 
+The development of \REs is considered completed when the \REs can coverage most of the cases in the 20-shot training data with resonable precision.
+After that, the \REs are fixed throughout the experiments.
+The majority of the time 
 for %spent on 
 writing the \REs is proportional to the number of \RE groups. 
 It took about 1.5 hours to write the 54 intent \REs with on average 2.2 groups per \RE. It is straightforward
 to write the slot \REs for the input and output level methods, for which it took around
- 1 hour to write the 60 \REs with averagely 1.7 groups. By contrast, writing slot \REs to guide attention requires more
+ 1 hour to write the 60 \REs with 1.7 groups on average. By contrast, writing slot \REs to guide attention requires more
 efforts as the annotator needs to carefully select clue words and annotate the full slot label. As a result, it took about 
 5.5 hours to generate 115 \REs with on average 3.3 groups.
+
+In practice, a positive \RE for intent (or slot) $k$ can often be treated as negative \REs for other intents (or slots). As such, we use the positive \REs for intent (or slot) $k$ as the negative \REs for other intents (or slots) in our experiments.
 % The performance of the sets of \REs used for the method described in
 % Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
 
@@ -95,7 +101,7 @@ Our hyper-parameters for \BLSTM are similar to the ones in Liu and Lane~\shortci
 % Specifically, we set the batch size to 16, the dropout probability to 0.5, the \BLSTM size to 200 (100 for each direction),
 Specifically, we use batch size 16, dropout probability 0.5, \BLSTM cell size 100.
 The attention loss weight is 16 (both positive and negative) for full few-shot and 1 for other settings.
-We use the 100d GloVe word vectors~\cite{pennington2014glove}, and the Adam optimizer~\cite{kingma2014adam} with learning rate 0.001.
+We use the 100d GloVe word vectors ~\cite{pennington2014glove} pretrained on Wikipedia and Gigaword~\cite{parker2011english}, and the Adam optimizer~\cite{kingma2014adam} with learning rate 0.001.
 
 \cparagraph{Evaluation Metrics}
 We report accuracy and macro-F1 for intent detection, and micro/macro-F1 for slot filling.

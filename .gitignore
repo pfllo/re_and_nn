@@ -5,6 +5,7 @@
 *.synctex
 *.blg
 *.bbl
+*.dvi
 *.synctex.gz
 acl2018.pdf
 *.synctex(busy)

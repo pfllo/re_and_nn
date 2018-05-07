@@ -10,6 +10,12 @@
 \end{figure}
 
 \vspace{-1mm}
+\subsection{Typesetting}
+\vspace{-1mm}
+In this paper, we use italic for emphasis, Courier for abbreviations like \texttt{RE}, bold italic for the first appearance for a concept like \emph{\textbf{clue words}}, Courier surrounded by / for regular expressions like {\small \texttt{/list(\;the)?\;\_\_AIRLINE/}}, underlined italic for words of the sentences in our dataset like \underline{\textit{Boston}}.
+
+
+\vspace{-1mm}
 \subsection{Problem Definition}
 \vspace{-1mm}
 %While our approach is generally applicable, to have concrete and measurable objectives,
@@ -70,20 +76,25 @@ we get a \REtag of \emph{flight} that is the same as %corresponds to
 
 For slot filling, we use two different sets of \REs. Given the group functionality of \RE, we can assign \REtags to our interested
 \textbf{\emph{\RE groups}} (i.e., the expressions defined inside parentheses). The translation from \REtags to slot labels depends
-on how the corresponding \REs are used. When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
+on how the corresponding \REs are used:
+(1) When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
 \REtags are the same as the target slot labels. % because our goal is to annotate clue words for certain slot labels. 
 For instance, the slot
 \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second one. 
 Here,  {\small \texttt{\_\_CITY}} is a list of city names, which can be replaced with a \RE string like
-\texttt{\small/Boston|Miami|LA|.../}. If \REs are used in the input (Sec.~\ref{fusion_with_input}) and the output layers
+\texttt{\small/Boston|Miami|LA|.../}.
+(2) If \REs are used in the input (Sec.~\ref{fusion_with_input}) and the output layers
 (Sec.~\ref{fusion_with_output}) of a \NN, the corresponding \REtag would be different from the target slot labels. In this context, the
 two \RE groups in Fig.~\ref{atis_sample} would be simply tagged as \emph{city} to capture the commonality of
-three related target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. The purpose of abstracting  \REtags to a
-simplified version of the target slot labels is to
+three related target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. 
+Note that, actually, we can use the target slot labels as REtags for all the settings.
+The purpose of abstracting \REtags to a simplified version of the target slot labels here 
+is to
 % maximize the applicability of \REs, so that 
-show that,
+show that
 \REs can still be useful when their
 evaluation outcome does not exactly match our learning objective.
+Further, as shown in Sec.~\ref{re_in_exp}, using simplified \REtags can also make the development of \REs much easier in our task.
 %
 %(1)~For the method in Sec.~\ref{interact_with_module}, since we need to annotate clue words for certain slot labels, its \REtags are the
 %same as our target slot labels. For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group

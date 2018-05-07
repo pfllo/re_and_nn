@@ -32,7 +32,7 @@ filling~\cite{liu2016attention}.
 \textbf{x}_n]$ of a n-word sentence, and produces a vector $\textbf{h}_i$ for each word $i$. A self-attention layer then takes in the
 vectors produced by the \BLSTM to compute the sentence embedding $\textbf{s}$:
 \begin{equation}
-\textbf{s} = \sum_{i}{\alpha_i\textbf{h}_i}, \quad \alpha_i=\frac{exp(\textbf{h}_i^T\textbf{Wc})}{\sum_{i}{exp(\textbf{h}_i^T\textbf{Wc})}}
+\textbf{s} = \sum_{i}{\alpha_i\textbf{h}_i}, \quad \alpha_i=\frac{\exp(\textbf{h}_i^\intercal \textbf{Wc})}{\sum_{i}{\exp(\textbf{h}_i^\intercal \textbf{Wc})}}
 \label{eq:simple_att}
 \end{equation}
 where  $\alpha_i$ is the attention for word $i$, $\textbf{c}$ is a randomly initialized trainable vector used to select informative words for classification, and $\textbf{W}$ is a weight matrix.
@@ -57,7 +57,7 @@ that are conflict with each other. For instance, the sentence \textsl{\underline
 w+)\{0,3\} flights?/}} that outputs tag \emph{flight}.
 % \footnote{\texttt{\_\_WORD} matches a single word, which can be \texttt{/\textbackslash w+/}.}
 
-To tackle the conflicting situations illustrated above, we average the tag embeddings to form an aggregated embedding as the \NN input.
+To tackle the conflicting situations illustrated above, we average the randomly initialized trainable tag embeddings to form an aggregated embedding as the \NN input.
 Intuitively, there are two ways to use the aggregated embedding. We can  append the aggregated embedding to either the embedding of every
 input word, or the input of the softmax classifier (see \circled{1} in Fig.~\ref{fig_overview_intent}). To determine which method to use,
 we perform a pilot study. We found that the first method causes the tag embedding to be copied many times; consequently, the \NN tends to
@@ -75,54 +75,54 @@ Note that we also extend the slot \REtags into the \BIO format, e.g., the \REtag
 I-city} if its original tag is \emph{city}.
 
 \subsection{Using \REs at the Network Module Level}
-\label{interact_with_module} At this level, we exploit ways to utilize the clue words in the surface form of a \RE (bold blue arrows and
+\label{interact_with_module} At the network module level, we explore ways to utilize the clue words in the surface form of a \RE (bold blue arrows and
 words in \circled{2} of Fig.~\ref{fig_overview}) to guide the attention module in \NNs.
 
 %Since the \RE itself has already highlighted the clue words (bold blue arrows and words in \circled{2} of Fig.~\ref{fig_overview}) for its output tag, it can therefore help us guide the attention module in \NN.
 
 \cparagraph{Intent Detection} Taking the sentence in Fig.~\ref{atis_sample} for example, the \RE: {\small\texttt{/\textasciicircum
-flights?\:from/} } that leads to intent \emph{flight} means that, \textsl{\underline{flights from}} are the key words to decide the intent
+flights?\:from/} } that leads to intent \emph{flight} means that \textsl{\underline{flights from}} are the key words to decide the intent
 \emph{flight}. Therefore, the attention module in \NNs should leverage these two words to get the correct prediction. To this end, we
 extend the base intent model by making two changes to incorporate the guidance from \REs.
 
 First, since each intent has its own clue words, using a single sentence embedding for all intent labels %which is produced by only one set of attention,
 would make the attention less focused.
 % Considering we also know the intent that each \RE points to,
-Therefore, we let each intent label $i$ use different attention $\textbf{a}_i$, which is then used to generate the sentence embedding
-$\textbf{s}_i$ for that intent:
+Therefore, we let each intent label $k$ use different attention $\textbf{a}_k$, which is then used to generate the sentence embedding
+$\textbf{s}_k$ for that intent:
 \begin{equation}
-\textbf{s}_i = \sum_{j}{\alpha_{ij}\textbf{h}_j}, \quad
-\alpha_{ij}=\frac{exp(\textbf{h}_j^T\textbf{W}_a\textbf{c}_i)}{\sum_{j}{exp(\textbf{h}_j^T\textbf{W}_a\textbf{c}_i)}}
+\textbf{s}_k = \sum_{i}{\alpha_{ki}\textbf{h}_i}, \quad
+\alpha_{ki}=\frac{\exp(\textbf{h}_i^\intercal \textbf{W}_a\textbf{c}_k)}{\sum_{i}{\exp(\textbf{h}_i^\intercal \textbf{W}_a\textbf{c}_k)}}
 \label{label_att_eq}
 \end{equation}
-where $\textbf{c}_i$ is a trainable vector for intent $i$ which is used to compute attention $\textbf{a}_i$, $\textbf{h}_j$ is the \BLSTM output for word $j$, and $\textbf{W}_a$ is a weight matrix.
+where $\textbf{c}_k$ is a trainable vector for intent $k$ which is used to compute attention $\textbf{a}_k$, $\textbf{h}_i$ is the \BLSTM output for word $i$, and $\textbf{W}_a$ is a weight matrix.
 
-The probability $p_i$ that the input sentence expresses intent $i$ is computed by:
+The probability $p_k$ that the input sentence expresses intent $k$ is computed by:
 \begin{equation}
-p_i = \frac{logit_i}{\sum_{i}{logit_i}}, \quad\quad logit_i=\textbf{w}_i\textbf{s}_i + b_i
+p_k = \frac{\exp(logit_k)}{\sum_{k}{\exp(logit_k)}}, \quad\quad logit_k=\textbf{w}_k\textbf{s}_k + b_k
 \label{label_prob_eq}
 \end{equation}
-where $\textbf{w}_i$, $logit_i$, $b_i$ are weight vector, logit, and bias for intent $i$, respectively.
+where $\textbf{w}_k$, $logit_k$, $b_k$ are weight vector, logit, and bias for intent $k$, respectively.
 
-Second, apart from indicating a sentence for intent $i$ (\textbf{\emph{positive \REs}}),
-a \RE can also indicate that a sentence does not express intent $i$ (\textbf{\emph{negative \REs}}).
+Second, apart from indicating a sentence for intent $k$ (\textbf{\emph{positive \REs}}),
+a \RE can also indicate that a sentence does not express intent $k$ (\textbf{\emph{negative \REs}}).
 %Therefore, to make use of negative \REs,
 We thus use a new set of attention (\textbf{\emph{negative attentions}}, in contrast to \textbf{\emph{positive attentions}}), to compute
 another set of logits for each intent with Eqs.~\ref{label_att_eq} and \ref{label_prob_eq}. We denote the logits computed by positive
-attentions as $logit_{pi}$, and those by negative attentions as $logit_{ni}$, the final logit for intent $i$ can then be calculated as:
+attentions as $logit_{pk}$, and those by negative attentions as $logit_{nk}$, the final logit for intent $k$ can then be calculated as:
 \begin{equation}
-logit_i = logit_{pi} - logit_{ni}
+logit_k = logit_{pk} - logit_{nk}
 \end{equation}
 
 To use \REs to guide attention, we add an attention loss to the final loss:
 \begin{equation}
-loss_{att} = \sum_{i}{m_i\sum_{j}{t_{ij}log(\alpha_{ij})}}
+loss_{att} = \sum_{k}{m_k\sum_{i}{t_{ki}\log(\alpha_{ki})}}
 \label{att_loss}
 \end{equation}
-where $t_{ij}$ is set to $0$ when none of the matched \REs that leads to intent $i$ mark word $j$ as a clue word -- otherwise
-$t_{ij}$ is set to $1/k_{i}$ where $k_i$ is the number of clue words
+where $t_{ki}$ is set to $0$ when none of the matched \REs that leads to intent $k$ mark word $i$ as a clue word -- otherwise
+$t_{ki}$ is set to $1/l_{k}$ where $l_k$ is the number of clue words
 % mark by \RE
-for intent $i$; $m_i$ is a 0-1 indicator that is set to 1 when there is a matched \RE that leads to intent $i$. We use Eq.~\ref{att_loss}
+for intent $k$; $m_k$ is a 0-1 indicator that is set to 1 when there is a matched \RE that leads to intent $k$. We use Eq.~\ref{att_loss}
 to compute the positive attention loss, $loss_{att\_p}$, for positive \REs and negative attention loss, $loss_{att\_n}$, for negative ones.
 The final loss is computed as:
 \begin{equation}
@@ -130,24 +130,28 @@ loss = loss_{c} + \beta_p loss_{att\_p} + \beta_n loss_{att\_n}
 \end{equation}
 where $loss_{c}$ is the original classification loss, $\beta_p$ and $\beta_n$ are weights for the two attention losses.
 
-In practice, a positive \RE for intent $i$ can often be treated as negative \REs for other intents. As such, we use the positive \REs for
-intent $i$ as the negative \REs for other intents in our experiments.
-
 \cparagraph{Slot Filling}
 %While we can apply the same \textbf{\emph{two-side attention}} (positive and negative attention) mechanism
 %as we do in intent prediction, we will face an efficiency problem in slot filling.
 The \textbf{\emph{two-side attention}} (positive and negative attention) mechanism introduced for intent prediction is unsuitable for slot
-filling. This is because for slot filling we need to compute attention for each word, which demand more computation
+filling. Because for slot filling, we need to compute attention for each word, which demand more computation
 and memory resources than doing that for intent detection.\footnote{Since we need to assign a label to each word, if we still compute
 attention for each slot label, we will have to compute $2\times L \times n^2$ attention values for one sentence, where $L$ is the number of
 tags and $n$ is the sentence length. The \BIO tagging format will further double the number of tags.}
 
-We thus use a simplified version of the two-side attention, where all the slot labels share the same set of positive and negative attention.
-Specifically, to predict the slot label of word $i$, we use Eq.~\ref{eq:simple_att} (with $\textbf{c}$ replaced with the \BLSTM output of word $i$, $\textbf{h}_i$) to generate a sentence embedding $\textbf{s}_{pi}$ from positive attention, and another one $\textbf{s}_{ni}$ from negative attention.
-The prediction $\textbf{p}_i$ for word $i$ is:
+We thus use a simplified version of the two-side attention, where all the slot labels share the same set of positive and negative attentions.
+Specifically, to predict the slot label of word $i$, we use the following equations, which is similar to Eq.~\ref{eq:simple_att}, to generate a sentence embedding $\textbf{s}_{pi}$ from positive attentions: 
+\begin{equation}
+\textbf{s}_{pi} = \sum_{j}{\alpha_{pij}\textbf{h}_j}, \quad \alpha_{pij}=\frac{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}{\sum_{j}{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}}
+\label{eq:slu_simple_att}
+\end{equation}
+where $\textbf{h}_i$ and $\textbf{h}_j$ are \BLSTM outputs for word $i$ and $j$, $\textbf{W}_{sp}$ is a weight matrix, and $\alpha_{pij}$ is the positive attention value for word $j$ with respect to word $i$.
+Further, by replacing $\textbf{W}_{sp}$ to $\textbf{W}_{sn}$, we use  Eq.~\ref{eq:slu_simple_att} again to compute negative attentions and generate the corresponding sentence embedding $\textbf{s}_{ni}$.
+
+Then, the prediction $\textbf{p}_i$ for word $i$ is:
 \begin{equation}
 \begin{split}
-\textbf{p}_i = softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) \\- (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n))
+\textbf{p}_i = \softmax((\textbf{W}_p [\textbf{s}_{pi}; \textbf{h}_i] + \textbf{b}_p) \\- (\textbf{W}_n [\textbf{s}_{ni}; \textbf{h}_i] + \textbf{b}_n))
 \end{split}
 \end{equation}
 where $\textbf{W}_{p}$, $\textbf{W}_{n}$, $\textbf{b}_{p}$, $\textbf{b}_{n}$ are weight matrices and bias vectors for positive and negative attention, respectively. Here we append the \BLSTM output $\textbf{h}_i$ to $\textbf{s}_{pi}$ and $\textbf{s}_{ni}$ because the word $i$ itself also plays a crucial part in identifying its slot label.
@@ -167,16 +171,19 @@ For instance, a \RE that outputs \emph{city} can lead to three target labels: \e
 \emph{stoploc.city}.
 % Actually, annotating this kind of connections is not difficult, since the \RE tags are generally somewhat related to the target label that we are trying to predict, otherwise the \RE tags will not be able to provide useful information for the prediction.
 
-Let $z_i$ be a 0-1 indicator of whether there is at least one \RE that leads to target label $i$ matches the sentence, the final logits
-of label $i$ for the sentence (or a specific word for slot filling) is:
+Let $z_k$ be a 0-1 indicator of whether there is at least one matched \RE that leads to target label $k$, the final logits
+of label $k$ for the sentence (or a specific word for slot filling) is:
 \begin{equation}
-logit_i = logit'_i + w_i z_i
+logit_k = logit'_k + w_k z_k
 \end{equation}
-where $logit'_i$ is the logit produced by the original \NN, and $w_i$ is a trainable weight indicating the overall confidence for \REs that
-lead to target label $i$. Here we do not assign a trainable weight for each \RE because it is often that only a few sentences match a \RE.
+where $logit'_k$ is the logit produced by the original \NN, and $w_k$ is a trainable weight indicating the overall confidence for \REs that
+lead to target label $k$. Here we do not assign a trainable weight for each \RE because it is often that only a few sentences match a \RE.
 
-We modify logit instead of the final probability because logit is an unconstrained real value, which matches the property of $w_i z_i$ better than probability.
-Further, when performing model ensemble,
+We modify logit instead of the final probability because logit is an unconstrained real value, which matches the property of $w_k z_k$ better than probability.
+Actually, when performing model ensemble,
 % kagglers have also proved emperically that,
-ensembling with logits is often empirically better than with the final probability -- see the ensemble version of Juan et al.~\shortcite{juan2016field}. This is also the reason why we operate on logit %instead of probability
+ensembling with logits is often empirically better than with the final probability\footnote{
+An example can be found in the ensemble version that Juan et al.~\shortcite{juan2016field} used in the Avazu Kaggle competition.
+}.
+This is also the reason why we operate on logit %instead of probability
 in Sec.~\ref{interact_with_module}.
