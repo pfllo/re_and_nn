@@ -140,7 +140,7 @@ attention for each slot label, we will have to compute $2\times L \times n^2$ at
 tags and $n$ is the sentence length. The \BIO tagging format will further double the number of tags.}
 
 We thus use a simplified version of the two-side attention, where all the slot labels share the same set of positive and negative attentions.
-Specifically, to predict the slot label of word $i$, we use the following equations, which is similar to Eq.~\ref{eq:simple_att}, to generate a sentence embedding $\textbf{s}_{pi}$ from positive attentions: 
+Specifically, to predict the slot label of word $i$, we use the following equations, which is similar to Eq.~\ref{eq:simple_att}, to generate a sentence embedding $\textbf{s}_{pi}$ from positive attentions:
 \begin{equation}
 \textbf{s}_{pi} = \sum_{j}{\alpha_{pij}\textbf{h}_j}, \quad \alpha_{pij}=\frac{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}{\sum_{j}{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}}
 \label{eq:slu_simple_att}
@@ -156,7 +156,7 @@ Then, the prediction $\textbf{p}_i$ for word $i$ is:
 \end{equation}
 where $\textbf{W}_{p}$, $\textbf{W}_{n}$, $\textbf{b}_{p}$, $\textbf{b}_{n}$ are weight matrices and bias vectors for positive and negative attention, respectively. Here we append the \BLSTM output $\textbf{h}_i$ to $\textbf{s}_{pi}$ and $\textbf{s}_{ni}$ because the word $i$ itself also plays a crucial part in identifying its slot label.
 
-\subsection{Using \REs at the Output Level}
+\subsection{Using REs at the Output Level}
 \label{fusion_with_output} At the output level, \REs are used to amend the output of \NNs, where we take the same method for intent
 detection and slot filling (see \circled{3} in Fig.~\ref{fig_overview}).
 
