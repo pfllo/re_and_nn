@@ -22,8 +22,10 @@ embedding, which is helpful for few-shot learning.
 
 To answer  \textbf{Q1} , we also exploit the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we randomly
 select 5, 10, 20 training instances for each intent to form the few-shot training set; and for slot filling, we also explore 5, 10, 20
-shots settings. However, since a sentence typically contains multiple slots, the number of frequent slot labels may inevitably exceed
-the target shot count. To better approximate the target shot count, we select sentences for each slot label  in the
+shots settings. 
+However, since a sentence typically contains multiple slots, the number of mentions of frequent slot labels may inevitably exceed
+the target shot count.
+To better approximate the target shot count, we select sentences for each slot label  in the
 ascending order of label frequencies.
 % As for slot filling, we first sort the slot labels by frequence, and randomly select sentences for the least-frequent slot label first, then the more frequent labels afterwards one by one. Although we also explore 5, 10, 20 shots settings, since one sentence typically involves multiple slots, the number of frequent slot labels may inevitably exceed the target number of shots.
 $k_1$-shot dataset contains $k_2$-shot dataset if $k_1>k_2$.
@@ -34,6 +36,9 @@ Since most few-shot learning methods require either extra classes or classes wit
 \textbf{\emph{partial few-shot learning setting}} for intent detection to make fair comparison with existing few-shot learning methods.
 Specifically, we let the 3 most frequent intents have 300 training instances, and the rest remains untouched.
 This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
+As for slot filling, however, since the number of mentions of frequent slot labels already exceeds the target shot count,
+the original few-shot learning dataset for slot filling can be directly used to train existing few-shot learning methods.
+Therefore, we do not distinguish full and partial few-shot learning for slot filling.
 
 \subsection{Preparing REs}
 \label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by a paid annotator 
@@ -53,10 +58,10 @@ to write the slot \REs for the input and output level methods, for which it took
  1 hour to write the 60 \REs with 1.7 groups on average. By contrast, writing slot \REs to guide attention requires more
 efforts as the annotator needs to carefully select clue words and annotate the full slot label. As a result, it took about 
 5.5 hours to generate 115 \REs with on average 3.3 groups.
+The performance of these \REs can be found in the last line of Table~\ref{tab_full_few}.
 
 In practice, a positive \RE for intent (or slot) $k$ can often be treated as negative \REs for other intents (or slots). As such, we use the positive \REs for intent (or slot) $k$ as the negative \REs for other intents (or slots) in our experiments.
-% The performance of the sets of \REs used for the method described in
-% Sec.~\ref{interact_with_module} is given in Table~\ref{tab_full_few}.
+
 
 %Writing an intent \RE takes about 1-2 minutes. In this work, the student spent 1.5 hours to write the 54 \REs, with on average 2.2 \RE
 %groups for each \RE. The student finds that writing the slot \RE for the methods described in Sec.~\ref{fusion_with_input} and
@@ -109,21 +114,42 @@ Micro/macro-F1 are the harmonic mean of micro/macro precision and recall.
 Macro-precision/recall are calculated by averaging precision/recall of each label, and micro-precision/recall are averaged over each prediction.
 % While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
 
-\cparagraph{Naming Conventions}
-% We use the following naming conventions when discussing our experimental results:
-%
-\texttt{BLSTM} is our base model,
-\texttt{+feat} means using \REtag as input features (Sec.~\ref{fusion_with_input}),
-% input side method in
-\ptatt is the two-side attention method without attention loss,
-\texttt{+posi} and \texttt{+neg} refer to using positive and negative attention loss, respectively, \texttt{+both} refers to using both attention losses (Sec.~\ref{interact_with_module}),
-% \NN module side method in
-\texttt{+logit} means using \REtag to modify \NN output (Sec.~\ref{fusion_with_output}),
-% output side methods in
-\texttt{RE} refers to using \RE output as prediction directly\footnote{
-For slot filling, \REs for Sec.~\ref{interact_with_module} are used.},
-\texttt{+hu16} is the method of Hu et al.~\shortcite{hu2016harnessing},
-\texttt{+mem} is the memory module of Kaiser et al.~\shortcite{kaiser2017learning}\footnote{
-We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
-},
-\LL is the state-of-art joint model~\cite{liu2016attention} in ATIS.
+\cparagraph{Competitors and Naming Conventions}
+Here bold Courier like \textbf{\BLSTM} denotes the notations of the models that we will compare in Sec.~\ref{sec:experiments}.
+
+Specifically, we compare our methods with the baseline \textbf{\texttt{BLSTM}} model (Sec.~\ref{sec:baseline}).
+Since our attention loss method (Sec.~\ref{interact_with_module}) uses two-side attention, we include the raw two-side attention model without attention loss (\textbf{\ptatt}) for comparison as well.
+Besides, we also evaluate the \RE output (\textbf{\texttt{RE}}), which uses the \REtags as prediction directly, to show the quality of the \REs that we used in the experiments.\footnote{
+	For slot filling, we evaluate the \REs that use the target slot labels as \REtags.}
+
+As for our methods for combinging \REs with \NN,
+\textbf{\texttt{+feat}}  refers to using \REtag as input features (Sec.~\ref{fusion_with_input}),
+\textbf{\texttt{+posi}} and \textbf{\texttt{+neg}} refer to using positive and negative attention loss respectively,
+\textbf{\texttt{+both}} refers to using both postive and negative attention losses (Sec.~\ref{interact_with_module}),
+and \textbf{\texttt{+logit}} means using \REtag to modify \NN output (Sec.~\ref{fusion_with_output}).
+
+Further, since the \REs can also be formatted as first-order-logic (\texttt{FOL}) rules, we also compare our methods with the teacher-student framework proposed by Hu et al.~\shortcite{hu2016harnessing}, which is a general framework for distilling knowledge from \texttt{FOL} rules into \NN (\textbf{\texttt{+hu16}}). 
+Besides, since we consider few-short learning settings,  we also include memory module proposed by Kaiser et al.~\shortcite{kaiser2017learning}, which performs well in various few-shot datasets (\textbf{\texttt{+mem}}).\footnote{
+	We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
+}
+Finally, the state-of-art model on the ATIS dataset is also included (\textbf{\LL}), which jointly models the intent detection and slot filling in a single network~\cite{liu2016attention}.
+
+
+% \cparagraph{Naming Conventions}
+% % We use the following naming conventions when discussing our experimental results:
+% %
+% \texttt{BLSTM} is our base model,
+% \texttt{+feat} means using \REtag as input features (Sec.~\ref{fusion_with_input}),
+% % input side method in
+% \ptatt is the two-side attention method without attention loss,
+% \texttt{+posi} and \texttt{+neg} refer to using positive and negative attention loss, respectively, \texttt{+both} refers to using both attention losses (Sec.~\ref{interact_with_module}),
+% % \NN module side method in
+% \texttt{+logit} means using \REtag to modify \NN output (Sec.~\ref{fusion_with_output}),
+% % output side methods in
+% \texttt{RE} refers to using \RE output as prediction directly\footnote{
+% For slot filling, we evaluate the \REs that use the target slot labels as \REtags.},
+% \texttt{+hu16} is the method of Hu et al.~\shortcite{hu2016harnessing},
+% \texttt{+mem} is the memory module of Kaiser et al.~\shortcite{kaiser2017learning}\footnote{
+% We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
+% },
+% \LL is the state-of-art joint model~\cite{liu2016attention} in ATIS.
