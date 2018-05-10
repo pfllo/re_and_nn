@@ -107,7 +107,7 @@ Therefore, the attention loss and the attention related parameters are more of a
 As the example shown in Fig.~\ref{atis_sample},
 %Take the sentence in Fig.~\ref{atis_sample} for example, 
 the model recognizes \textsl{\underline{Boston}} as \emph{fromloc.city} mainly because \textsl{\underline{Boston}} itself is a city, 
-and its  context word \textsl{\underline{from}} may have been % Since this simple context is easily
+and its  context word \textsl{\underline{from}} may have already been % Since this simple context is easily
 captured by \BLSTM, where our attention mechanism does not help much.
 By examining the attention values of \texttt{+two} trained on the full dataset,
 we find that instead of marking informative context words, the attention tends to concentrate on the target word itself, which
@@ -116,7 +116,7 @@ further confirms our hypothesis on the attention loss.
 % However, due to the word list \RE groups like city list, the \REtag actually provides some type information about the target word.
 On the other hand, since the \REtags here actually provide extra information, such as type, about words in the sentence, \texttt{logit} and \texttt{feat} generally work better.
 However, different from intent detection, \texttt{feat} slightly outperforms \texttt{logit}.
-The reason is that \texttt{feat} can utilize the \REtags of all words and further distill better context representations through \NN, 
+The reason is that \texttt{feat} can utilize the \REtags of all words and further generate better context representations through \NN, 
 %in the sentence \red{to better model the utterance}, 
 while \texttt{logit} can only utilize the \REtag of the target word before the final output layer.
 Therefore, \texttt{feat} actually receives more information from \RE and can make better use of them than \texttt{logit}.
@@ -312,7 +312,7 @@ Further, we can also see that complex \REs generally produces better results com
 This indicates that when considering using \REs to improve a \NN model, we can simply start with simple \REs, and gradually increase the \RE complexity if the cost is affordable.\footnote{
 % Further, we can see that attention loss is less sensitive to the simplification than other methods.
 % The reason probably lies in that, although simplified, the core informative words still remains in the pattern, which is therefore still helpful for the attention module
-We do not include results of \texttt{both} for slot filling since its \REs are different from \texttt{feat} and \texttt{logit}, and we already know the attention loss method does not work for slot filling.}.
+We do not include results of \texttt{both} for slot filling since its \REs are different from \texttt{feat} and \texttt{logit}, and we already know the attention loss method does not work for slot filling.}
 
 
 %simple \REs generally lead to worse results, indicating that we should write complex \REs to get better performance if the cost is affordable.

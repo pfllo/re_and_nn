@@ -17,12 +17,13 @@ On the loss function side, people modify the loss function to model the relation
 Since fusing in initialization and loss function often require special properties of the task, which is not applicable to our problem, we explore to fuse \RE rules on the input, \NN module and output side.   
 
 \cparagraph{NN and RE}
-As for \NN and \RE, previous work have tried using \RE to speed up the decoding of \NN~\cite{strauss2016regular} and translating natural language queries into \REs~\cite{locascio2016neural}.
+As for \NN and \RE, previous work have tried using \RE to speed up the decoding phase of \NN~\cite{strauss2016regular} and
+generating \RE from natural language specifications of the \RE~\cite{locascio2016neural}.
 % Our work, on the other side, tries to use \RE to improve the prediction ability of \NN.
 
 \cparagraph{Few-Shot Learning}
 % Early work uses Bayesian framework to handle few-shot learning~\cite{fei2006one}.
-Recently, people either consider few-shot learning in a metric learning framework~\cite{koch2015siamese,vinyals2016matching}, or store instances in a memory~\cite{santoro2016meta, kaiser2017learning} to match rare instances in the future.
+Recently, people either consider few-shot learning in a metric learning framework~\cite{koch2015siamese,vinyals2016matching}, or store instances in a memory~\cite{santoro2016meta, kaiser2017learning} to match similar instances in the future.
 % Besides, transfer learning technique is also explored in the few-shot learning setting \cite{qiao2017few}.
 % Our method follows another thread of work that adds additional information to assist few-shot learning.
 % In this thread, Wang et al.~\shortcite{wang2017multi} uses the semantic meaning of the class name itself to guide the attention module in \NN.
@@ -34,7 +35,7 @@ Our method, however, seeks to use the human-generated \RE to provide additional 
 Recurrent neural networks (\texttt{RNN}) are proven to be effective in both intent detection~\cite{ravuri2015comparative} and slot filling~\cite{mesnil2015using}.
 % Intent detection is a sentence classification problem, and several recurrent neural networks (\texttt{RNN}) have been used~\cite{ravuri2015comparative}.
 % Slot filling is often treated as a sequence labeling task, and \texttt{RNN} also performs well in this task~\cite{mesnil2015using}. 
-Further, people explore to jointly model the two tasks, and have achieved better results~\cite{liu2016attention, zhang2016joint}.
+Further, people also explore to jointly model the two tasks, and have achieved better results~\cite{liu2016attention, zhang2016joint}.
 % There is also a line of work that tries to use domain adaptation \cite{kim2017domain, liu2017multi, zhu2017concept} to enhance the \NLU performance.
 
 
