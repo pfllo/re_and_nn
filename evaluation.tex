@@ -10,54 +10,47 @@ instances is small?  \textbf{Q2:}  Does the use of \REs still help when using th
 \subsection{Datasets}
 \label{sec_datasest}
 
-We use the ATIS dataset~\cite{hemphill1990atis} to evaluate our approach, which is widely used in \SLU research, and
-includes queries of flights, meal, etc. We follow the setup of Liu and Lane~\shortcite{liu2016attention} by using 4,978 queries for training and 893 for
+We use the ATIS dataset~\cite{hemphill1990atis} to evaluate our approach. This dataset is widely used in \SLU research. It includes queries
+of flights, meal, etc. We follow the setup of Liu and Lane~\shortcite{liu2016attention} by using 4,978 queries for training and 893 for
 testing, with 18 intent labels and 127 slot labels.
 % Numbers are replaced with special tokens like \textsl{\underline{DIGIT*m}},
 % where \emph{m} is the number of digits in the original string.
-%Different from previous work, 
-We also split words like
-\textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} during the tokenization phase to reduce the number of words that do not have a pre-trained word
-embedding, which is helpful for few-shot learning.
+%Different from previous work,
+We also split words like \textsl{\underline{Miami's}} into \textsl{\underline{Miami 's}} during the tokenization phase to reduce the number
+of words that do not have a pre-trained word embedding. This strategy is useful for few-shot learning.
 
-To answer  \textbf{Q1} , we also exploit the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we randomly
-select 5, 10, 20 training instances for each intent to form the few-shot training set; and for slot filling, we also explore 5, 10, 20
-shots settings. 
-However, since a sentence typically contains multiple slots, the number of mentions of frequent slot labels may inevitably exceed
-the target shot count.
-To better approximate the target shot count, we select sentences for each slot label  in the
-ascending order of label frequencies.
-% As for slot filling, we first sort the slot labels by frequence, and randomly select sentences for the least-frequent slot label first, then the more frequent labels afterwards one by one. Although we also explore 5, 10, 20 shots settings, since one sentence typically involves multiple slots, the number of frequent slot labels may inevitably exceed the target number of shots.
-$k_1$-shot dataset contains $k_2$-shot dataset if $k_1>k_2$.
-All settings use the original test set.
-% After that, we move to the adjacent label which is slightly more frequent, and make sure the number of training instances meet the threshold.
+To answer  \textbf{Q1} , we also exploit the \textbf{\emph{full few-shot learning setting}}. Specifically, for intent detection, we
+randomly select 5, 10, 20 training instances for each intent to form the few-shot training set; and for slot filling, we also explore 5,
+10, 20 shots settings. However, since a sentence typically contains multiple slots, the number of mentions of frequent slot labels may
+inevitably exceeds the target shot count. To better approximate the target shot count, we select sentences for each slot label  in
+ascending order of label frequencies. That is $k_1$-shot dataset will contain $k_2$-shot dataset if $k_1>k_2$. All settings use the
+original test set.
 
-Since most existing few-shot learning methods require either many few-shot classes or some classes with enough data for training, we also explore the
-\textbf{\emph{partial few-shot learning setting}} for intent detection to make fair comparison with existing few-shot learning methods.
-Specifically, we let the 3 most frequent intents have 300 training instances, and the rest remains untouched.
-This is also a common scenario in real world, where we often have several frequent classes and many classes with limited data.
-As for slot filling, however, since the number of mentions of frequent slot labels already exceeds the target shot count,
-the original slot filling few-shot dataset can be directly used to train existing few-shot learning methods.
-Therefore, we do not distinguish full and partial few-shot learning for slot filling.
+Since most existing few-shot learning methods require either many few-shot classes or some classes with enough data for training, we also
+explore the \textbf{\emph{partial few-shot learning setting}} for intent detection to provide a fair comparison for existing few-shot
+learning methods. Specifically, we let the 3 most frequent intents have 300 training instances, and the rest remains untouched. This is
+also a common scenario in real world, where we often have several frequent classes and many classes with limited data. As for slot filling,
+however, since the number of mentions of frequent slot labels already exceeds the target shot count, the original slot filling few-shot
+dataset can be directly used to train existing few-shot learning methods. Therefore, we do not distinguish full and partial few-shot
+learning for slot filling.
 
 \subsection{Preparing REs}
-\label{re_in_exp} We use the standard \RE grammar in this work. Our \REs are written by a paid annotator 
-who is familiar with the domain.
+\label{re_in_exp} We use the syntax of \REs in Perl in this work. Our \REs are written by a paid annotator who is familiar with the domain.
 % \footnote{Code and data are available at: [url redacted for double-blind review].}.
 It took the annotator in total less than 10 hours
-to develop all the \REs, while a domain expert can accomplish the task faster. 
+to develop all the \REs, while a domain expert can accomplish the task faster.
 We use the 20-shot training data to develop the \REs, but word lists
-like cities are obtained from the full training set. 
+like cities are obtained from the full training set.
 The development of \REs is considered completed when the \REs can cover most of the cases in the 20-shot training data with resonable precision.
 After that, the \REs are fixed throughout the experiments.
 
-The majority of the time 
-for %spent on 
-writing the \REs is proportional to the number of \RE groups. 
+The majority of the time
+for %spent on
+writing the \REs is proportional to the number of \RE groups.
 It took about 1.5 hours to write the 54 intent \REs with on average 2.2 groups per \RE. It is straightforward
 to write the slot \REs for the input and output level methods, for which it took around
  1 hour to write the 60 \REs with 1.7 groups on average. By contrast, writing slot \REs to guide attention requires more
-efforts as the annotator needs to carefully select clue words and annotate the full slot label. As a result, it took about 
+efforts as the annotator needs to carefully select clue words and annotate the full slot label. As a result, it took about
 5.5 hours to generate 115 \REs with on average 3.3 groups.
 The performance of the \REs can be found in the last line of Table~\ref{tab_full_few}.
 
@@ -100,14 +93,11 @@ In practice, a positive \RE for intent (or slot) $k$ can often be treated as neg
 
 
 \subsection{Experimental Setup}
-\cparagraph{Hyper-parameters}
-Our hyper-parameters for \BLSTM are similar to the ones used by Liu and Lane~\shortcite{liu2016attention},
-% We use similar hyper-parameters to Liu and Lane~\shortcite{liu2016attention} for \BLSTM,
-% which gives comparable results on the original dataset.
-% Specifically, we set the batch size to 16, the dropout probability to 0.5, the \BLSTM size to 200 (100 for each direction),
-Specifically, we use batch size 16, dropout probability 0.5, and \BLSTM cell size 100.
-The attention loss weight is 16 (both positive and negative) for full few-shot learning settings and 1 for other settings.
-We use the 100d GloVe word vectors ~\cite{pennington2014glove} pretrained on Wikipedia and Gigaword~\cite{parker2011english}, and the Adam optimizer~\cite{kingma2014adam} with learning rate 0.001.
+\cparagraph{Hyper-parameters} Our hyper-parameters for the \BLSTM are similar to the ones used by Liu and
+Lane~\shortcite{liu2016attention}. Specifically, we use batch size 16, dropout probability 0.5, and \BLSTM cell size 100. The attention
+loss weight is 16 (both positive and negative) for full few-shot learning settings and 1 for other settings. We use the 100d GloVe word
+vectors ~\cite{pennington2014glove} pre-trained on Wikipedia and Gigaword~\cite{parker2011english}, and the Adam
+optimizer~\cite{kingma2014adam} with learning rate 0.001.
 
 \cparagraph{Evaluation Metrics}
 We report accuracy and macro-F1 for intent detection, and micro/macro-F1 for slot filling.
@@ -115,12 +105,13 @@ Micro/macro-F1 are the harmonic mean of micro/macro precision and recall.
 Macro-precision/recall are calculated by averaging precision/recall of each label, and micro-precision/recall are averaged over each prediction.
 % While accuracy and micro statistics show performance on all the instances, macro statitics are more sensitive to classes with limited data.
 
-\cparagraph{Competitors and Naming Conventions}
-Here, bold Courier like \textbf{\BLSTM} denotes the notations of the models that we will compare in Sec.~\ref{sec:experiments}.
+\cparagraph{Competitors and Naming Conventions} Here, a bold Courier typeface like \textbf{\BLSTM} denotes the notations of the models that
+we will compare in Sec.~\ref{sec:experiments}.
 
-Specifically, we compare our methods with the baseline \textbf{\texttt{BLSTM}} model (Sec.~\ref{sec:baseline}).
-Since our attention loss method (Sec.~\ref{interact_with_module}) uses two-side attention, we include the raw two-side attention model without attention loss (\textbf{\ptatt}) for comparison as well.
-Besides, we also evaluate the \RE output (\textbf{\texttt{RE}}), which uses the \REtags as prediction directly, to show the quality of the \REs that we will use in the experiments.\footnote{
+Specifically, we compare our methods with the baseline \textbf{\texttt{BLSTM}} model (Sec.~\ref{sec:baseline}). Since our attention loss
+method (Sec.~\ref{interact_with_module}) uses two-side attention, we include the raw two-side attention model without attention loss
+(\textbf{\ptatt}) for comparison as well. Besides, we also evaluate the \RE output (\textbf{\texttt{REO}}), which uses the \REtags as
+prediction directly, to show the quality of the \REs that we will use in the experiments.\footnote{
 	For slot filling, we evaluate the \REs that use the target slot labels as \REtags.}
 
 As for our methods for combinging \REs with \NN,
@@ -129,11 +120,14 @@ As for our methods for combinging \REs with \NN,
 \textbf{\texttt{+both}} refers to using both postive and negative attention losses (Sec.~\ref{interact_with_module}),
 and \textbf{\texttt{+logit}} means using \REtag to modify \NN output (Sec.~\ref{fusion_with_output}).
 
-Further, since the \REs can also be formatted as first-order-logic (\texttt{FOL}) rules, we also compare our methods with the teacher-student framework proposed by Hu et al.~\shortcite{hu2016harnessing}, which is a general framework for distilling knowledge from \texttt{FOL} rules into \NN (\textbf{\texttt{+hu16}}). 
-Besides, since we consider few-short learning,  we also include the memory module proposed by Kaiser et al.~\shortcite{kaiser2017learning}, which performs well in various few-shot datasets (\textbf{\texttt{+mem}}).\footnote{
-	We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of \texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot.
-}
-Finally, the state-of-art model on the ATIS dataset is also included (\textbf{\LL}), which jointly models the intent detection and slot filling in a single network~\cite{liu2016attention}.
+Moverover, since the \REs can also be formatted as first-order-logic (\texttt{FOL}) rules, we also compare our methods with the
+teacher-student framework proposed by Hu et al.~\shortcite{hu2016harnessing}, which is a general framework for distilling knowledge from
+\texttt{FOL} rules into \NN (\textbf{\texttt{+hu16}}). Besides, since we consider few-short learning,  we also include the memory module
+proposed by Kaiser et al.~\shortcite{kaiser2017learning}, which performs well in various few-shot datasets
+(\textbf{\texttt{+mem}})\footnote{
+	We tune $C$ and $\pi_0$ of \texttt{hu16}, and choose (0.1, 0.3) for intent, and (1, 0.3) for slot. We tune memory-size and $k$ of
+\texttt{mem}, and choose (1024, 64) for intent, and (2048, 64) for slot. }. Finally, the state-of-art model on the ATIS dataset is also
+included (\textbf{\LL}), which jointly models the intent detection and slot filling in a single network~\cite{liu2016attention}.
 
 
 % \cparagraph{Naming Conventions}
