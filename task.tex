@@ -11,9 +11,10 @@
 
 \vspace{-1mm}
 \subsection{Typesetting}
-\vspace{-1mm} In this paper, we use italic for emphasis like \emph{intent detection}, Courier for abbreviations like \texttt{RE}, bold italic for the first appearance
-of a concept like \emph{\textbf{clue words}}, Courier surrounded by / for regular expressions like {\small
-\texttt{/list(\;the)?\;\_\_AIRLINE/}}, and underlined italic for words of sentences in our dataset like \underline{\textit{Boston}}.
+\vspace{-1mm} In this paper, we use italic for emphasis like \emph{intent detection}, the Courier typeface for abbreviations like
+\texttt{RE}, bold italic for the first appearance of a concept like \emph{\textbf{clue words}}, Courier surrounded by / for regular
+expressions like {\small \texttt{/list(\;the)?\;\_\_AIRLINE/}}, and underlined italic for words of sentences in our dataset like
+\underline{\textit{Boston}}.
 
 
 \vspace{-1mm}
@@ -44,9 +45,9 @@ corresponding word, $x_i$. % in the input query.
 %\cparagraph{Example}
 Take the sentence in Fig.~\ref{atis_sample} as an example.
 %gives an example sentence from the ATIS (Airline Travel Information Systems) dataset~\cite{hemphill1990atis}.
-A successful intent detector would suggest the intent of the sentence as \emph{flight}, i.e., querying
-about flight-related information. Slot filler, on the other hand, should identify the slots \emph{fromloc.city} and
-\emph{toloc.city} by labeling \underline{\textit{Boston}} and \underline{\textit{Miami}}, respectively,
+A successful intent detector would suggest the intent of the sentence as \emph{flight}, i.e., querying about flight-related information. A
+slot filler, on the other hand, should identify the slots \emph{fromloc.city} and \emph{toloc.city} by labeling \underline{\textit{Boston}}
+and \underline{\textit{Miami}}, respectively,
 %the sentence
 using the begin-inside-outside (\texttt{BIO}) scheme.
 
@@ -58,7 +59,7 @@ using the begin-inside-outside (\texttt{BIO}) scheme.
 
 In this work, a \RE defines a mapping from a text \emph{pattern} to several \textbf{\emph{\REtags}} which are  the same as or related to
 the \textbf{\emph{target labels}} (i.e., intent and slot labels). A search function takes in a \RE, applies it to all sentences, and
-returns any texts that match the pattern. We assign the \REtag(\texttt{s}) (that are associated with the matching \RE) to either the
+returns any texts that match the pattern. We then assign the \REtag(\texttt{s}) (that are associated with the matching \RE) to either the
 matched sentence (for intent detection) or some matched phrases (for slot filling).
 
 
@@ -76,26 +77,17 @@ we get a \REtag of \emph{flight} that is the same as %corresponds to
 % Figure~\ref{atis_sample} for intention detection, we get a \REtag of \emph{flight}.
 
 For slot filling, we use two different sets of \REs. Given the group functionality of \RE, we can assign \REtags to our interested
-\textbf{\emph{\RE groups}} (i.e., the expressions defined inside parentheses). The translation from \REtags to slot labels depends
-on how the corresponding \REs are used:
-(1) When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
-\REtags are the same as the target slot labels. % because our goal is to annotate clue words for certain slot labels.
-For instance, the slot
-\RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group and \emph{toloc.city} to the second one.
-Here,  {\small \texttt{\_\_CITY}} is a list of city names, which can be replaced with a \RE string like
-\texttt{\small/Boston|Miami|LA|.../}.
-(2) If \REs are used in the input (Sec.~\ref{fusion_with_input}) and the output layers
-(Sec.~\ref{fusion_with_output}) of a \NN, the corresponding \REtag would be different from the target slot labels. In this context, the
-two \RE groups in Fig.~\ref{atis_sample} would be simply tagged as \emph{city} to capture the commonality of
-three related target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}.
-Note that, actually, we can use the target slot labels as \REtags for all the settings.
-The purpose of abstracting \REtags to a simplified version of the target slot labels here
-is to
-% maximize the applicability of \REs, so that
-show that
-\REs can still be useful when their
-evaluation outcome does not exactly match our learning objective.
-Further, as shown in Sec.~\ref{re_in_exp}, using simplified \REtags can also make the development of \REs much easier in our task.
+\textbf{\emph{\RE groups}} (i.e., the expressions defined inside parentheses). The translation from \REtags to slot labels depends on how
+the corresponding \REs are used. (1) When \REs are used at the network module level (Sec.~\ref{interact_with_module}), the corresponding
+\REtags are the same as the target slot labels. For instance, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the
+first \RE group and \emph{toloc.city} to the second one. Here,  {\small \texttt{\_\_CITY}} is a list of city names, which can be replaced
+with a \RE string like \texttt{\small/Boston|Miami|LA|.../}. (2) If \REs are used in the input (Sec.~\ref{fusion_with_input}) and the
+output layers (Sec.~\ref{fusion_with_output}) of a \NN, the corresponding \REtag would be different from the target slot labels. In this
+context, the two \RE groups in Fig.~\ref{atis_sample} would be simply tagged as \emph{city} to capture the commonality of three related
+target slot labels: \emph{fromloc.city}, \emph{toloc.city}, \emph{stoploc.city}. Note that we could use the target slot labels as \REtags
+for all the settings. The purpose of abstracting \REtags to a simplified version of the target slot labels here is to show that \REs can
+still be useful when their evaluation outcome does not exactly match our learning objective. Further, as shown in Sec.~\ref{re_in_exp},
+using simplified \REtags can also make the development of \REs easier in our tasks.
 %
 %(1)~For the method in Sec.~\ref{interact_with_module}, since we need to annotate clue words for certain slot labels, its \REtags are the
 %same as our target slot labels. For example, the slot \RE in Fig.~\ref{atis_sample} will assign \emph{fromloc.city} to the first \RE group
@@ -116,8 +108,8 @@ Further, as shown in Sec.~\ref{re_in_exp}, using simplified \REtags can also mak
 %When writing \REs,
 Intuitively, complicated \REs can lead to better performance but require more efforts to generate. %, \RE complexity is often an
  Generally, there are two aspects affecting \RE complexity most: the number of \RE groups\footnote{
-	When talking about complexity, we consider each semantically independant consecutive word sequence as a \RE group (excluding clauses matching all words).
-	For example, {\small \texttt{/how\:long(\:\textbackslash w+)\{1,2\}?\:(it\:take|flight)/}} has 2 RE groups: {\small \texttt{(how\;long)}} and {\small \texttt{(it\;take|flight)}}.
+	When discussing complexity, we consider each semantically independent consecutive word sequence as a \RE group (excluding clauses, such as \texttt{\textbackslash w+}, that can match any word).
+	For instance, the \texttt{RE}: {\small \texttt{/how\:long(\:\textbackslash w+)\{1,2\}?\:(it\:take|flight)/}} has two RE groups: {\small \texttt{(how\;long)}} and {\small \texttt{(it\;take|flight)}}.
 }
 and \emph{or} clauses (i.e., expressions separated by the disjunction operator $|$) in a \RE group. Having a larger number of \RE groups
 often leads to better precision but lower coverage on pattern matching, while a larger number of \emph{or} clauses usually gives a higher
