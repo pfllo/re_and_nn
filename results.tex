@@ -100,7 +100,7 @@ dataset, we find that instead of marking informative context words, the attentio
 observation further reinforces our hypothesis on the attention loss.
 
 On the other hand, since the \REtags provide extra information, such as type, about words in the sentence, \texttt{logit} and \texttt{feat}
-generally work better. However, different from intent detection, \texttt{feat} only outperforms \texttt{logit} by a margin. The is because
+generally work better. However, different from intent detection, \texttt{feat} only outperforms \texttt{logit} by a margin. This is because
 \texttt{feat} can use the \REtags of all words to generate better context representations through the \NN, while \texttt{logit} can only
 utilize the \REtag of the target word before the final output layer. As a result, \texttt{feat} actually gathers more information from \REs
 and can make better use of them than \texttt{logit}. Again, \texttt{hu16} is still outperformed by \texttt{logit}, possibly due to the
@@ -160,7 +160,8 @@ Note that, the memory module requires the input sentence to have only one embedd
 
 As for slot filling, since we already have extra data for frequent tags in the original few-shot data (see Sec.~\ref{sec_datasest}), we use
 them directly to run the memory module. As shown in the bottom of Table \ref{tab_full_few}, \texttt{mem} also improves the base \BLSTM, and
-gains further boost when it is combined with our \texttt{feat} method\footnote{For compactness, we only combine the best method in each
+gains further boost when it is combined with \texttt{feat}\footnote{For compactness, we only combine the best method in each
+%gains further boost when it is combined with our \texttt{feat} method\footnote{For compactness, we only combine the best method in each
 task with \texttt{mem}, but others can also be combined.}.
 % \footnote{
 % \texttt{logit} may not be able to applied to methods with other output form, e.g., matching based method~\cite{koch2015siamese}.}.
@@ -223,8 +224,8 @@ concatenates \REtags at the input level, the powerful \NN makes it more likely t
 performs even worse when compared to the \BLSTM.
 % This shows that, although the informative words marked by \RE still helps, the low-performance \RE output no longer works when the labeled data is sufficient. While \NN can learn to assign low weights for \RE output in \texttt{logit}, the noise coming from the input feature is hard to eliminate, and therefore leading to bad results of \texttt{feat}.
 
-As for slot filling, \texttt{feat} and \texttt{logit} are still effective. This shows that the word type information contained in the
-\REtags is still hard to be learned even when we have more annotated data.
+As for slot filling, introducing \texttt{feat} and \texttt{logit} can still bring further improvements. This shows that the word type information contained in the
+\REtags is still hard to be fully learned even when we have more annotated data.
 % the output of the \RE used for \texttt{feat} and \texttt{logit} provides extra information to help \NN better understand the target word (e.g., entity type), which is hard to inferred by \NN itself.
 % The reason is probably that the output of the \RE used for \texttt{feat} and \texttt{logit} is only the entity part of the slot label, which is only indirectly connected to the prediction target. The noise contained in the indirectness makes \NN relies less on the \RE output, and therefore is less sensitive to the wrong predictions made by \RE as they do in intent detection.
 Moreover, different from few-shot settings, \texttt{two+both} has a better macro-F1 score than the \texttt{BLSTM} for this task, suggesting
