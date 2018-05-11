@@ -145,7 +145,7 @@ Because of the aforementioned reason, we use a simplified version of the two-sid
 of positive and negative attention. Specifically, to predict the slot label of word $i$, we use the following equations, which are similar
 to Eq.~\ref{eq:simple_att}, to generate a sentence embedding $\textbf{s}_{pi}$ with regard to word $i$ from positive attention:
 \begin{equation}
-\textbf{s}_{pi} = \sum_{j}{\alpha_{pij}\textbf{h}_j}, \quad \alpha_{pij}=\frac{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}{\sum_{j}{exp(\textbf{h}_j^T\textbf{W}_{sp}\textbf{h}_i)}}
+\textbf{s}_{pi} = \sum_{j}{\alpha_{pij}\textbf{h}_j}, \quad \alpha_{pij}=\frac{\exp(\textbf{h}_j^\intercal\textbf{W}_{sp}\textbf{h}_i)}{\sum_{j}{\exp(\textbf{h}_j^\intercal \textbf{W}_{sp}\textbf{h}_i)}}
 \label{eq:slu_simple_att}
 \end{equation}
 where $\textbf{h}_i$ and $\textbf{h}_j$ are the \BLSTM outputs for word $i$ and $j$ respectively, $\textbf{W}_{sp}$ is a weight matrix, and
